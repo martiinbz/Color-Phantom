@@ -1,6 +1,7 @@
 #pragma once
 
 #include "framework/entities/entity.h"
+#include "framework/entities/entity_mesh.h"
 
 #include "graphics/material.h"
 

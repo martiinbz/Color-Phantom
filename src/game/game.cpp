@@ -4,8 +4,9 @@
 #include "graphics/texture.h"
 #include "graphics/fbo.h"
 #include "graphics/shader.h"
+#include "graphics/material.h"
 #include "framework/input.h"
-
+#include "framework/entities/entity_mesh.h"
 #include <cmath>
 
 //some globals
@@ -13,9 +14,13 @@ Mesh* mesh = NULL;
 Texture* texture = NULL;
 Shader* shader = NULL;
 float angle = 0;
-float mouse_speed = 100.0f;
+float mouse_speed = 10.0f;
 
 Game* Game::instance = NULL;
+
+EntityMesh* entity_mesh = nullptr;
+
+
 
 Game::Game(int window_width, int window_height, SDL_Window* window)
 {
@@ -37,7 +42,7 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 
 	// Create our camera
 	camera = new Camera();
-	camera->lookAt(Vector3(0.f,100.f, 100.f),Vector3(0.f,0.f,0.f), Vector3(0.f,1.f,0.f)); //position the camera and point to 0,0,0
+	camera->lookAt(Vector3(0.f,1.f, 1.f),Vector3(0.f,0.f,0.f), Vector3(0.f,1.f,0.f)); //position the camera and point to 0,0,0
 	camera->setPerspective(70.f,window_width/(float)window_height,0.1f,10000.f); //set the projection, we want to be perspective
 
 	// Load one texture using the Texture Manager
@@ -48,6 +53,10 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 
 	// Example of shader loading using the shaders manager
 	shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
+
+	Material material;
+	entity_mesh = new EntityMesh(mesh,material);
+
 
 	// Hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
