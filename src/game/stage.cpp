@@ -6,6 +6,8 @@
 #include "framework/utils.h"
 #include <iostream>
 #include "framework/input.h"
+#include "game/scene_parser.h"
+#include "framework/entities/entity.h"
 
 
 
@@ -15,12 +17,10 @@
 
 
 PlayStage::PlayStage(): Stage() {
-	root = new Entity();
+	Entity*root = new Entity();
 
 	SceneParser parser;
-	parser.parse("data/scene.txt", root);
-
-	
+	parser.parse("data/myscene.scene", root);
 }
 
 

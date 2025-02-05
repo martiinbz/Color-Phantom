@@ -89,7 +89,7 @@ void Game::render(void)
 		shader->enable();
 
 		// Upload uniforms
-		shader->setUniform("u_color", Vector4(1,1,1,1));
+		shader->setUniform("u_color", Vector4(0,1,1,1));
 		shader->setUniform("u_viewprojection", camera->viewprojection_matrix );
 		shader->setUniform("u_texture", texture, 0);
 		shader->setUniform("u_model", m);

@@ -58,7 +58,7 @@ void EntityMesh::render(Camera* camera)
 	material->shader->enable();
 	material->shader->setUniform("u_model", getGlobalMatrix());
 	material->shader->setUniform("u_viewprojection", camera->viewprojection_matrix);
-	material->shader->setUniform("u_color", Vector4(1, 0, 0, 1));
+	material->shader->setUniform("u_color", Vector4(0, 0, 0, 1));
 
 	if (isInstanced) {
 		mesh->renderInstanced(GL_TRIANGLES,must_render_models.data(), must_render_models.size());
@@ -81,13 +81,13 @@ void EntityMesh::update(float delta_time)
 	Entity::update(delta_time);
 }
 
-void EntityMesh::addMeshLOD(Mesh* mesh, float distance)
-{
-	mesh_lods.push_back({ mesh, distance });
-
-	std::sort(mesh_lods.begin(), mesh_lods.end(),
-		[](const sMeshLOD& l1, const sMeshLOD& l2) {
-			return l1.distance > l2.distance;
-		});
-}		
+//void EntityMesh::addMeshLOD(Mesh* mesh, float distance)
+//{
+//	mesh_lods.push_back({ mesh, distance });
+//
+//	std::sort(mesh_lods.begin(), mesh_lods.end(),
+//		[](const sMeshLOD& l1, const sMeshLOD& l2) {
+//			return l1.distance > l2.distance;
+//		});
+//}		
 

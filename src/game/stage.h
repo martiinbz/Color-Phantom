@@ -35,9 +35,7 @@ public:
 
     void update(double dt) override;
     void render(Camera* camera) override;
-    bool isValid(Vector2 target) override;
-	bool isFloor(Vector2 target) override;
-	
+  
 };
 
 
