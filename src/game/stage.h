@@ -9,7 +9,7 @@
 
 class Stage {
 protected:
-    
+    bool mouse_locked; //tells if the mouse is locked (not seen)
 
 
 public:

@@ -16,11 +16,13 @@ EntityMesh::EntityMesh(Mesh* new_mesh, const Material& new_material)
 
 void EntityMesh::render(Camera* camera)
 {
-	material->shader = Shader::Get(isInstanced ? "data/shaders/instanced.vs": "data/shaders/basic.vs", "data/shaders/flat.fs");
-	if (!material || !mesh || material->shader) {
+	
+	if (!material || !mesh ) {
 		return;
 	}
-
+	if (!material->shader) {
+		material->shader = Shader::Get(isInstanced ? "data/shaders/instanced.vs" : "data/shaders/basic.vs", "data/shaders/texture.fs");
+	}
 
 	std::vector<Matrix44> must_render_models;
 	//// CULLINGS
@@ -58,7 +60,7 @@ void EntityMesh::render(Camera* camera)
 	material->shader->enable();
 	material->shader->setUniform("u_model", getGlobalMatrix());
 	material->shader->setUniform("u_viewprojection", camera->viewprojection_matrix);
-	material->shader->setUniform("u_color", Vector4(0, 0, 0, 1));
+	material->shader->setUniform("u_color", material->color);
 
 	if (isInstanced) {
 		mesh->renderInstanced(GL_TRIANGLES,must_render_models.data(), must_render_models.size());
