@@ -5,33 +5,27 @@
 
 #include "framework/camera.h"
 
-
+enum {
+    STAGE_PLAY,
+    STAGE_MENU
+};
 
 class Stage {
 protected:
     bool mouse_locked; //tells if the mouse is locked (not seen)
 
-
 public:
-
+    virtual void init() {};
     virtual void update(double dt) {};
     virtual void render(Camera* camera) {};
-    
 	
 };
 
-
-
 class  PlayStage : public Stage {
-
-   
-
-public:
-   
-
-    PlayStage();
   
-    
+public:
+  
+    PlayStage();
 
     void update(double dt) override;
     void render(Camera* camera) override;

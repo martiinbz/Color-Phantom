@@ -14,6 +14,10 @@ class Game
 public:
 	static Game* instance;
 
+	std::map<int, Stage*> stages;
+	void goToStage(uint8_t stage_id);
+
+
 	//window
 	SDL_Window* window;
 	int window_width;

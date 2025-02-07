@@ -15,9 +15,6 @@
 Stage* current_stage = NULL;
 Game* Game::instance = NULL;
 
-
-
-
 Game::Game(int window_width, int window_height, SDL_Window* window)
 {
 	this->window_width = window_width;
@@ -33,9 +30,16 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	mouse_locked = false;
 
 	
-	Stage* playstage = new PlayStage();
-	current_stage = playstage;
+	stages[STAGE_MENU] = new MenuStage();
+	stages[STAGE_PLAY] = new PlayStage();
 
+	for (auto entry : stages) {
+		int id = entry.first;
+		Stage* stage = entry.second;
+		stage->init();
+	}
+
+	goToStage(STAGE_PLAY);
 
 	// OpenGL flags
 	glEnable( GL_CULL_FACE ); //render both sides of every triangle
@@ -56,13 +60,23 @@ void Game::render(void)
 		current_stage->render(camera);
 
 	drawText(2, 2, getGPUStats(), Vector3(1,1,1), 2);
-	SDL_GL_SwapWindow(this->window);
 }
 
 void Game::update(double seconds_elapsed)
 {
 	if (current_stage)
 		current_stage->update(seconds_elapsed);
+}
+
+void Game::goToStage(uint8_t stage_id) {
+	Stage* new_stage = stages[stage_id];
+	assert(new_stage);
+
+	if (current_stage)
+		current_stage->onLeave(new_stage);
+	new_stage->onEnter(current_stage);
+	current_stage = new_stage;
+
 }
 
 //Keyboard event handler (sync input)
