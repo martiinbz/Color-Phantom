@@ -49,16 +49,6 @@ PlayStage::PlayStage(): Stage() {
 
 	Material material;
 	entity_mesh = new EntityMesh(mesh, material);
-
-
-	// Hide the cursor
-	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
-
-
-
-
-
-
 }
 
 
@@ -134,5 +124,4 @@ void PlayStage::update(double seconds_elapsed) {
 	if (Input::isKeyPressed(SDL_SCANCODE_S) || Input::isKeyPressed(SDL_SCANCODE_DOWN)) Game::instance->camera->move(Vector3(0.0f, 0.0f, -1.0f) * speed);
 	if (Input::isKeyPressed(SDL_SCANCODE_A) || Input::isKeyPressed(SDL_SCANCODE_LEFT)) Game::instance->camera->move(Vector3(1.0f, 0.0f, 0.0f) * speed);
 	if (Input::isKeyPressed(SDL_SCANCODE_D) || Input::isKeyPressed(SDL_SCANCODE_RIGHT)) Game::instance->camera->move(Vector3(-1.0f, 0.0f, 0.0f) * speed);
-		
 }

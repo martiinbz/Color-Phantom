@@ -37,7 +37,6 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	current_stage = playstage;
 
 
-
 	// OpenGL flags
 	glEnable( GL_CULL_FACE ); //render both sides of every triangle
 	glEnable( GL_DEPTH_TEST ); //check the occlusions using the Z buffer
@@ -47,16 +46,17 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	camera->lookAt(Vector3(0.f,1.f, 1.f),Vector3(0.f,0.f,0.f), Vector3(0.f,1.f,0.f)); //position the camera and point to 0,0,0
 	camera->setPerspective(70.f,window_width/(float)window_height,0.1f,10000.f); //set the projection, we want to be perspective
 
-	
+	SDL_ShowCursor(!mouse_locked);
 }
 
 //what to do when the image has to be draw
 void Game::render(void)
 {
-	//cargar la current stage
-		if (current_stage)
-			current_stage->render(camera);
+	if (current_stage)
+		current_stage->render(camera);
 
+	drawText(2, 2, getGPUStats(), Vector3(1,1,1), 2);
+	SDL_GL_SwapWindow(this->window);
 }
 
 void Game::update(double seconds_elapsed)
