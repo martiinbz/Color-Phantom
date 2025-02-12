@@ -28,7 +28,6 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	time = 0.0f;
 	elapsed_time = 0.0f;
 	mouse_locked = false;
-
 	
 	stages[STAGE_MENU] = new MenuStage();
 	stages[STAGE_PLAY] = new PlayStage();
