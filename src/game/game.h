@@ -7,6 +7,8 @@
 #include "framework/includes.h"
 #include "framework/camera.h"
 #include "framework/utils.h"
+#include "game/stage.h"
+#include <map>
 
 
 class Game

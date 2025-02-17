@@ -3,7 +3,7 @@
 #include "game/scene_parser.h"
 #include "framework/input.h"
 #include "framework/player.h"
-#include "../../build/world.h"
+#include "framework/world.h"
 
 
 World* World::instance = nullptr;
@@ -18,15 +18,15 @@ World::World() {
 	camera->setPerspective(70.f, window_width / float(window_height), 0.1f, 1000.f);
 
 	// camera 2D
-	camera2D = new Camera();
-	// ...
+	//camera2D = new Camera();
+	//// ...
 
-	// parent root
-	root = new Entity();
+	//// parent root
+	//root = new Entity();
 
-	// player init 
-	player = new Player();
-	// ...
+	//// player init 
+	//player = new Player();
+	//// ...
 
 	SceneParser parser;
 	bool ok = parser.parse("data/myscene.scene", root);
@@ -46,7 +46,7 @@ void World::render() {
 
 	glEnable(GL_DEPTH_TEST);
 
-	player->render(camera);
+	//player->render(camera);
 
 	root->render(camera);
 }
@@ -68,7 +68,7 @@ void World::update(double seconds_elapsed) {
 	}
 	else {
 		root->update(seconds_elapsed);
-		player->update(seconds_elapsed);
+		//player->update(seconds_elapsed);
 
 		camera_yaw -= Input::mouse_delta.x * seconds_elapsed * mouse_speed;
 		camera_pitch -= Input::mouse_delta.y * seconds_elapsed * mouse_speed;
@@ -86,13 +86,13 @@ void World::update(double seconds_elapsed) {
 		Vector3 center;
 
 		if (use_first_person) {
-			eye = player->model.getTranslation() + Vector3(0.f, 0.5f, 0.f) + front * 0.1f;
-			center = eye + front;
+			eye = //player->model.getTranslation() + Vector3(0.f, 0.5f, 0.f) + front * 0.1f;
+				center = eye + front;
 		}
 		else {
 			float orbit_dist = 1.5f;
-			eye = player->model.getTranslation() - front * orbit_dist;
-			center = player->model.getTranslation() + Vector3(0.f, 0.5f, 0.f);
+			//eye =player->model.getTranslation() - front * orbit_dist;
+			//	center =player->model.getTranslation() + Vector3(0.f, 0.5f, 0.f);
 		}
 		camera->lookAt(eye, center, Vector3(0, 1, 0));
 	}

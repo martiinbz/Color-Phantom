@@ -25,8 +25,22 @@ void MenuStage::update(double dt) {
 
 }
 
+void MenuStage::onEnter(Stage* stage) {
 
+}
+
+void MenuStage::onLeave(Stage* stage) {
+
+}
 //PLAY STAGE///////////////////////////////////////////
+
+void PlayStage::onEnter(Stage* stage) {
+	
+}
+void PlayStage::onLeave(Stage* stage) {
+
+}
+
 
 
 

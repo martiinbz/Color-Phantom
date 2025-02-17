@@ -38,7 +38,7 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 		stage->init();
 	}
 
-	goToStage(STAGE_PLAY);
+	goToStage(STAGE_MENU);
 
 	// OpenGL flags
 	glEnable( GL_CULL_FACE ); //render both sides of every triangle
@@ -85,6 +85,7 @@ void Game::onKeyDown( SDL_KeyboardEvent event )
 	{
 		case SDLK_ESCAPE: must_exit = true; break; //ESC key, kill the app
 		case SDLK_F1: Shader::ReloadAll(); break; 
+		case SDLK_z: Game::instance->goToStage(STAGE_PLAY); break;
 	}
 }
 
