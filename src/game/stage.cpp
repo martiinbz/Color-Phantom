@@ -13,6 +13,17 @@
 #include "graphics/shader.h"
 
 
+MenuStage::MenuStage() : Stage() {
+
+}
+
+void MenuStage::render(Camera* camera) {
+
+}
+
+void MenuStage::update(double dt) {
+
+}
 
 
 //PLAY STAGE///////////////////////////////////////////

@@ -21,19 +21,21 @@ public:
 	
 };
 
+class MenuStage : public Stage {
+
+public:
+    MenuStage();
+    void render(Camera* camera) override;
+    void update(double dt) override;
+};
+
 class  PlayStage : public Stage {
   
 public:
-  
     PlayStage();
-
     void update(double dt) override;
     void render(Camera* camera) override;
-  
 };
-
-
-
 #endif
 
 

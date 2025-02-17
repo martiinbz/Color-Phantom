@@ -1,9 +1,9 @@
-#include "world.h"
 #include "framework/camera.h"
 #include "game/game.h"
 #include "game/scene_parser.h"
 #include "framework/input.h"
 #include "framework/player.h"
+#include "../../build/world.h"
 
 
 World* World::instance = nullptr;
@@ -12,15 +12,21 @@ World::World() {
 	int window_width = Game::instance->window_width;
 	int window_height = Game::instance->window_height;
 
-	// set camera
+	// normal camera
 	camera = new Camera();
 	camera->lookAt(Vector3(0.f, 1.f, 1.f), Vector3(0.f), Vector3(0.f, 1.f, 0.f));
 	camera->setPerspective(70.f, window_width / float(window_height), 0.1f, 1000.f);
 
+	// camera 2D
+	camera2D = new Camera();
+	// ...
+
 	// parent root
 	root = new Entity();
 
+	// player init 
 	player = new Player();
+	// ...
 
 	SceneParser parser;
 	bool ok = parser.parse("data/myscene.scene", root);
@@ -40,7 +46,7 @@ void World::render() {
 
 	glEnable(GL_DEPTH_TEST);
 
-	// player->render(camera);
+	player->render(camera);
 
 	root->render(camera);
 }

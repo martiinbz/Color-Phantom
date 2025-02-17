@@ -2,10 +2,10 @@
 
 
 Player::Player() {
-
+	
 }
 
-void Player::render() {
+void Player::render(Camera* camera) {
 
 }
 
