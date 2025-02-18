@@ -60,7 +60,7 @@ PlayStage::PlayStage(): Stage() {
 
 
 	SceneParser parser;
-	parser.parse("data/myscene.scene", root);
+	parser.parse("data/prueba.scene", root);
 
 
 	// Load one texture using the Texture Manager
@@ -98,23 +98,7 @@ void PlayStage::render(Camera* camera) {
 	Matrix44 m;
 	m.rotate(angle * DEG2RAD, Vector3(0.0f, 1.0f, 0.0f));
 
-	//if (shader)
-	//{
-	//	// Enable shader
-	//	shader->enable();
-	//	// Upload uniforms
-	//	/*shader->setUniform("u_color", Vector4(0, 1, 1, 1));
-	//	shader->setUniform("u_viewprojection", camera->viewprojection_matrix);
-	//	shader->setUniform("u_texture", texture, 0);
-	//	shader->setUniform("u_model", m);
-	//	shader->setUniform("u_time", time);*/
-
-	//	// Do the draw call
-	//	mesh->render(GL_TRIANGLES);
-	//	
-	//	// Disable shader
-	//	shader->disable();
-	//}
+	
 	root->render(camera);
 	// Draw the floor grid
 	drawGrid();
