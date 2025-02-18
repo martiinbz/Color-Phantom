@@ -2,7 +2,6 @@
 #include "framework/entities/entity.h"
 #include "framework/entities/entity_mesh.h"
 
-
 class World {
 	static World* instance;
 
@@ -20,9 +19,10 @@ public:
 	Entity* root = nullptr;
 
 	EntityMesh* skybox = nullptr;
-	// Player* player = nullptr;
+	Player* player = nullptr;
 
 	Camera* camera = nullptr;
+	Camera* camera2D = nullptr;
 
 	float camera_yaw = 0.f;
 	float camera_pitch = 0.f;

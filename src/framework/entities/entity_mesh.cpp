@@ -16,7 +16,6 @@ EntityMesh::EntityMesh(Mesh* new_mesh, const Material& new_material)
 
 void EntityMesh::render(Camera* camera)
 {
-	
 	if (!material || !mesh ) {
 		return;
 	}
@@ -55,24 +54,19 @@ void EntityMesh::render(Camera* camera)
 	}
 	camera->enable();
 
-
-
 	material->shader->enable();
 	material->shader->setUniform("u_model", getGlobalMatrix());
 	material->shader->setUniform("u_viewprojection", camera->viewprojection_matrix);
 	material->shader->setUniform("u_color", material->color);
 
 	if (isInstanced) {
-		mesh->renderInstanced(GL_TRIANGLES,must_render_models.data(), must_render_models.size());
+		mesh->renderInstanced(GL_TRIANGLES, must_render_models.data(), must_render_models.size());
 	}
 	else {
 		mesh->render(GL_TRIANGLES);
 	}
 
 	material->shader->disable();
-	
-	
-
 
 	//propagate render call to children
 	Entity::render(camera);
@@ -83,6 +77,7 @@ void EntityMesh::update(float delta_time)
 	Entity::update(delta_time);
 }
 
+// SI IMPLEMENTAMOS LODS
 //void EntityMesh::addMeshLOD(Mesh* mesh, float distance)
 //{
 //	mesh_lods.push_back({ mesh, distance });
@@ -91,5 +86,4 @@ void EntityMesh::update(float delta_time)
 //		[](const sMeshLOD& l1, const sMeshLOD& l2) {
 //			return l1.distance > l2.distance;
 //		});
-//}		
-
+//}	
