@@ -111,7 +111,7 @@ void Game::onMouseButtonUp(SDL_MouseButtonEvent event)
 
 void Game::onMouseWheel(SDL_MouseWheelEvent event)
 {
-	//mouse_speed *= event.y > 0 ? 1.1f : 0.9f;
+	// mouse_speed *= event.y > 0 ? 1.1f : 0.9f;
 }
 
 void Game::onGamepadButtonDown(SDL_JoyButtonEvent event)
