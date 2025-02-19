@@ -2,9 +2,11 @@
 
 #include "graphics/material.h"
 #include "graphics/mesh.h"
+#include "framework/player.h"
 
 #include "framework/utils.h"
-
+#include "game/stage.h"
+#include "game/game.h"
 #include <fstream>
 
 bool SceneParser::parse(const char* filename, Entity* root)
@@ -56,12 +58,25 @@ bool SceneParser::parse(const char* filename, Entity* root)
 		Material mat = render_data.material;
 		EntityMesh* new_entity = nullptr;
 
-		size_t tag = data.first.find("@tag");
+		std::cout << "Procesando entidad: " << data.first << std::endl;
+
+		size_t tag = data.first.find("@player");
 
 		if (tag != std::string::npos) {
-			Mesh* mesh = Mesh::Get("...");
-			// Create a different type of entity
-			// new_entity = new ...
+			
+			std::cout << "Encontrado @player en escena!" << std::endl;
+
+			// Cargar la malla desde el archivo de Blender
+			Mesh* mesh = Mesh::Get(mesh_name.c_str());
+
+			// Crear la entidad como un Player en vez de EntityMesh
+			new_entity = new Player(mesh, mat, "player");
+
+			// Referenciar globalmente el player
+			root->addChild(new_entity); // Agregarlo a la jerarquía de la escena
+
+			
+		
 		}
 		else {
 			Mesh* mesh = Mesh::Get(mesh_name.c_str());

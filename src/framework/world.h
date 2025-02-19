@@ -7,8 +7,16 @@ class World {
 
 public:
 
+	struct sCollisionData {
+		Vector3 col_point;
+		Vector3 col_normal;
+		float distance = 1e10f;
+		bool collided = false;
+		//Entitycollider* collider = nullptr;
+	};
+
 	static World* get_instance() {
-		if (instance != nullptr);
+		if (instance != nullptr)
 			return instance;
 		instance = new World();
 		return instance;
@@ -39,4 +47,8 @@ public:
 
 	void addEntity(Entity* entity);
 	void destroyEntity(Entity* entity);
+	void update_fpcamera(float seconds_elapsed);
+	void update_thirdpcamera(float seconds_elapsed);
+	//sCollisionData raycast(const Vector3& origin, const Vector3& direction, int layer =0 /*eCollisionFilter::ALL*/, bool closest = true, float mad_ray_distance = 3.4);
+
 };

@@ -4,7 +4,7 @@
 class Player : public EntityMesh {
 
 	float walk_speed = 0.0f;
-	Vector3 velocity = Vector3(0.0f);
+	Vector3 velocity = Vector3(0,0,0);
 
 public:
 	Player() {};

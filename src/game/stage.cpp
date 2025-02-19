@@ -11,6 +11,8 @@
 #include "graphics/texture.h"
 #include "graphics/mesh.h"
 #include "graphics/shader.h"
+#include "framework/player.h"
+#include "framework/world.h"
 
 
 MenuStage::MenuStage() : Stage() {
@@ -54,76 +56,67 @@ Entity* root = new Entity();
 
 
 EntityMesh* entity_mesh = nullptr;
+Player* player = nullptr;
 
 
 PlayStage::PlayStage(): Stage() {
 
 
 	SceneParser parser;
-	parser.parse("data/prueba.scene", root);
+	parser.parse("data/myscene.scene", root);
+
+	
 
 
 	// Load one texture using the Texture Manager
 	texture = Texture::Get("data/textures/texture.tga");
 
 	// Example of loading Mesh from Mesh Manager
-	mesh = Mesh::Get("data/meshes/box.ASE");
+	mesh = Mesh::Get("data/meshes/box.ase");
 
 	// Example of shader loading using the shaders manager
 	shader= Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
 
 	Material material;
 	entity_mesh = new EntityMesh(mesh, material);
+	
 }
 
 
 
 void PlayStage::render(Camera* camera) {
     
-	// Set the clear color (the background color)
-	glClearColor(0.0, 0.0, 0.0, 1.0);
+	
 
-	// Clear the window and the depth buffer
+
+	
+	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// Set the camera as default
 	camera->enable();
 
-	// Set flags
 	glDisable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 
-	// Create model matrix for cube
-	Matrix44 m;
-	m.rotate(angle * DEG2RAD, Vector3(0.0f, 1.0f, 0.0f));
+	// Llamar al render de World en lugar de root->render()
+	World::get_instance()->render();
 
-	
-	root->render(camera);
-	// Draw the floor grid
+	// Dibujar el grid y estadísticas de FPS
 	drawGrid();
-
-		
-	// Render the FPS, Draw Calls, etc
 	drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
 
-	// Swap between front buffer and back buffer
+	// Intercambiar buffers
 	SDL_GL_SwapWindow(Game::instance->window);
+	
+
+	
+	
 
 	
 }
 
 void PlayStage::update(double seconds_elapsed) {
 
-	float speed = seconds_elapsed * mouse_speed; //the speed is defined by the seconds_elapsed so it goes constant
-
-	// Example
-	angle += (float)seconds_elapsed * 10.0f;
-
-	// Mouse input to rotate the cam
-	if (Input::isMousePressed(SDL_BUTTON_LEFT) || Game::instance->mouse_locked) //is left button pressed?
-	{
-		Game::instance->camera->rotate(Input::mouse_delta.x * 0.005f, Vector3(0.0f, -1.0f, 0.0f));
-		Game::instance->camera->rotate(Input::mouse_delta.y * 0.005f, Game::instance->camera->getLocalVector(Vector3(-1.0f, 0.0f, 0.0f)));
-	}
+	World::get_instance()->update(seconds_elapsed);
 }
