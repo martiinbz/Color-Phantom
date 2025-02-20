@@ -42,9 +42,7 @@ void World::render() {
 	skybox->render(camera);
 	glEnable(GL_DEPTH_TEST);
 	*/
-	GLfloat color[3];
-	glReadPixels(camera->eye.x, camera->eye.y, 1, 1, GL_RGB, GL_FLOAT, color);
-	std::cout << "Color: " << color[0] << " " << color[1] << " " << color[2] << std::endl;
+	
 
 
 	glEnable(GL_DEPTH_TEST);
@@ -52,6 +50,9 @@ void World::render() {
 	player->render(camera);
 
 	root->render(camera);
+	Vector3 color;
+	glReadPixels(camera->eye.x, camera->eye.y, 1, 1, GL_RGB, GL_FLOAT, &color.x);
+	std::cout << "Color: " << color.x << " " << color.y << " " << color.z << std::endl;
 
 	
 }
