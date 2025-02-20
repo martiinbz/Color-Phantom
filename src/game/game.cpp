@@ -9,6 +9,7 @@
 #include "framework/entities/entity_mesh.h"
 #include "game/stage.h"
 #include <cmath>
+#include "framework/world.h"
 
 //some globals
 
@@ -59,7 +60,7 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 void Game::render(void)
 {
 	if (current_stage)
-		current_stage->render(camera);
+		current_stage->render(World::get_instance()->camera);
 
 	drawText(2, 2, getGPUStats(), Vector3(1,1,1), 2);
 }

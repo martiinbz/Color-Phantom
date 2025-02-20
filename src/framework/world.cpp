@@ -7,6 +7,7 @@
 
 World* World::instance = nullptr;
 
+
 World::World() {
 	int window_width = Game::instance->window_width;
 	int window_height = Game::instance->window_height;
@@ -16,16 +17,16 @@ World::World() {
 	camera->lookAt(Vector3(0.f, 1.f, 1.f), Vector3(0.f), Vector3(0.f, 1.f, 0.f));
 	camera->setPerspective(70.f, window_width / float(window_height), 0.1f, 1000.f);
 
-	// camera 2D
-	camera2D = new Camera();
-	// ...
-
 	// parent root
 	root = new Entity();
 
-	// player init 
-	player = new Player();
-	// ...
+	// Si la instancia de Player aún no está creada, crearla
+	if (!Player::instance) {
+		Player::instance = new Player();
+	}
+
+
+	
 
 	SceneParser parser;
 	bool ok = parser.parse("data/supermarket.scene", root);
@@ -106,9 +107,9 @@ void World::update(double seconds_elapsed) {
 			root->update(seconds_elapsed);
 		}
 
-		if (player) {
+		if (Player::instance) {
 			
-			player->update(seconds_elapsed);
+			Player::instance->update(seconds_elapsed);
 
 			// Asegurar que la cámara sigue al Player en tercera o primera persona
 			if (Input::isMousePressed(SDL_BUTTON_LEFT)) {
@@ -155,7 +156,8 @@ void World::update_fpcamera(float seconds_elapsed) {
 	Vector3 front = (mPitch * mYaw).frontVector().normalize();
 
 	//put the camera in front of the player
-	Vector3 eye = player->model.getTranslation() + Vector3(2.1, 2.2, -0.2) - front * 0.5;
+	
+	Vector3 eye = Player::instance->model.getTranslation() + Vector3(0.7, 2.2, -0.3) - front * 0.5;
 	Vector3 center = eye + front;
 
 	camera->lookAt(eye, center, Vector3(0, 1, 0));
@@ -164,7 +166,7 @@ void World::update_fpcamera(float seconds_elapsed) {
 void World::update_thirdpcamera(float seconds_elapsed) {
 	// Ajustar sensibilidad del ratón
 
-	
+		
 		camera_yaw -= Input::mouse_delta.x * seconds_elapsed * mouse_speed;
 		camera_pitch -= Input::mouse_delta.y * seconds_elapsed * mouse_speed;
 
@@ -180,7 +182,7 @@ void World::update_thirdpcamera(float seconds_elapsed) {
 		Vector3 front = (mPitch * mYaw).frontVector().normalize();
 
 		// Ajustar la posición de la cámara
-		Vector3 center = player->model.getTranslation() + Vector3(1.5, 2.5, -1.5);
+		Vector3 center = Player::instance->model.getTranslation() + Vector3(0, 2.5, 0);
 		float orbit_distance = 3.0f;  // Ajusta la distancia de la cámara
 		Vector3 eye = center - front * orbit_distance;
 

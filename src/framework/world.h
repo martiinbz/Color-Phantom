@@ -28,11 +28,10 @@ public:
 	Entity* root = nullptr;
 
 	EntityMesh* skybox = nullptr;
-	Player* player = nullptr;
-
+	
 	Camera* camera = nullptr;
 	Camera* camera2D = nullptr;
-
+	
 	Vector3 looking_color;
 	float camera_yaw = 0.f;
 	float camera_pitch = 0.f;

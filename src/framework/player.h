@@ -5,6 +5,7 @@
 
 class Player : public EntityMesh {
 
+	
 	float walk_speed = 0.0f;
 	Vector3 velocity = Vector3(0,0,0);
 	Vector3 current_color = Vector3(1, 1, 1); //el color del jugador es blanco por defecto
@@ -13,6 +14,7 @@ class Player : public EntityMesh {
 	Shader* player_shader;
 
 public:
+	static Player* instance;
 	Player() {};
 	Player(Mesh* mesh, const Material& material, const std::string& name = "");
 	void render(Camera* camera) override;

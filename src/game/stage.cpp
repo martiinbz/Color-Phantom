@@ -52,34 +52,13 @@ Texture* texture = NULL;
 Shader* shader = NULL;
 float angle = 0;
 float mouse_speed = 10.0f;
-Entity* root = new Entity();
 
 
-EntityMesh* entity_mesh = nullptr;
-Player* player = nullptr;
+
 
 
 PlayStage::PlayStage(): Stage() {
 
-
-	SceneParser parser;
-	parser.parse("data/myscene.scene", root);
-
-	
-
-
-	// Load one texture using the Texture Manager
-	texture = Texture::Get("data/textures/texture.tga");
-
-	// Example of loading Mesh from Mesh Manager
-	mesh = Mesh::Get("data/meshes/box.ase");
-
-	// Example of shader loading using the shaders manager
-	shader= Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
-
-	Material material;
-	entity_mesh = new EntityMesh(mesh, material);
-	
 }
 
 

@@ -77,7 +77,7 @@ bool SceneParser::parse(const char* filename, Entity* root)
 			root->addChild(new_entity); // Agregarlo a la jerarquía de la escena
 
 			// Guardamos el jugador en World
-			World::get_instance()->player = dynamic_cast<Player*>(new_entity);
+			//World::get_instance()->player = new_entity;
 			
 		
 		}

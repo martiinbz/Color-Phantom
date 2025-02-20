@@ -6,12 +6,15 @@
 #include "graphics/material.h"
 
 
+Player* Player::instance = NULL;
+
 
 Player::Player(Mesh* mesh, const Material& material, const std::string& name)
     : EntityMesh(mesh, material) {
     walk_speed = 2.0f;
     //cargamos el player_texture shader
     player_shader = Shader::Get(isInstanced ? "data/shaders/instanced.vs" : "data/shaders/basic.vs" , "data/shaders/player_texture.fs");
+	instance = this;
     
 }
 
@@ -37,6 +40,7 @@ void Player::render(Camera* camera) {
 
     player_shader->disable();
 	
+    EntityMesh::render(camera);
 }
 
 
@@ -62,6 +66,7 @@ void Player::update(float seconds_elapsed) {
     }
     if (Input::isKeyPressed(SDL_SCANCODE_A) || Input::isKeyPressed(SDL_SCANCODE_LEFT)) {
         move_dir += right;
+        
     }
     if (Input::isKeyPressed(SDL_SCANCODE_D) || Input::isKeyPressed(SDL_SCANCODE_RIGHT)) {
         move_dir -= right;
@@ -86,19 +91,19 @@ void Player::update(float seconds_elapsed) {
     if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT))
         speed_mult *= 3.0f;
 
-    if (move_dir.length() > 0) {
-        move_dir.normalize();
-        move_dir *= speed_mult;
-        model.setRotation(camera_yaw, Vector3(0, 1, 0));
-    }
+    
+    move_dir.normalize();
+    move_dir *= speed_mult;
 
     // Aplicar el movimiento
     position += move_dir * seconds_elapsed;
+    
     model.setTranslation(position);
-
+    model.rotate(camera_yaw, Vector3(0, 1, 0));
+	
     // Reducir velocidad para fricción
     velocity.x *= 0.5f;
     velocity.y *= 0.5;
-
+   
     EntityMesh::update(seconds_elapsed);
 }
