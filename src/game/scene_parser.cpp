@@ -7,6 +7,7 @@
 #include "framework/utils.h"
 #include "game/stage.h"
 #include "game/game.h"
+#include "framework/world.h"
 #include <fstream>
 
 bool SceneParser::parse(const char* filename, Entity* root)
@@ -75,6 +76,8 @@ bool SceneParser::parse(const char* filename, Entity* root)
 			// Referenciar globalmente el player
 			root->addChild(new_entity); // Agregarlo a la jerarquía de la escena
 
+			// Guardamos el jugador en World
+			World::get_instance()->player = dynamic_cast<Player*>(new_entity);
 			
 		
 		}

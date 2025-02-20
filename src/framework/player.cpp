@@ -16,7 +16,7 @@ void Player::render(Camera* camera) {
 }
 
 void Player::update(float seconds_elapsed) {
-    std::cout << "Actualizando Player" << std::endl;
+    
 
     float camera_yaw = World::get_instance()->camera_yaw;
 
@@ -35,10 +35,10 @@ void Player::update(float seconds_elapsed) {
         move_dir -= front;
     }
     if (Input::isKeyPressed(SDL_SCANCODE_A) || Input::isKeyPressed(SDL_SCANCODE_LEFT)) {
-        move_dir -= right;
+        move_dir += right;
     }
     if (Input::isKeyPressed(SDL_SCANCODE_D) || Input::isKeyPressed(SDL_SCANCODE_RIGHT)) {
-        move_dir += right;
+        move_dir -= right;
     }
 
     // Ajustar velocidad
@@ -57,7 +57,7 @@ void Player::update(float seconds_elapsed) {
 
     // Reducir velocidad para fricción
     velocity.x *= 0.5f;
-    velocity.y *= 0.5f;
+    velocity.y *= 0.5;
 
     EntityMesh::update(seconds_elapsed);
 }

@@ -23,6 +23,9 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	instance = this;
 	must_exit = false;
 
+	setMouseLocked(true);
+	
+
 	fps = 0;
 	frame = 0;
 	time = 0.0f;
@@ -63,8 +66,14 @@ void Game::render(void)
 
 void Game::update(double seconds_elapsed)
 {
+
+	
 	if (current_stage)
 		current_stage->update(seconds_elapsed);
+	
+	
+	
+
 }
 
 void Game::goToStage(uint8_t stage_id) {
@@ -131,5 +140,14 @@ void Game::onResize(int width, int height)
 	camera->aspect =  width / (float)height;
 	window_width = width;
 	window_height = height;
+}
+
+void Game::setMouseLocked(bool must_lock)
+{
+	SDL_ShowCursor(!must_lock);
+
+	SDL_SetRelativeMouseMode((SDL_bool)must_lock);
+
+	mouse_locked = must_lock;
 }
 

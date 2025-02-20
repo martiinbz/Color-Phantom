@@ -35,10 +35,11 @@ public:
 	float camera_yaw = 0.f;
 	float camera_pitch = 0.f;
 	float camera_speed = 2.f;
-	float mouse_speed = 0.f;
+	float mouse_speed = 0.5f;
 
-	bool free_camera = true;
+	bool free_camera = false;
 	bool use_first_person = false;
+	bool use_third_person = true;
 
 	void render();
 	void update(double seconds_elapsed);
