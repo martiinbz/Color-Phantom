@@ -1,6 +1,7 @@
 #pragma once
 #include "framework/entities/entity.h"
 #include "framework/entities/entity_mesh.h"
+#include "framework/player.h"
 
 class World {
 	static World* instance;
@@ -32,6 +33,7 @@ public:
 	Camera* camera = nullptr;
 	Camera* camera2D = nullptr;
 
+	Vector3 looking_color;
 	float camera_yaw = 0.f;
 	float camera_pitch = 0.f;
 	float camera_speed = 2.f;

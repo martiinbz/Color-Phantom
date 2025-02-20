@@ -1,7 +1,7 @@
 # Blender 4.3.2
 # www.blender.org
 mtllib shopping-cart.mtl
-o shopping-cart.002
+o shopping-cart
 v 0.075000 0.125000 -0.072000
 v 0.075000 -0.175000 -0.072000
 v -0.075000 0.125000 -0.072000
@@ -401,7 +401,7 @@ vt 0.593750 0.275000
 vt 0.218750 0.025000
 vt 0.218750 0.225000
 s 1
-usemtl colormap.015
+usemtl colormap.011
 f 3/1/1 2/1/2 1/1/3
 f 2/1/2 3/1/1 4/1/4
 f 3/1/1 5/2/5 4/1/4

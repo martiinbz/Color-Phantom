@@ -3,7 +3,9 @@
 #include "framework/camera.h"
 #include "graphics/mesh.h"
 #include "graphics/material.h"
+#include "framework/world.h"
 #include "graphics/shader.h"
+#include "framework/player.h"
 
 #include <algorithm>
 
@@ -58,6 +60,9 @@ void EntityMesh::render(Camera* camera)
 	material->shader->setUniform("u_model", getGlobalMatrix());
 	material->shader->setUniform("u_viewprojection", camera->viewprojection_matrix);
 	material->shader->setUniform("u_color", material->color);
+
+
+	
 
 	if (isInstanced) {
 		mesh->renderInstanced(GL_TRIANGLES, must_render_models.data(), must_render_models.size());

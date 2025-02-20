@@ -28,7 +28,7 @@ World::World() {
 	// ...
 
 	SceneParser parser;
-	bool ok = parser.parse("data/myscene.scene", root);
+	bool ok = parser.parse("data/supermarket.scene", root);
 }
 
 void World::render() {
@@ -50,10 +50,11 @@ void World::render() {
 	player->render(camera);
 
 	root->render(camera);
-	Vector3 color;
-	glReadPixels(camera->eye.x, camera->eye.y, 1, 1, GL_RGB, GL_FLOAT, &color.x);
-	//std::cout << "Color: " << color.x << " " << color.y << " " << color.z << std::endl;
+	
+	glReadPixels(camera->eye.x, camera->eye.y, 1, 1, GL_RGB, GL_FLOAT, &looking_color.x);
+	
 
+	drawText(5, 15, "current color", looking_color, 4);
 	
 }
 
@@ -140,7 +141,7 @@ void World::destroyEntity(Entity* entity) {
 }
 
 void World::update_fpcamera(float seconds_elapsed) {
-	
+
 
 	camera_yaw -= Input::mouse_delta.x * seconds_elapsed * mouse_speed;
 	camera_pitch -= Input::mouse_delta.y * seconds_elapsed * mouse_speed;
@@ -179,7 +180,7 @@ void World::update_thirdpcamera(float seconds_elapsed) {
 		Vector3 front = (mPitch * mYaw).frontVector().normalize();
 
 		// Ajustar la posición de la cámara
-		Vector3 center = player->model.getTranslation() + Vector3(0, 0.5, 0);
+		Vector3 center = player->model.getTranslation() + Vector3(0, 1.5, 0);
 		float orbit_distance = 3.0f;  // Ajusta la distancia de la cámara
 		Vector3 eye = center - front * orbit_distance;
 
