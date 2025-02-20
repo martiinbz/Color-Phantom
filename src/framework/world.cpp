@@ -47,11 +47,11 @@ void World::render() {
 
 	glEnable(GL_DEPTH_TEST);
 
-	player->render(camera);
+	//player->render(camera);
 
 	root->render(camera);
 	
-	glReadPixels(camera->eye.x, camera->eye.y, 1, 1, GL_RGB, GL_FLOAT, &looking_color.x);
+	glReadPixels(Game::instance->window_width/2, Game::instance->window_height/2, 1, 1, GL_RGB, GL_FLOAT, &looking_color.x);
 	
 
 	drawText(5, 15, "current color", looking_color, 4);
@@ -111,7 +111,7 @@ void World::update(double seconds_elapsed) {
 			player->update(seconds_elapsed);
 
 			// Asegurar que la cámara sigue al Player en tercera o primera persona
-			if (use_first_person) {
+			if (Input::isMousePressed(SDL_BUTTON_LEFT)) {
 				update_fpcamera(seconds_elapsed);
 			}
 			else {
@@ -155,7 +155,7 @@ void World::update_fpcamera(float seconds_elapsed) {
 	Vector3 front = (mPitch * mYaw).frontVector().normalize();
 
 	//put the camera in front of the player
-	Vector3 eye = player->model.getTranslation() + Vector3(0, 0.5, 0) - front * 0.5;
+	Vector3 eye = player->model.getTranslation() + Vector3(2.1, 2.2, -0.2) - front * 0.5;
 	Vector3 center = eye + front;
 
 	camera->lookAt(eye, center, Vector3(0, 1, 0));
@@ -180,7 +180,7 @@ void World::update_thirdpcamera(float seconds_elapsed) {
 		Vector3 front = (mPitch * mYaw).frontVector().normalize();
 
 		// Ajustar la posición de la cámara
-		Vector3 center = player->model.getTranslation() + Vector3(0, 1.5, 0);
+		Vector3 center = player->model.getTranslation() + Vector3(1.5, 2.5, -1.5);
 		float orbit_distance = 3.0f;  // Ajusta la distancia de la cámara
 		Vector3 eye = center - front * orbit_distance;
 

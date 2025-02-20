@@ -51,6 +51,7 @@ void Player::update(float seconds_elapsed) {
     Vector3 front = mYaw.frontVector();
     Vector3 right = mYaw.rightVector();
     Vector3 position = model.getTranslation();
+	
     Vector3 move_dir;
 
     if (Input::isKeyPressed(SDL_SCANCODE_W) || Input::isKeyPressed(SDL_SCANCODE_UP)) {
@@ -88,6 +89,7 @@ void Player::update(float seconds_elapsed) {
     if (move_dir.length() > 0) {
         move_dir.normalize();
         move_dir *= speed_mult;
+        model.setRotation(camera_yaw, Vector3(0, 1, 0));
     }
 
     // Aplicar el movimiento
