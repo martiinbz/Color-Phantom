@@ -6,6 +6,7 @@
 #include "framework/world.h"
 #include "framework/entities/entity_collider.h"
 #include "graphics/mesh.h"
+#include "framework/entities/entity_mesh.h"
 
 World* World::instance = nullptr;
 
@@ -212,13 +213,31 @@ sCollisionData World::raycast(const Vector3& origin, const Vector3& direction, i
 		Vector3 col_normal;
 
 		if (!ec->isInstanced) {
-			if (!ec->mesh->testRayCollisions() {
+			if (!ec->mesh->testRayCollision(ec->model,origin,direction,col_point,col_normal,mad_ray_distance,closest))
+				continue;
 
+			float new_distance = (col_point - origin).length();
+			if (new_distance < data.distance) {
+				data = { col_point, col_normal, new_distance, true, ec };
+			}
+
+			if (!closest)
+				return data;
+		}
+		else {
+			for (const Matrix44& model : ec->models) {
+				if (!ec->mesh->testRayCollision(model, origin, direction, col_point, col_normal, mad_ray_distance, closest))
+					continue;
+
+				float new_distance = (col_point - origin).length();
+				if (new_distance < data.distance) {
+					data = { col_point, col_normal, new_distance, true, ec };
+				}
+
+				if (!closest)
+					return data;
 			}
 		}
-
-
 	}
-
-
+	return data;
 }
