@@ -8,6 +8,8 @@ enum eCollisionFilter {
 	ALL = 0xFFFFFFFF
 };
 
+class EntityCollider;
+
 struct sCollisionData {
 	Vector3 col_point;
 	Vector3 col_normal;
@@ -22,10 +24,10 @@ class EntityCollider : public EntityMesh {
 public:
 
 	EntityCollider() {};
-	EntityCollider(Mesh* mesh, const Material& material, const std::string name) :
-		EntityMesh(mesh, material) {};
+	EntityCollider(Mesh* mesh, const Material& material, const std::string name);
 
 	bool is_dynamic = false;
-	void getCollisions(const Vector3& target_position, std::vector<sCollisionData>& collisions, std::vector<sCollisionData>& ground_collisions);
+	int layer = eCollisionFilter::ALL;
 
+	void getCollisions(const Vector3& target_position, std::vector<sCollisionData>& collisions, std::vector<sCollisionData>& ground_collisions);
 };

@@ -42,20 +42,14 @@ void World::render() {
 	skybox->render(camera);
 	glEnable(GL_DEPTH_TEST);
 	*/
-	
-
 
 	glEnable(GL_DEPTH_TEST);
-
-	//player->render(camera);
 
 	root->render(camera);
 	
 	glReadPixels(Game::instance->window_width/2, Game::instance->window_height/2, 1, 1, GL_RGB, GL_FLOAT, &looking_color.x);
 	
-
-	drawText(5, 15, "current color", looking_color, 4);
-	
+	drawText(5, 15, "COLOR", looking_color, 4);
 }
 
 void World::update(double seconds_elapsed) {
@@ -111,7 +105,6 @@ void World::update(double seconds_elapsed) {
 			}
 			else {
 				update_thirdpcamera(seconds_elapsed);
-				
 			}
 		}
 		else {
@@ -173,19 +166,16 @@ void World::update_thirdpcamera(float seconds_elapsed) {
 
 	// Ajustar la posición de la cámara
 	Vector3 center = Player::instance->model.getTranslation() + Vector3(0, 2.5, 0);
-	float orbit_distance = 3.0f;  // Ajusta la distancia de la cámara
-	Vector3 eye = center - front * orbit_distance;
+	float orbit_distance = 1.5f;  // Ajusta la distancia de la cámara
+	Vector3 eye = Player::instance->model.getTranslation() - front * orbit_distance;
 
 	// Para que la camara no atraviese las paredes
-
-
 	sCollisionData data = raycast(center, (eye - center).normalize());
 	if (data.collided) {
 		eye = data.col_point;
 	}
 
-	camera->lookAt(eye, center, Vector3(0, 1, 0));
-		
+	camera->lookAt(eye, center, Vector3(0, 1, 0));		
 }
 
 void World::test_scene_collisions(const Vector3& position, std::vector<sCollisionData>& collisions, std::vector<sCollisionData>& ground_collisions) {
