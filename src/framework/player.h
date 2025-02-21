@@ -19,4 +19,5 @@ public:
 	Player(Mesh* mesh, const Material& material, const std::string& name = "");
 	void render(Camera* camera) override;
 	void update(float seconds_elapsed) override;
+	void test_collisions(Vector3& position, float seconds_elapsed);
 };

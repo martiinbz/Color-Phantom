@@ -61,9 +61,6 @@ void EntityMesh::render(Camera* camera)
 	material->shader->setUniform("u_viewprojection", camera->viewprojection_matrix);
 	material->shader->setUniform("u_color", material->color);
 
-
-	
-
 	if (isInstanced) {
 		mesh->renderInstanced(GL_TRIANGLES, must_render_models.data(), must_render_models.size());
 	}

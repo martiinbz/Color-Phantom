@@ -67,14 +67,8 @@ void Game::render(void)
 
 void Game::update(double seconds_elapsed)
 {
-
-	
 	if (current_stage)
 		current_stage->update(seconds_elapsed);
-	
-	
-	
-
 }
 
 void Game::goToStage(uint8_t stage_id) {
@@ -85,7 +79,6 @@ void Game::goToStage(uint8_t stage_id) {
 		current_stage->onLeave(new_stage);
 	new_stage->onEnter(current_stage);
 	current_stage = new_stage;
-
 }
 
 //Keyboard event handler (sync input)

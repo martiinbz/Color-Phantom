@@ -2,19 +2,12 @@
 #include "framework/entities/entity.h"
 #include "framework/entities/entity_mesh.h"
 #include "framework/player.h"
+#include "framework/entities/entity_collider.h"
 
 class World {
 	static World* instance;
 
 public:
-
-	struct sCollisionData {
-		Vector3 col_point;
-		Vector3 col_normal;
-		float distance = 1e10f;
-		bool collided = false;
-		//Entitycollider* collider = nullptr;
-	};
 
 	static World* get_instance() {
 		if (instance != nullptr)
@@ -30,7 +23,7 @@ public:
 	EntityMesh* skybox = nullptr;
 	
 	Camera* camera = nullptr;
-	Camera* camera2D = nullptr;
+	// Camera* camera2D = nullptr;
 	
 	Vector3 looking_color;
 	float camera_yaw = 0.f;
@@ -51,6 +44,8 @@ public:
 	void destroyEntity(Entity* entity);
 	void update_fpcamera(float seconds_elapsed);
 	void update_thirdpcamera(float seconds_elapsed);
-	//sCollisionData raycast(const Vector3& origin, const Vector3& direction, int layer =0 /*eCollisionFilter::ALL*/, bool closest = true, float mad_ray_distance = 3.4);
+
+	sCollisionData raycast(const Vector3& origin, const Vector3& direction, int layer = eCollisionFilter::ALL, bool closest = true, double mad_ray_distance = 3.4);
+	void test_scene_collisions(const Vector3& position, std::vector<sCollisionData>& collisions, std::vector<sCollisionData>& ground_collisions);
 
 };

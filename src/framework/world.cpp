@@ -4,9 +4,10 @@
 #include "framework/input.h"
 #include "framework/player.h"
 #include "framework/world.h"
+#include "framework/entities/entity_collider.h"
+#include "graphics/mesh.h"
 
 World* World::instance = nullptr;
-
 
 World::World() {
 	int window_width = Game::instance->window_width;
@@ -24,9 +25,6 @@ World::World() {
 	if (!Player::instance) {
 		Player::instance = new Player();
 	}
-
-
-	
 
 	SceneParser parser;
 	bool ok = parser.parse("data/supermarket.scene", root);
@@ -63,7 +61,6 @@ void World::update(double seconds_elapsed) {
 	// Verificamos si la cámara está en modo libre
 	free_camera = false;
 	
-
 	//poner free camera con F
 	if (Input::isKeyPressed(SDL_SCANCODE_F)) {
 		free_camera = true;
@@ -81,10 +78,6 @@ void World::update(double seconds_elapsed) {
 		free_camera = false;
 		use_third_person = true;
 	}
-	
-
-
-	
 	
 	if (free_camera) {
 		
@@ -142,8 +135,6 @@ void World::destroyEntity(Entity* entity) {
 }
 
 void World::update_fpcamera(float seconds_elapsed) {
-
-
 	camera_yaw -= Input::mouse_delta.x * seconds_elapsed * mouse_speed;
 	camera_pitch -= Input::mouse_delta.y * seconds_elapsed * mouse_speed;
 
@@ -165,41 +156,49 @@ void World::update_fpcamera(float seconds_elapsed) {
 
 void World::update_thirdpcamera(float seconds_elapsed) {
 	// Ajustar sensibilidad del ratón
+	camera_yaw -= Input::mouse_delta.x * seconds_elapsed * mouse_speed;
+	camera_pitch -= Input::mouse_delta.y * seconds_elapsed * mouse_speed;
 
-		
-		camera_yaw -= Input::mouse_delta.x * seconds_elapsed * mouse_speed;
-		camera_pitch -= Input::mouse_delta.y * seconds_elapsed * mouse_speed;
+	// Limitar la inclinación de la cámara
+	camera_pitch = clamp(camera_pitch, -M_PI * 0.4f, M_PI * 0.4f);
 
-		// Limitar la inclinación de la cámara
-		camera_pitch = clamp(camera_pitch, -M_PI * 0.4f, M_PI * 0.4f);
+	Matrix44 mYaw;
+	mYaw.setRotation(camera_yaw, Vector3(0, 1, 0));
 
-		Matrix44 mYaw;
-		mYaw.setRotation(camera_yaw, Vector3(0, 1, 0));
+	Matrix44 mPitch;
+	mPitch.setRotation(camera_pitch, Vector3(-1, 0, 0));
 
-		Matrix44 mPitch;
-		mPitch.setRotation(camera_pitch, Vector3(-1, 0, 0));
+	Vector3 front = (mPitch * mYaw).frontVector().normalize();
 
-		Vector3 front = (mPitch * mYaw).frontVector().normalize();
+	// Ajustar la posición de la cámara
+	Vector3 center = Player::instance->model.getTranslation() + Vector3(0, 2.5, 0);
+	float orbit_distance = 3.0f;  // Ajusta la distancia de la cámara
+	Vector3 eye = center - front * orbit_distance;
 
-		// Ajustar la posición de la cámara
-		Vector3 center = Player::instance->model.getTranslation() + Vector3(0, 2.5, 0);
-		float orbit_distance = 3.0f;  // Ajusta la distancia de la cámara
-		Vector3 eye = center - front * orbit_distance;
-
-		// Para que la camara no atraviese las paredes
+	// Para que la camara no atraviese las paredes
 
 
-		/*sCollisionData data = raycast(center, (eye - center).normalize());
-		if (data.collided) {
-			eye = data.col_point;
-		}*/
+	sCollisionData data = raycast(center, (eye - center).normalize());
+	if (data.collided) {
+		eye = data.col_point;
+	}
 
-		camera->lookAt(eye, center, Vector3(0, 1, 0));
+	camera->lookAt(eye, center, Vector3(0, 1, 0));
 		
 }
 
+void World::test_scene_collisions(const Vector3& position, std::vector<sCollisionData>& collisions, std::vector<sCollisionData>& ground_collisions) {
+	for (auto e : root->children) {
+		EntityCollider* ec = dynamic_cast<EntityCollider*>(e);
+		// si no es un collider no hacemos nada
+		if (ec == nullptr)
+			continue;
+		// si es collider las guarda en los vectores de colisiones
+		ec->getCollisions(position, collisions, ground_collisions);
+	}
+}
 
-/*sCollisionData World::raycast(const Vector3& origin, const Vector3& direction, int layer) {
+sCollisionData World::raycast(const Vector3& origin, const Vector3& direction, int layer, bool closest, double mad_ray_distance) {
 
 	sCollisionData data;
 
@@ -212,9 +211,14 @@ void World::update_thirdpcamera(float seconds_elapsed) {
 		Vector3 col_point;
 		Vector3 col_normal;
 
+		if (!ec->isInstanced) {
+			if (!ec->mesh->testRayCollisions() {
+
+			}
+		}
 
 
 	}
 
 
-}*/
+}

@@ -4,7 +4,7 @@
 #include "framework/camera.h"
 #include "graphics/mesh.h"
 #include "graphics/material.h"
-
+#include "framework/entities/entity_collider.h"
 
 Player* Player::instance = NULL;
 
@@ -45,7 +45,6 @@ void Player::render(Camera* camera) {
 
 
 void Player::update(float seconds_elapsed) {
-    
 
     float camera_yaw = World::get_instance()->camera_yaw;
 
@@ -81,7 +80,7 @@ void Player::update(float seconds_elapsed) {
     }
 
     //REINICIAR COLOR A BLANCO
-    if (Input::isKeyPressed(SDL_SCANCODE_Z)) {
+    if (Input::isKeyPressed(SDL_SCANCODE_C)) {
         
         current_color = Vector3(1,1,1);
     }
@@ -91,9 +90,11 @@ void Player::update(float seconds_elapsed) {
     if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT))
         speed_mult *= 3.0f;
 
-    
     move_dir.normalize();
     move_dir *= speed_mult;
+
+    // Miramos que no haya colisiones
+    test_collisions(position, seconds_elapsed);
 
     // Aplicar el movimiento
     position += move_dir * seconds_elapsed;
@@ -106,4 +107,40 @@ void Player::update(float seconds_elapsed) {
     velocity.y *= 0.5;
    
     EntityMesh::update(seconds_elapsed);
+}
+
+void Player::test_collisions(Vector3& position, float seconds_elapsed) {
+    std::vector<sCollisionData> collisions;
+    std::vector<sCollisionData> ground_collisions;
+
+    World::get_instance()->test_scene_collisions(position + velocity * seconds_elapsed, collisions, ground_collisions);
+
+    // Checkeo de colisiones
+    for (const sCollisionData& collision : collisions) {
+
+        // Si el vector normal apunta hacia arriba tenemos una colision de suelo
+        float up_vector = fabsf(collision.col_normal.dot(Vector3::UP));
+        if (up_vector > 0.8)
+            continue;
+
+        // Movernos arrastrandonos por la pared cuando chocamos
+        Vector3 newDir = velocity.dot(collision.col_normal) * collision.col_normal;
+        velocity.x -= newDir.x;
+        velocity.y -= newDir.y;
+    }
+
+    // Colisiones de suelo
+    bool is_grounded = false;
+    for (const sCollisionData& collision : ground_collisions) {
+        float up_vector = fabsf(collision.col_normal.dot(Vector3::UP));
+        if (up_vector > 0.8)
+            is_grounded = true;
+    }
+
+    if (!is_grounded)
+        velocity.y -= 9.8f * seconds_elapsed;
+    else if (Input::wasKeyPressed(SDL_SCANCODE_SPACE))
+        velocity.y = 3.0f;
+    else
+        velocity.y = 0.0f;
 }

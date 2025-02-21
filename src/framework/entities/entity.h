@@ -14,6 +14,7 @@ public:
 
 	std::string name;
 	Matrix44 model;
+	int layer;
 
 	Entity* parent = nullptr;
 	std::vector<Entity*> children;
