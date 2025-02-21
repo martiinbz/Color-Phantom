@@ -78,12 +78,11 @@ bool SceneParser::parse(const char* filename, Entity* root)
 
 			// Guardamos el jugador en World
 			//World::get_instance()->player = new_entity;
-			
 		
 		}
 		else {
 			Mesh* mesh = Mesh::Get(mesh_name.c_str());
-			new_entity = new EntityMesh(mesh, mat);
+			new_entity = new EntityCollider(mesh, mat, mesh_name);
 		}
 
 		if (!new_entity) {

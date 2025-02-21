@@ -8,7 +8,6 @@ void Entity::render(Camera* camera)
 	for (int i = 0; i < children.size(); ++i) {
 		children[i]->render(camera);
 	}
-
 }
 
 void Entity::update(float delta_time)
