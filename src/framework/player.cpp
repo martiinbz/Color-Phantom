@@ -106,6 +106,8 @@ void Player::update(float seconds_elapsed) {
     velocity.x *= 0.5f;
     velocity.y *= 0.5;
    
+
+    model.scale(0.6f);
     EntityMesh::update(seconds_elapsed);
 }
 
@@ -122,9 +124,11 @@ void Player::test_collisions(Vector3& position, float seconds_elapsed) {
         float up_vector = fabsf(collision.col_normal.dot(Vector3::UP));
         if (up_vector > 0.8)
             continue;
-
+		
         // Movernos arrastrandonos por la pared cuando chocamos
+		position += collision.col_normal * collision.distance;
         Vector3 newDir = velocity.dot(collision.col_normal) * collision.col_normal;
+        
         velocity.x -= newDir.x;
         velocity.y -= newDir.y;
     }
@@ -136,6 +140,7 @@ void Player::test_collisions(Vector3& position, float seconds_elapsed) {
         if (up_vector > 0.8)
             is_grounded = true;
     }
+	
 
     if (!is_grounded)
         velocity.y -= 9.8f * seconds_elapsed;

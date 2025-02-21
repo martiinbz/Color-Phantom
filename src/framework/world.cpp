@@ -28,7 +28,7 @@ World::World() {
 	}
 
 	SceneParser parser;
-	bool ok = parser.parse("data/supermarket.scene", root);
+	bool ok = parser.parse("data/myscene.scene", root);
 }
 
 void World::render() {
@@ -165,17 +165,24 @@ void World::update_thirdpcamera(float seconds_elapsed) {
 	Vector3 front = (mPitch * mYaw).frontVector().normalize();
 
 	// Ajustar la posición de la cámara
-	Vector3 center = Player::instance->model.getTranslation() + Vector3(0, 2.5, 0);
-	float orbit_distance = 1.5f;  // Ajusta la distancia de la cámara
-	Vector3 eye = Player::instance->model.getTranslation() - front * orbit_distance;
-
+	Vector3 center = Player::instance->model.getTranslation() + Vector3(0,1.5, 0);
+	float orbit_distance = 2.0f;  // Ajusta la distancia de la cámara
+	Vector3 eye = center - front * orbit_distance;
+	
 	// Para que la camara no atraviese las paredes
 	sCollisionData data = raycast(center, (eye - center).normalize());
 	if (data.collided) {
-		eye = data.col_point;
+		
+		float smoothing_factor = 0.2f;  // Puedes ajustar esto para hacerlo más suave
+		eye = eye * (1 - smoothing_factor) + data.col_point * smoothing_factor;
+		camera->lookAt(eye, center, Vector3(0, 1, 0));
+		
+	}
+	else {
+		camera->lookAt(eye, center, Vector3(0, 1, 0));
 	}
 
-	camera->lookAt(eye, center, Vector3(0, 1, 0));		
+		
 }
 
 void World::test_scene_collisions(const Vector3& position, std::vector<sCollisionData>& collisions, std::vector<sCollisionData>& ground_collisions) {
