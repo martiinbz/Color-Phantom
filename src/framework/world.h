@@ -23,7 +23,7 @@ public:
 	EntityMesh* skybox = nullptr;
 	
 	Camera* camera = nullptr;
-	// Camera* camera2D = nullptr;
+	Camera* camera2D = nullptr;
 	
 	Vector3 looking_color;
 	float camera_yaw = 0.f;

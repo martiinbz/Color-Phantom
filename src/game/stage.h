@@ -25,8 +25,12 @@ public:
 
 class MenuStage : public Stage {
 
+    EntityUI* background = nullptr;
+    EntityUI* play_button = nullptr;
+    EntityUI* exit_button = nullptr;
+
 public:
-    MenuStage();
+    void init() override;
     void render(Camera* camera) override;
     void update(double dt) override;
 	void onEnter(Stage* stage) override;
@@ -36,7 +40,7 @@ public:
 class  PlayStage : public Stage {
   
 public:
-    PlayStage();
+    void init() override;
     void update(double dt) override;
     void render(Camera* camera) override;
 	void onEnter(Stage* stage) override;

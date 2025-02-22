@@ -1,7 +1,5 @@
 #include "stage.h"
 #include "game.h"
-
-
 #include "stage.h"
 #include "framework/utils.h"
 #include <iostream>
@@ -13,31 +11,49 @@
 #include "graphics/shader.h"
 #include "framework/player.h"
 #include "framework/world.h"
+#include "framework/entities/entity_ui.h"
+#include "../../build/entity_ui.h"
 
 
-MenuStage::MenuStage() : Stage() {
+void MenuStage::init() {
+	int width = Game::instance->window_width;
+	int height = Game::instance->window_height;
 
+	Material background_material;
+	background_material.diffuse = Texture::Get("");
+	background = new EntityUI(Vector2(width * 0.5, height * 0.5), Vector2(width, height), background_material);
 }
 
 void MenuStage::render(Camera* camera) {
+	background->render(World::get_instance()->camera2D);
 
+	// boton exit
+	if (UI::addButton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(0,0), "data/button/exit_button.png")) {
+		exit(0);
+	}
+
+	// boton play
+	if (UI::addButton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(0,0), "data/button/play_button")) {
+		Game::instance->goToStage(STAGE_PLAY);
+	}
 }
 
 void MenuStage::update(double dt) {
-
+	background->update(dt);
 }
 
 void MenuStage::onEnter(Stage* stage) {
-
+	Game::instance->setMouseLocked(false);
 }
 
 void MenuStage::onLeave(Stage* stage) {
 
 }
-//PLAY STAGE///////////////////////////////////////////
+
+
 
 void PlayStage::onEnter(Stage* stage) {
-	
+	Game::instance->setMouseLocked(false);
 }
 void PlayStage::onLeave(Stage* stage) {
 
@@ -96,6 +112,5 @@ void PlayStage::render(Camera* camera) {
 }
 
 void PlayStage::update(double seconds_elapsed) {
-
 	World::get_instance()->update(seconds_elapsed);
 }
