@@ -19,6 +19,8 @@ World::World() {
 	camera->lookAt(Vector3(0.f, 1.f, 1.f), Vector3(0.f), Vector3(0.f, 1.f, 0.f));
 	camera->setPerspective(70.f, window_width / float(window_height), 0.1f, 1000.f);
 
+	
+
 	// parent root
 	root = new Entity();
 
@@ -56,61 +58,31 @@ void World::update(double seconds_elapsed) {
 	// Verificamos si la cámara está en modo libre
 	free_camera = false;
 	
-	//poner free camera con F
-	if (Input::isKeyPressed(SDL_SCANCODE_F)) {
-		free_camera = true;
-		use_first_person = false;
-		use_third_person = false;
-	}
-	if (Input::isKeyPressed(SDL_SCANCODE_G)) {
-		use_first_person = true;
-		free_camera = false;
-		use_third_person = false;
-	}
-
-	if (Input::isKeyPressed(SDL_SCANCODE_H)) {
-		use_first_person = false;
-		free_camera = false;
-		use_third_person = true;
-	}
 	
-	if (free_camera) {
-		
-		float speed = seconds_elapsed * camera_speed;
-		
-		if (Input::isMousePressed(SDL_BUTTON_LEFT) || Game::instance->mouse_locked) {
-			camera->rotate(Input::mouse_delta.x * 0.005f, Vector3(0.f, -1.f, 0.f));
-			camera->rotate(Input::mouse_delta.y * 0.005f, camera->getLocalVector(Vector3(-1.f, 0.f, 0.f)));
-		}
-
-		if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT)) speed *= 10;
-		if (Input::isKeyPressed(SDL_SCANCODE_W) || Input::isKeyPressed(SDL_SCANCODE_UP)) camera->move(Vector3(0.0f, 0.0f, 1.0f) * speed);
-		if (Input::isKeyPressed(SDL_SCANCODE_S) || Input::isKeyPressed(SDL_SCANCODE_DOWN)) camera->move(Vector3(0.0f, 0.0f, -1.0f) * speed);
-		if (Input::isKeyPressed(SDL_SCANCODE_A) || Input::isKeyPressed(SDL_SCANCODE_LEFT)) camera->move(Vector3(1.0f, 0.0f, 0.0f) * speed);
-		if (Input::isKeyPressed(SDL_SCANCODE_D) || Input::isKeyPressed(SDL_SCANCODE_RIGHT)) camera->move(Vector3(-1.0f, 0.0f, 0.0f) * speed);
+	
+	
+	// Si no estamos en free_camera, actualizamos la escena y el jugador
+	if (root) {
+		root->update(seconds_elapsed);
 	}
-	else {
-		// Si no estamos en free_camera, actualizamos la escena y el jugador
-		if (root) {
-			root->update(seconds_elapsed);
-		}
 
-		if (Player::instance) {
+	if (Player::instance) {
 			
-			Player::instance->update(seconds_elapsed);
+		Player::instance->update(seconds_elapsed);
 
-			// Asegurar que la cámara sigue al Player en tercera o primera persona
-			if (Input::isMousePressed(SDL_BUTTON_LEFT)) {
-				update_fpcamera(seconds_elapsed);
-			}
-			else {
-				update_thirdpcamera(seconds_elapsed);
-			}
+		// Asegurar que la cámara sigue al Player en tercera o primera persona
+		if (Input::isMousePressed(SDL_BUTTON_LEFT)) {
+			
+			update_fpcamera(seconds_elapsed);
 		}
 		else {
-			std::cout << "ERROR: Player es nullptr. No se puede actualizar ni seguir con la cámara." << std::endl;
+			update_thirdpcamera(seconds_elapsed);
 		}
 	}
+	else {
+		std::cout << "ERROR: Player es nullptr. No se puede actualizar ni seguir con la cámara." << std::endl;
+	}
+	
 
 	// Destruir entidades marcadas para eliminación
 	for (auto e : entities_to_destroy) {
@@ -128,25 +100,53 @@ void World::destroyEntity(Entity* entity) {
 	entities_to_destroy.push_back(entity);
 }
 
+
 void World::update_fpcamera(float seconds_elapsed) {
+	// Ajustar la orientación del jugador (y no de la cámara) con el movimiento del ratón
 	camera_yaw -= Input::mouse_delta.x * seconds_elapsed * mouse_speed;
 	camera_pitch -= Input::mouse_delta.y * seconds_elapsed * mouse_speed;
 
+	// Limitar la inclinación de la cámara
+	camera_pitch = clamp(camera_pitch, -M_PI * 0.4f, M_PI * 0.4f);
+
+	// Crear la matriz de rotación para el jugador (pero no para la cámara)
 	Matrix44 mYaw;
-	mYaw.setRotation(camera_yaw, Vector3(0, 1, 0));
+	mYaw.setRotation(camera_yaw, Vector3(0, 1, 0));  // Rotación en el eje Y (horizontal)
 
 	Matrix44 mPitch;
-	mPitch.setRotation(camera_pitch, Vector3(-1, 0, 0));
+	mPitch.setRotation(camera_pitch, Vector3(-1, 0, 0));  // Rotación en el eje X (vertical)
 
+	// Dirección que la cámara sigue (del jugador)
 	Vector3 front = (mPitch * mYaw).frontVector().normalize();
 
-	//put the camera in front of the player
-	
-	Vector3 eye = Player::instance->model.getTranslation() + Vector3(0.7, 2.2, -0.3) - front * 0.5;
-	Vector3 center = eye + front;
+	// La cámara siempre debe estar frente al jugador, no se ve afectada por la tercera persona
+	Vector3 center = Player::instance->model.getTranslation() + Vector3(0, 1.5f, 0);  // Centro del jugador
 
-	camera->lookAt(eye, center, Vector3(0, 1, 0));
+	// Colocamos la cámara a una distancia fija frente al jugador
+	float orbit_distance = 1.0f;  // Distancia de la cámara respecto al jugador
+	Vector3 eye = center - front * orbit_distance; // La cámara está siempre frente al jugador
+
+	// La cámara debe mirar hacia donde el jugador está mirando
+	camera->lookAt(eye, center + front * 2.0f, Vector3(0, 1, 0));  // La cámara sigue al jugador
+
+	// Si se detecta una colisión (por ejemplo, una pared entre el jugador y la cámara), ajustamos la posición de la cámara
+	sCollisionData data = raycast(center, (eye - center).normalize());
+
+	if (data.collided) {
+		// Suavizamos el ajuste de la cámara para evitar que se mueva bruscamente
+		float smoothing_factor = 0.3f;  // Ajusta este factor según lo suave que desees que sea el movimiento
+		eye = eye * (1 - smoothing_factor) + data.col_point * smoothing_factor;
+	}
+
+	// Finalmente, actualizamos la cámara para que mire al jugador desde la posición calculada
+	camera->lookAt(eye, center + front * 2.0f, Vector3(0, 1, 0));  // La cámara sigue al jugador
 }
+
+
+
+
+
+
 
 void World::update_thirdpcamera(float seconds_elapsed) {
 	// Ajustar sensibilidad del ratón
@@ -173,7 +173,7 @@ void World::update_thirdpcamera(float seconds_elapsed) {
 	sCollisionData data = raycast(center, (eye - center).normalize());
 	if (data.collided) {
 		
-		float smoothing_factor = 0.2f;  // Puedes ajustar esto para hacerlo más suave
+		float smoothing_factor = 0.3f;  // Puedes ajustar esto para hacerlo más suave
 		eye = eye * (1 - smoothing_factor) + data.col_point * smoothing_factor;
 		camera->lookAt(eye, center, Vector3(0, 1, 0));
 		

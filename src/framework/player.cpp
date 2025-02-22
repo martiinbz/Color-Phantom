@@ -46,17 +46,19 @@ void Player::render(Camera* camera) {
 
 void Player::update(float seconds_elapsed) {
 
+    
     float camera_yaw = World::get_instance()->camera_yaw;
 
+    // Crear la matriz de rotación
     Matrix44 mYaw;
     mYaw.setRotation(camera_yaw, Vector3(0, 1, 0));
 
     Vector3 front = mYaw.frontVector();
     Vector3 right = mYaw.rightVector();
-    Vector3 position = model.getTranslation();
-	
+    Vector3 position = model.getTranslation();  // Posición actual del jugador
     Vector3 move_dir;
 
+    // Detectar las teclas de movimiento (WASD)
     if (Input::isKeyPressed(SDL_SCANCODE_W) || Input::isKeyPressed(SDL_SCANCODE_UP)) {
         move_dir += front;
     }
@@ -65,50 +67,59 @@ void Player::update(float seconds_elapsed) {
     }
     if (Input::isKeyPressed(SDL_SCANCODE_A) || Input::isKeyPressed(SDL_SCANCODE_LEFT)) {
         move_dir += right;
-        
     }
     if (Input::isKeyPressed(SDL_SCANCODE_D) || Input::isKeyPressed(SDL_SCANCODE_RIGHT)) {
         move_dir -= right;
     }
-
     //mecanica de cambio de color 
     if (Input::isKeyPressed(SDL_SCANCODE_X)) {
         target_color = World::get_instance()->looking_color;
 
         //cambiar el color progresivamente
-		current_color = current_color * (1.0f - seconds_elapsed) + target_color * seconds_elapsed;
+        current_color = current_color * (1.0f - seconds_elapsed) + target_color * seconds_elapsed;
     }
 
     //REINICIAR COLOR A BLANCO
     if (Input::isKeyPressed(SDL_SCANCODE_C)) {
-        
-        current_color = Vector3(1,1,1);
+
+        current_color = Vector3(1, 1, 1);
     }
 
-    // Ajustar velocidad
+    // Ajustar la velocidad (correr con Shift)
     float speed_mult = walk_speed;
     if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT))
-        speed_mult *= 3.0f;
+        speed_mult *= 3.0f;  // Correr
 
+    // Normalizar la dirección de movimiento
     move_dir.normalize();
     move_dir *= speed_mult;
 
-    // Miramos que no haya colisiones
+    // Calcular la velocidad
+    velocity = move_dir;
+
+    // Test de colisiones
     test_collisions(position, seconds_elapsed);
 
-    // Aplicar el movimiento
-    position += move_dir * seconds_elapsed;
-    
-    model.setTranslation(position);
-    model.rotate(camera_yaw, Vector3(0, 1, 0));
-	
-    // Reducir velocidad para fricción
-    velocity.x *= 0.5f;
-    velocity.y *= 0.5;
-   
+    // Aplicar el movimiento a la posición usando la velocity ajustada
+    position += velocity * seconds_elapsed;
 
+    // Actualizar la posición del modelo del jugador
+    model.setTranslation(position);
+
+    // Actualizar la rotación del jugador (si es necesario)
+    model.rotate(camera_yaw, Vector3(0, 1, 0));
+
+    // Reducir la velocidad por fricción (opcional)
+    velocity.x *= 0.5f;
+    velocity.y *= 0.5f;
+
+    // Escalar el modelo del jugador (opcional)
     model.scale(0.6f);
+
+    // Actualizar la entidad base
     EntityMesh::update(seconds_elapsed);
+    
+
 }
 
 void Player::test_collisions(Vector3& position, float seconds_elapsed) {
@@ -125,8 +136,11 @@ void Player::test_collisions(Vector3& position, float seconds_elapsed) {
         if (up_vector > 0.8)
             continue;
 		
-        // Movernos arrastrandonos por la pared cuando chocamos
-		position += collision.col_normal * collision.distance;
+        float collisionFactor = velocity.dot(collision.col_normal);
+        if (collisionFactor > 0.0f) {
+			//deteneos la velocidad en la dirección de la colisión
+            velocity -= collisionFactor * collision.col_normal;  
+        }
         Vector3 newDir = velocity.dot(collision.col_normal) * collision.col_normal;
         
         velocity.x -= newDir.x;
@@ -137,15 +151,18 @@ void Player::test_collisions(Vector3& position, float seconds_elapsed) {
     bool is_grounded = false;
     for (const sCollisionData& collision : ground_collisions) {
         float up_vector = fabsf(collision.col_normal.dot(Vector3::UP));
-        if (up_vector > 0.8)
+        if (up_vector > 0.8 && (position.y - collision.col_point.y)< 0.01f)  //miramos tambien que el jugador esté pegado al suelo
+			// si está en mitad de un salto, is_grounded = false para que se le aplique la gravedad
             is_grounded = true;
+		std::cout << "is_grounded: " << is_grounded << std::endl;
+        
     }
 	
 
     if (!is_grounded)
         velocity.y -= 9.8f * seconds_elapsed;
-    else if (Input::wasKeyPressed(SDL_SCANCODE_SPACE))
-        velocity.y = 3.0f;
-    else
-        velocity.y = 0.0f;
+    else if (Input::wasKeyPressed(SDL_SCANCODE_SPACE)) {
+        velocity.y += 50.0f;
+    }
+      
 }
