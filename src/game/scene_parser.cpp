@@ -65,16 +65,16 @@ bool SceneParser::parse(const char* filename, Entity* root)
 
 		if (tag != std::string::npos) {
 			
-			std::cout << "Encontrado @player en escena!" << std::endl;
+			std::cout << "Encontrado @player en escena" << std::endl;
 
-			// Cargar la malla desde el archivo de Blender
+			
 			Mesh* mesh = Mesh::Get(mesh_name.c_str());
 
-			// Crear la entidad como un Player en vez de EntityMesh
+			
 			new_entity = new Player(mesh, mat, "player");
 
-			// Referenciar globalmente el player
-			root->addChild(new_entity); // Agregarlo a la jerarquía de la escena
+			
+			root->addChild(new_entity); 
 
 			// Guardamos el jugador en World
 			//World::get_instance()->player = new_entity;

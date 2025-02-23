@@ -32,7 +32,7 @@ EntityUI::EntityUI(Vector2 new_pos, Vector2 new_size, const Material& material, 
      Vector2 mouse_pos = Input::mouse_position;
      bool is_hovered = false;
      bool was_presed = false;
-
+    
      if (mouse_pos.x > (pos.x - size.x * 0.5f) && mouse_pos.x < (pos.x + size.x * 0.5f) &&
          mouse_pos.y >(pos.y - size.y * 0.5f) && mouse_pos.y < (pos.y + size.y * 0.5f)) {
          is_hovered = true;
@@ -60,12 +60,15 @@ EntityUI::EntityUI(Vector2 new_pos, Vector2 new_size, const Material& material, 
 	 shader->setUniform("u_texture", texture, 0);
 
      Mesh quad;
-     quad.createQuad(pos.x, pos.y, size.x, size.y, true);    
-	 quad.render(GL_TRIANGLES);
-
+     quad.createQuad(0, 0, size.x, size.y, true);    
+     quad.render(GL_TRIANGLES);
 	 shader->disable();
-	 glEnable(GL_DEPTH_TEST);
+	 
 
+
+	 drawText(5, 15, "LOS BOTONES NO SE PINTAN,PERO ESTAN CREADOS. HAZ CLICK EN EL CENTRO", Vector3(1, 1, 1), 2);
+     SDL_GL_SwapWindow(Game::instance->window);
+ 
 	 return was_presed;
 }
 

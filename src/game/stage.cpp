@@ -23,10 +23,17 @@ void MenuStage::init() {
 }
 
 void MenuStage::render(Camera* camera) {
-    background->render(World::get_instance()->camera2D);
+    glClearColor(0.0, 0.0, 0.0, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    if (UI::addbackground(Vector2(Game::instance->window_width, Game::instance->window_height), Vector2(Game::instance->window_width, Game::instance->window_height), "data/button/novios.png")) {
-        std::cout<< "IMPRIME PANTALLLA" << std::endl;
+    camera->enable();
+
+    glDisable(GL_BLEND);
+    glEnable(GL_DEPTH_TEST);
+    glDisable(GL_CULL_FACE);
+    
+    if (UI::addbackground(Vector2(Game::instance->window_width, Game::instance->window_height), Vector2(Game::instance->window_width, Game::instance->window_height), "data/button/blue.png")) {
+       
     }
 
     // boton exit
@@ -38,6 +45,10 @@ void MenuStage::render(Camera* camera) {
     if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(494,520), "data/button/flatDark41.png")) {
         Game::instance->goToStage(STAGE_PLAY);
     }
+
+    
+    // Intercambiar buffers
+   // SDL_GL_SwapWindow(Game::instance->window);
 }
 
 void MenuStage::update(double dt) {
@@ -46,7 +57,7 @@ void MenuStage::update(double dt) {
 
 void MenuStage::onEnter(Stage* stage)
 {
-    Game::instance->setMouseLocked(false); // Por si en otra escena estaba bloqueado
+    Game::instance->setMouseLocked(false); // por si en otra escena estaba bloqueado
 }
 
 void MenuStage::onLeave(Stage* stage)
@@ -74,14 +85,13 @@ void PlayStage::render(Camera* camera)
     glEnable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
 
-    // Renderizamos el mundo
+   
     World::get_instance()->render();
 
-    // Dibujar grid/estadísticas, etc.
     drawGrid();
     drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
 
-    // Intercambiar buffers
+    
     SDL_GL_SwapWindow(Game::instance->window);
 }
 
@@ -97,5 +107,5 @@ void PlayStage::onEnter(Stage* stage)
 
 void PlayStage::onLeave(Stage* stage)
 {
-    // ...
+    
 }

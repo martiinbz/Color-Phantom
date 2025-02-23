@@ -49,16 +49,15 @@ void Player::update(float seconds_elapsed) {
     
     float camera_yaw = World::get_instance()->camera_yaw;
 
-    // Crear la matriz de rotación
     Matrix44 mYaw;
     mYaw.setRotation(camera_yaw, Vector3(0, 1, 0));
 
     Vector3 front = mYaw.frontVector();
     Vector3 right = mYaw.rightVector();
-    Vector3 position = model.getTranslation();  // Posición actual del jugador
+    Vector3 position = model.getTranslation(); 
     Vector3 move_dir;
 
-    // Detectar las teclas de movimiento (WASD)
+    //WASD keys
     if (Input::isKeyPressed(SDL_SCANCODE_W) || Input::isKeyPressed(SDL_SCANCODE_UP)) {
         move_dir += front;
     }
@@ -75,7 +74,7 @@ void Player::update(float seconds_elapsed) {
     if (Input::isKeyPressed(SDL_SCANCODE_X)) {
         target_color = World::get_instance()->looking_color;
 
-        //cambiar el color progresivamente
+        //cambiar el color progresivamente 
         current_color = current_color * (1.0f - seconds_elapsed) + target_color * seconds_elapsed;
     }
 
@@ -85,38 +84,36 @@ void Player::update(float seconds_elapsed) {
         current_color = Vector3(1, 1, 1);
     }
     
-    // Ajustar la velocidad (correr con Shift)
+    //correr con shift
     float speed_mult = walk_speed;
     if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT))
         speed_mult *= 3.0f;  // Correr
 
-    // Normalizar la dirección de movimiento
+  
     move_dir.normalize();
     move_dir *= speed_mult;
 
-    // Calcular la velocidad
     velocity = move_dir;
 
-    // Test de colisiones
+    //colisiones del jugador
     test_collisions(position, seconds_elapsed);
 
-    // Aplicar el movimiento a la posición usando la velocity ajustada
+    // aplicar el movimiento
     position += velocity * seconds_elapsed;
 
-    // Actualizar la posición del modelo del jugador
+    
     model.setTranslation(position);
 
-    // Actualizar la rotación del jugador (si es necesario)
+    //rotar al jugador con la cámara
     model.rotate(camera_yaw, Vector3(0, 1, 0));
 
-    // Reducir la velocidad por fricción (opcional)
-    velocity.x *= 0.5f;
-    velocity.y *= 0.5f;
+    
+    
 
-    // Escalar el modelo del jugador (opcional)
+    // escalar al jugador (en el portatil me sale super grande, pero en la torre sale pequeñisimo entonces esto hay que arreglarlo)
     model.scale(0.6f);
 
-    // Actualizar la entidad base
+   
     EntityMesh::update(seconds_elapsed);
     
 
@@ -128,10 +125,10 @@ void Player::test_collisions(Vector3& position, float seconds_elapsed) {
 
     World::get_instance()->test_scene_collisions(position + velocity * seconds_elapsed, collisions, ground_collisions);
 
-    // Checkeo de colisiones
+    
     for (const sCollisionData& collision : collisions) {
 
-        // Si el vector normal apunta hacia arriba tenemos una colision de suelo
+        //mirar si hay colision de suelo
         float up_vector = fabsf(collision.col_normal.dot(Vector3::UP));
         if (up_vector > 0.8)
             continue;
@@ -147,14 +144,14 @@ void Player::test_collisions(Vector3& position, float seconds_elapsed) {
         velocity.y -= newDir.y;
     }
 
-    // Colisiones de suelo
+    // colisiones de suelo
     bool is_grounded = false;
     for (const sCollisionData& collision : ground_collisions) {
         float up_vector = fabsf(collision.col_normal.dot(Vector3::UP));
         if (up_vector > 0.8 && (position.y - collision.col_point.y)< 0.01f)  //miramos tambien que el jugador esté pegado al suelo
-			// si está en mitad de un salto, is_grounded = false para que se le aplique la gravedad
+			// si está en mitad de un salto, is_grounded = false para que se le aplique la gravedad y caiga
             is_grounded = true;
-		std::cout << "is_grounded: " << is_grounded << std::endl;
+		
         
     }
 	

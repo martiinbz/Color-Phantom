@@ -29,7 +29,7 @@ World::World() {
 	// parent root
 	root = new Entity();
 
-	// Si la instancia de Player aún no está creada, crearla
+	
 	if (!Player::instance) {
 		Player::instance = new Player();
 	}
@@ -56,14 +56,16 @@ void World::render() {
 	
 	glReadPixels(Game::instance->window_width/2, Game::instance->window_height/2, 1, 1, GL_RGB, GL_FLOAT, &looking_color.x);
 	
-	drawText(5, 15, "COLOR", looking_color, 4);
+	drawText(5, 15, "LOOKING_COLOR", looking_color, 4);
+
+	//mira (en negativo al color que apuntas para que siempre se vea)
+	drawText(Game::instance->window_width / 2, Game::instance->window_height / 2-5, "o", Vector3(1-looking_color.x, 1 - looking_color.y, 1 - looking_color.z), 2);
 }
 
 void World::update(double seconds_elapsed) {
-	// Verificamos si la cámara está en modo libre
-	free_camera = false;
 	
-	// Si no estamos en free_camera, actualizamos la escena y el jugador
+	
+	//update the scene
 	if (root) {
 		root->update(seconds_elapsed);
 	}
@@ -72,7 +74,7 @@ void World::update(double seconds_elapsed) {
 			
 		Player::instance->update(seconds_elapsed);
 
-		// Asegurar que la cámara sigue al Player en tercera o primera persona
+		//si se hace click, se cambia la cámara
 		if (Input::isMousePressed(SDL_BUTTON_LEFT)) {
 			
 			update_fpcamera(seconds_elapsed);
@@ -86,7 +88,7 @@ void World::update(double seconds_elapsed) {
 	}
 	
 
-	// Destruir entidades marcadas para eliminación
+	
 	for (auto e : entities_to_destroy) {
 		root->removeChild(e);
 		delete e;
@@ -102,54 +104,51 @@ void World::destroyEntity(Entity* entity) {
 	entities_to_destroy.push_back(entity);
 }
 
+//realmente no es primera persona como tal
 void World::update_fpcamera(float seconds_elapsed) {
-	// Ajustar la orientación del jugador (y no de la cámara) con el movimiento del ratón
+	
 	camera_yaw -= Input::mouse_delta.x * seconds_elapsed * mouse_speed;
 	camera_pitch -= Input::mouse_delta.y * seconds_elapsed * mouse_speed;
 
-	// Limitar la inclinación de la cámara
 	camera_pitch = clamp(camera_pitch, -M_PI * 0.4f, M_PI * 0.4f);
 
-	// Crear la matriz de rotación para el jugador (pero no para la cámara)
 	Matrix44 mYaw;
-	mYaw.setRotation(camera_yaw, Vector3(0, 1, 0));  // Rotación en el eje Y (horizontal)
+	mYaw.setRotation(camera_yaw, Vector3(0, 1, 0)); 
 
 	Matrix44 mPitch;
-	mPitch.setRotation(camera_pitch, Vector3(-1, 0, 0));  // Rotación en el eje X (vertical)
+	mPitch.setRotation(camera_pitch, Vector3(-1, 0, 0)); 
 
-	// Dirección que la cámara sigue (del jugador)
 	Vector3 front = (mPitch * mYaw).frontVector().normalize();
 
-	// La cámara siempre debe estar frente al jugador, no se ve afectada por la tercera persona
-	Vector3 center = Player::instance->model.getTranslation() + Vector3(0, 1.5f, 0);  // Centro del jugador
+	
+	Vector3 center = Player::instance->model.getTranslation() + Vector3(0.5f, 1.5f, 0);  
 
-	// Colocamos la cámara a una distancia fija frente al jugador
-	float orbit_distance = 1.0f;  // Distancia de la cámara respecto al jugador
-	Vector3 eye = center - front * orbit_distance; // La cámara está siempre frente al jugador
+	
+	float orbit_distance = 1.3f; 
+	Vector3 eye = center - front * orbit_distance; 
 
-	// La cámara debe mirar hacia donde el jugador está mirando
-	camera->lookAt(eye, center + front * 2.0f, Vector3(0, 1, 0));  // La cámara sigue al jugador
+	
+	camera->lookAt(eye, center + front * 2.0f, Vector3(0, 1, 0));  
 
-	// Si se detecta una colisión (por ejemplo, una pared entre el jugador y la cámara), ajustamos la posición de la cámara
+	//detectar colisiones
 	sCollisionData data = raycast(center, (eye - center).normalize());
 
 	if (data.collided) {
-		// Suavizamos el ajuste de la cámara para evitar que se mueva bruscamente
-		float smoothing_factor = 0.3f;  // Ajusta este factor según lo suave que desees que sea el movimiento
+		//suavizar la transición para que la camara no de saltos bruscos
+		float smoothing_factor = 0.3f;
 		eye = eye * (1 - smoothing_factor) + data.col_point * smoothing_factor;
 	}
 
-	// Finalmente, actualizamos la cámara para que mire al jugador desde la posición calculada
-	camera->lookAt(eye, center + front * 2.0f, Vector3(0, 1, 0));  // La cámara sigue al jugador
+	
+	camera->lookAt(eye, center + front * 2.0f, Vector3(0, 1, 0));  
 }
 
 
 void World::update_thirdpcamera(float seconds_elapsed) {
-	// Ajustar sensibilidad del ratón
+	
 	camera_yaw -= Input::mouse_delta.x * seconds_elapsed * mouse_speed;
 	camera_pitch -= Input::mouse_delta.y * seconds_elapsed * mouse_speed;
 
-	// Limitar la inclinación de la cámara
 	camera_pitch = clamp(camera_pitch, -M_PI * 0.4f, M_PI * 0.4f);
 
 	Matrix44 mYaw;
@@ -160,16 +159,16 @@ void World::update_thirdpcamera(float seconds_elapsed) {
 
 	Vector3 front = (mPitch * mYaw).frontVector().normalize();
 
-	// Ajustar la posición de la cámara
+	
 	Vector3 center = Player::instance->model.getTranslation() + Vector3(0,1.5, 0);
-	float orbit_distance = 2.0f;  // Ajusta la distancia de la cámara
+	float orbit_distance = 2.0f; 
 	Vector3 eye = center - front * orbit_distance;
 	
-	// Para que la camara no atraviese las paredes
+	//colisiones
 	sCollisionData data = raycast(center, (eye - center).normalize());
 	if (data.collided) {
 		
-		float smoothing_factor = 0.3f;  // Puedes ajustar esto para hacerlo más suave
+		float smoothing_factor = 0.3f; 
 		eye = eye * (1 - smoothing_factor) + data.col_point * smoothing_factor;
 		camera->lookAt(eye, center, Vector3(0, 1, 0));
 		
