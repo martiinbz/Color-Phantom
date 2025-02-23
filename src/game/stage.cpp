@@ -1,6 +1,5 @@
 #include "stage.h"
 #include "game.h"
-#include "stage.h"
 #include "framework/utils.h"
 #include <iostream>
 #include "framework/input.h"
@@ -12,105 +11,87 @@
 #include "framework/player.h"
 #include "framework/world.h"
 #include "framework/entities/entity_ui.h"
-#include "../../build/entity_ui.h"
-
 
 void MenuStage::init() {
-	int width = Game::instance->window_width;
-	int height = Game::instance->window_height;
+    int width = Game::instance->window_width;
+    int height = Game::instance->window_height;
 
-	Material background_material;
-	background_material.diffuse = Texture::Get("");
-	background = new EntityUI(Vector2(width * 0.5, height * 0.5), Vector2(width, height), background_material);
+    Material background_material;
+
+    //background_material.diffuse = Texture::Get("data/textures/novios.png");
+    background = new EntityUI(Vector2(width * 0.5, height * 0.5), Vector2(width, height), background_material);
 }
 
 void MenuStage::render(Camera* camera) {
-	background->render(World::get_instance()->camera2D);
+    background->render(World::get_instance()->camera2D);
 
-	// boton exit
-	if (UI::addButton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(0,0), "data/button/exit_button.png")) {
-		exit(0);
-	}
+    // boton exit
+    if (play_button->addButton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(0, 0), "data/button/button2.png")) {
+        exit(0);
+    }
 
-	// boton play
-	if (UI::addButton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(0,0), "data/button/play_button")) {
-		Game::instance->goToStage(STAGE_PLAY);
-	}
+    // boton play
+    if (exit_button->addButton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(0, 0), "data/button/button.png")) {
+        Game::instance->goToStage(STAGE_PLAY);
+    }
 }
 
 void MenuStage::update(double dt) {
-	background->update(dt);
+    background->update(dt);
 }
 
-void MenuStage::onEnter(Stage* stage) {
-	Game::instance->setMouseLocked(false);
+void MenuStage::onEnter(Stage* stage)
+{
+    Game::instance->setMouseLocked(false); // Por si en otra escena estaba bloqueado
 }
 
-void MenuStage::onLeave(Stage* stage) {
-
-}
-
-
-
-void PlayStage::onEnter(Stage* stage) {
-	Game::instance->setMouseLocked(false);
-}
-void PlayStage::onLeave(Stage* stage) {
-
+void MenuStage::onLeave(Stage* stage)
+{
+    // Nada en especial al salir
 }
 
 
-
-
-//some globals
-Mesh* mesh = NULL;
-Texture* texture = NULL;
-Shader* shader = NULL;
-float angle = 0;
-float mouse_speed = 10.0f;
-
-
-
-
-
-PlayStage::PlayStage(): Stage() {
-
+// -------------------------------------
+// PLAY STAGE
+// -------------------------------------
+void PlayStage::init()
+{
+    // ...
 }
 
+void PlayStage::render(Camera* camera)
+{
+    glClearColor(0.0, 0.0, 0.0, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    camera->enable();
 
-void PlayStage::render(Camera* camera) {
-    
-	
+    glDisable(GL_BLEND);
+    glEnable(GL_DEPTH_TEST);
+    glDisable(GL_CULL_FACE);
 
+    // Renderizamos el mundo
+    World::get_instance()->render();
 
-	
-	glClearColor(0.0, 0.0, 0.0, 1.0);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // Dibujar grid/estadísticas, etc.
+    drawGrid();
+    drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
 
-	camera->enable();
-
-	glDisable(GL_BLEND);
-	glEnable(GL_DEPTH_TEST);
-	glDisable(GL_CULL_FACE);
-
-	// Llamar al render de World en lugar de root->render()
-	World::get_instance()->render();
-
-	// Dibujar el grid y estadísticas de FPS
-	drawGrid();
-	drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
-
-	// Intercambiar buffers
-	SDL_GL_SwapWindow(Game::instance->window);
-	
-
-	
-	
-
-	
+    // Intercambiar buffers
+    SDL_GL_SwapWindow(Game::instance->window);
 }
 
-void PlayStage::update(double seconds_elapsed) {
-	World::get_instance()->update(seconds_elapsed);
+void PlayStage::update(double seconds_elapsed)
+{
+    World::get_instance()->update(seconds_elapsed);
+}
+
+void PlayStage::onEnter(Stage* stage)
+{
+    Game::instance->setMouseLocked(false);
+}
+
+void PlayStage::onLeave(Stage* stage)
+{
+    // ...
 }

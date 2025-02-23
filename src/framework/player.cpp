@@ -84,7 +84,7 @@ void Player::update(float seconds_elapsed) {
 
         current_color = Vector3(1, 1, 1);
     }
-
+    
     // Ajustar la velocidad (correr con Shift)
     float speed_mult = walk_speed;
     if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT))

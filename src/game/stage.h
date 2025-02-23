@@ -4,6 +4,7 @@
 #include "framework/includes.h"
 
 #include "framework/camera.h"
+#include "framework/entities/entity_ui.h"
 
 enum {
     STAGE_PLAY,
@@ -25,9 +26,11 @@ public:
 
 class MenuStage : public Stage {
 
+	
     EntityUI* background = nullptr;
     EntityUI* play_button = nullptr;
     EntityUI* exit_button = nullptr;
+
 
 public:
     void init() override;
