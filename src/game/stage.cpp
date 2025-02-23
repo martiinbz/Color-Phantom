@@ -34,12 +34,12 @@ void MenuStage::render(Camera* camera) {
 
 
     // boton exit
-    if (EntityUI::addButton(Vector2(Game::instance->window_width * 0.7, Game::instance->window_height * 0.7), Vector2(108,48), "data/button/flatDark41.png")) {
+    if (UI::addbutton(Vector2(Game::instance->window_width * 0.7, Game::instance->window_height * 0.7), Vector2(108,48), "data/button/flatDark41.png")) {
         exit(0);
     }
 
     // boton play
-    if (EntityUI::addButton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(494,520), "data/button/flatDark41.png")) {
+    if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(494,520), "data/button/flatDark41.png")) {
         Game::instance->goToStage(STAGE_PLAY);
     }
 }

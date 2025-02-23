@@ -28,8 +28,7 @@ EntityUI::EntityUI(Vector2 new_pos, Vector2 new_size, const Material& material, 
         this->material->shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
 }
 
- bool EntityUI::addButton(Vector2 pos, Vector2 size, const char* texture_path)
-{
+ bool UI::addbutton(Vector2 pos, Vector2 size, const char* texture_path) {
      Vector2 mouse_pos = Input::mouse_position;
      bool is_hovered = false;
      bool was_presed = false;
@@ -58,24 +57,16 @@ EntityUI::EntityUI(Vector2 new_pos, Vector2 new_size, const Material& material, 
      }
      shader->setUniform("u_model", Matrix44());
 	 shader->setUniform("u_viewprojection", World::get_instance()->camera2D->viewprojection_matrix);
-	 shader->setUniform("u_texture", texture,0);
+	 shader->setUniform("u_texture", texture, 0);
 
-
-
-
-     
      Mesh quad;
-     quad.createQuad(pos.x, pos.y, size.x, size.y, true);
-
-    
+     quad.createQuad(pos.x, pos.y, size.x, size.y, true);    
 	 quad.render(GL_TRIANGLES);
 
 	 shader->disable();
 	 glEnable(GL_DEPTH_TEST);
-	
 
 	 return was_presed;
-  
 }
 
 void EntityUI::render(Camera* camera2D) {
