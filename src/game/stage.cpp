@@ -16,6 +16,8 @@ void MenuStage::init() {
     int width = Game::instance->window_width;
     int height = Game::instance->window_height;
 
+    
+
     Material background_material;
 
     //background_material.diffuse = Texture::Get("data/textures/novios.png");
@@ -23,15 +25,21 @@ void MenuStage::init() {
 }
 
 void MenuStage::render(Camera* camera) {
-    background->render(World::get_instance()->camera2D);
+    //background->render(World::get_instance()->camera2D);
+    glClearColor(0, 0, 1, 1);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // Un quad del tamaño de la ventana
+    
+
+
 
     // boton exit
-    if (play_button->addButton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(0, 0), "data/button/button2.png")) {
+    if (EntityUI::addButton(Vector2(Game::instance->window_width * 0.7, Game::instance->window_height * 0.7), Vector2(108,48), "data/button/flatDark41.png")) {
         exit(0);
     }
 
     // boton play
-    if (exit_button->addButton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(0, 0), "data/button/button.png")) {
+    if (EntityUI::addButton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(494,520), "data/button/flatDark41.png")) {
         Game::instance->goToStage(STAGE_PLAY);
     }
 }
@@ -47,7 +55,7 @@ void MenuStage::onEnter(Stage* stage)
 
 void MenuStage::onLeave(Stage* stage)
 {
-    // Nada en especial al salir
+    Game::instance->setMouseLocked(true);
 }
 
 
@@ -88,7 +96,7 @@ void PlayStage::update(double seconds_elapsed)
 
 void PlayStage::onEnter(Stage* stage)
 {
-    Game::instance->setMouseLocked(false);
+    Game::instance->setMouseLocked(true);
 }
 
 void PlayStage::onLeave(Stage* stage)

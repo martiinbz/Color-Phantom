@@ -19,6 +19,15 @@ World::World() {
 	camera->lookAt(Vector3(0.f, 1.f, 1.f), Vector3(0.f), Vector3(0.f, 1.f, 0.f));
 	camera->setPerspective(70.f, window_width / float(window_height), 0.1f, 1000.f);
 
+
+	// 2D camera
+	camera2D = new Camera();
+	camera2D->setOrthographic(0, (float)800, 0, (float)600, -1, 1);
+	camera2D->updateViewMatrix();
+	camera2D->viewprojection_matrix = camera2D->projection_matrix * camera2D->view_matrix;
+	
+
+
 	
 
 	// parent root
@@ -35,7 +44,7 @@ World::World() {
 
 void World::render() {
 	camera->enable();
-
+	camera2D->enable();
 	glDisable(GL_BLEND);
 	glDisable(GL_CULL_FACE);
 
