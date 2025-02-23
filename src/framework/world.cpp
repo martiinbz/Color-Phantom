@@ -22,13 +22,9 @@ World::World() {
 
 	// 2D camera
 	camera2D = new Camera();
-	camera2D->setOrthographic(0, (float)800, 0, (float)600, -1, 1);
-	camera2D->updateViewMatrix();
-	camera2D->viewprojection_matrix = camera2D->projection_matrix * camera2D->view_matrix;
-	
+	camera2D->view_matrix.setIdentity();
+	camera2D->setOrthographic(0, window_width, window_height, 0, -1, -1);
 
-
-	
 
 	// parent root
 	root = new Entity();
@@ -66,9 +62,6 @@ void World::render() {
 void World::update(double seconds_elapsed) {
 	// Verificamos si la cámara está en modo libre
 	free_camera = false;
-	
-	
-	
 	
 	// Si no estamos en free_camera, actualizamos la escena y el jugador
 	if (root) {
@@ -108,7 +101,6 @@ void World::addEntity(Entity* entity) {
 void World::destroyEntity(Entity* entity) {
 	entities_to_destroy.push_back(entity);
 }
-
 
 void World::update_fpcamera(float seconds_elapsed) {
 	// Ajustar la orientación del jugador (y no de la cámara) con el movimiento del ratón
@@ -152,11 +144,6 @@ void World::update_fpcamera(float seconds_elapsed) {
 }
 
 
-
-
-
-
-
 void World::update_thirdpcamera(float seconds_elapsed) {
 	// Ajustar sensibilidad del ratón
 	camera_yaw -= Input::mouse_delta.x * seconds_elapsed * mouse_speed;
@@ -190,8 +177,6 @@ void World::update_thirdpcamera(float seconds_elapsed) {
 	else {
 		camera->lookAt(eye, center, Vector3(0, 1, 0));
 	}
-
-		
 }
 
 void World::test_scene_collisions(const Vector3& position, std::vector<sCollisionData>& collisions, std::vector<sCollisionData>& ground_collisions) {

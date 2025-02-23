@@ -16,22 +16,18 @@ void MenuStage::init() {
     int width = Game::instance->window_width;
     int height = Game::instance->window_height;
 
-    
-
     Material background_material;
 
-    //background_material.diffuse = Texture::Get("data/textures/novios.png");
+    background_material.diffuse = Texture::Get("data/button/novios.png");
     background = new EntityUI(Vector2(width * 0.5, height * 0.5), Vector2(width, height), background_material);
 }
 
 void MenuStage::render(Camera* camera) {
-    //background->render(World::get_instance()->camera2D);
-    glClearColor(0, 0, 1, 1);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    // Un quad del tamaño de la ventana
-    
+    background->render(World::get_instance()->camera2D);
 
-
+    if (UI::addbackground(Vector2(Game::instance->window_width, Game::instance->window_height), Vector2(Game::instance->window_width, Game::instance->window_height), "data/button/novios.png")) {
+        std::cout<< "IMPRIME PANTALLLA" << std::endl;
+    }
 
     // boton exit
     if (UI::addbutton(Vector2(Game::instance->window_width * 0.7, Game::instance->window_height * 0.7), Vector2(108,48), "data/button/flatDark41.png")) {

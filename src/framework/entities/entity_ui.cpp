@@ -43,7 +43,7 @@ EntityUI::EntityUI(Vector2 new_pos, Vector2 new_size, const Material& material, 
 	 glDisable(GL_CULL_FACE);
 	 glDisable(GL_BLEND);
 	
-	 Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/flat.fs");
+	 Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
 	 Texture* texture = Texture::Get(texture_path);
 
      shader->enable();
@@ -68,6 +68,31 @@ EntityUI::EntityUI(Vector2 new_pos, Vector2 new_size, const Material& material, 
 
 	 return was_presed;
 }
+
+ bool UI::addbackground(Vector2 pos, Vector2 size, const char* texture_path) {
+     glDisable(GL_DEPTH_TEST);
+     glDisable(GL_CULL_FACE);
+     glDisable(GL_BLEND);
+
+     Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
+     Texture* texture = Texture::Get(texture_path);
+
+     shader->enable();
+
+     shader->setUniform("u_color", Vector4(1, 0, 0, 1));
+     shader->setUniform("u_model", Matrix44());
+     shader->setUniform("u_viewprojection", World::get_instance()->camera2D->viewprojection_matrix);
+     shader->setUniform("u_texture", texture, 0);
+
+     Mesh quad;
+     quad.createQuad(pos.x, pos.y, size.x, size.y, true);
+     quad.render(GL_TRIANGLES);
+
+     shader->disable();
+     glEnable(GL_DEPTH_TEST);
+
+     return true;
+ }
 
 void EntityUI::render(Camera* camera2D) {
     if (!visible)
