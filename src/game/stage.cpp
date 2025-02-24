@@ -23,18 +23,15 @@ void MenuStage::init() {
 }
 
 void MenuStage::render(Camera* camera) {
-    glClearColor(0.0, 0.0, 0.0, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    camera->enable();
-
-    glDisable(GL_BLEND);
-    glEnable(GL_DEPTH_TEST);
-    glDisable(GL_CULL_FACE);
     
-    if (UI::addbackground(Vector2(Game::instance->window_width, Game::instance->window_height), Vector2(Game::instance->window_width, Game::instance->window_height), "data/button/blue.png")) {
+
+    
+
+   
+    
+    UI::addbackground(Vector2(Game::instance->window_width, Game::instance->window_height), Vector2(Game::instance->window_width, Game::instance->window_height), "data/button/blue.png");
        
-    }
+    
 
     // boton exit
     if (UI::addbutton(Vector2(Game::instance->window_width * 0.7, Game::instance->window_height * 0.7), Vector2(108,48), "data/button/flatDark41.png")) {
@@ -76,9 +73,7 @@ void PlayStage::init()
 
 void PlayStage::render(Camera* camera)
 {
-    glClearColor(0.0, 0.0, 0.0, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+ 
     camera->enable();
 
     glDisable(GL_BLEND);
@@ -90,9 +85,6 @@ void PlayStage::render(Camera* camera)
 
     drawGrid();
     drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
-
-    
-    SDL_GL_SwapWindow(Game::instance->window);
 }
 
 void PlayStage::update(double seconds_elapsed)

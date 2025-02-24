@@ -29,6 +29,8 @@ EntityUI::EntityUI(Vector2 new_pos, Vector2 new_size, const Material& material, 
 }
 
  bool UI::addbutton(Vector2 pos, Vector2 size, const char* texture_path) {
+
+	 World::get_instance()->camera2D->enable();    
      Vector2 mouse_pos = Input::mouse_position;
      bool is_hovered = false;
      bool was_presed = false;
@@ -45,7 +47,8 @@ EntityUI::EntityUI(Vector2 new_pos, Vector2 new_size, const Material& material, 
 	
 	 Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
 	 Texture* texture = Texture::Get(texture_path);
-
+    
+  
      shader->enable();
 
      if (is_hovered) {
@@ -58,21 +61,20 @@ EntityUI::EntityUI(Vector2 new_pos, Vector2 new_size, const Material& material, 
      shader->setUniform("u_model", Matrix44());
 	 shader->setUniform("u_viewprojection", World::get_instance()->camera2D->viewprojection_matrix);
 	 shader->setUniform("u_texture", texture, 0);
-
+    
      Mesh quad;
-     quad.createQuad(0, 0, size.x, size.y, true);    
+     quad.createQuad(pos.x, pos.y, size.x, size.y, true);
      quad.render(GL_TRIANGLES);
-	 shader->disable();
 	 
-
-
-	 drawText(5, 15, "LOS BOTONES NO SE PINTAN,PERO ESTAN CREADOS. HAZ CLICK EN EL CENTRO", Vector3(1, 1, 1), 2);
-     SDL_GL_SwapWindow(Game::instance->window);
+     shader->disable();
+    
+	 //drawText(5, 15, "LOS BOTONES NO SE PINTAN,PERO ESTAN CREADOS. HAZ CLICK EN EL CENTRO", Vector3(1, 1, 1), 2);
+    
  
 	 return was_presed;
 }
 
- bool UI::addbackground(Vector2 pos, Vector2 size, const char* texture_path) {
+ void UI::addbackground(Vector2 pos, Vector2 size, const char* texture_path) {
      glDisable(GL_DEPTH_TEST);
      glDisable(GL_CULL_FACE);
      glDisable(GL_BLEND);
@@ -94,7 +96,7 @@ EntityUI::EntityUI(Vector2 new_pos, Vector2 new_size, const Material& material, 
      shader->disable();
      glEnable(GL_DEPTH_TEST);
 
-     return true;
+ 
  }
 
 void EntityUI::render(Camera* camera2D) {

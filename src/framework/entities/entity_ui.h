@@ -26,5 +26,5 @@ public:
 
 namespace UI {
 	bool addbutton(Vector2 pos, Vector2 size, const char* text);
-	bool addbackground(Vector2 pos, Vector2 size, const char* text);
+	void addbackground(Vector2 pos, Vector2 size, const char* text);
 };

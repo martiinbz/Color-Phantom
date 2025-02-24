@@ -59,10 +59,14 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 //what to do when the image has to be draw
 void Game::render(void)
 {
+	glClearColor(1.0, 1.0, 0.0, 1.0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	if (current_stage)
 		current_stage->render(World::get_instance()->camera);
 
-	drawText(2, 2, getGPUStats(), Vector3(0,0,0), 2);
+	drawText(2, 2, getGPUStats(), Vector3(1,1,1), 2);
+	SDL_GL_SwapWindow(window);
 }
 
 void Game::update(double seconds_elapsed)
