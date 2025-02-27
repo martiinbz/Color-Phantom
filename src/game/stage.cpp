@@ -84,6 +84,12 @@ void PlayStage::render(Camera* camera)
 
     drawGrid();
     drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
+    Vector3 color = Player::instance->current_color;
+	std::cout << "color: " << color.x << " " << color.y << " " << color.z << std::endl; 
+    if (color.x==0 && color.y==0 && color.z==0) {
+		std::cout << "has ganado!" << std::endl;
+
+    }
 }
 
 void PlayStage::update(double seconds_elapsed)
