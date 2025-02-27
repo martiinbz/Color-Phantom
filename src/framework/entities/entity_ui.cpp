@@ -56,7 +56,7 @@ EntityUI::EntityUI(Vector2 new_pos, Vector2 new_size, const Material& material, 
 		 shader->setUniform("u_color", Vector4(0.5, 0.5, 0.5, 1));
 	 }
      else {
-		 shader->setUniform("u_color", Vector4(1, 0, 0, 1));
+		 shader->setUniform("u_color", Vector4(1,1, 1, 1));
      }
      shader->setUniform("u_model", Matrix44());
 	 shader->setUniform("u_viewprojection", World::get_instance()->camera2D->viewprojection_matrix);
@@ -84,7 +84,7 @@ EntityUI::EntityUI(Vector2 new_pos, Vector2 new_size, const Material& material, 
 
      shader->enable();
 
-     shader->setUniform("u_color", Vector4(1, 0, 0, 1));
+     shader->setUniform("u_color", Vector4(1, 1, 1, 1));
      shader->setUniform("u_model", Matrix44());
      shader->setUniform("u_viewprojection", World::get_instance()->camera2D->viewprojection_matrix);
      shader->setUniform("u_texture", texture, 0);
@@ -94,7 +94,7 @@ EntityUI::EntityUI(Vector2 new_pos, Vector2 new_size, const Material& material, 
      quad.render(GL_TRIANGLES);
 
      shader->disable();
-     glEnable(GL_DEPTH_TEST);
+    
 
  
  }

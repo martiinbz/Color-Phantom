@@ -58,8 +58,11 @@ void World::render() {
 	
 	drawText(5, 15, "LOOKING_COLOR", looking_color, 4);
 
-	//mira (en negativo al color que apuntas para que siempre se vea)
-	drawText(Game::instance->window_width / 2, Game::instance->window_height / 2-5, "o", Vector3(1-looking_color.x, 1 - looking_color.y, 1 - looking_color.z), 2);
+	//crosshair, solo en primera persona y del color negativo al que se  está mirando
+	if (use_first_person) {
+		drawText(Game::instance->window_width / 2, Game::instance->window_height / 2 - 5, "o", Vector3(1 - looking_color.x, 1 - looking_color.y, 1 - looking_color.z), 2);
+	}
+	
 }
 
 void World::update(double seconds_elapsed) {
@@ -76,10 +79,13 @@ void World::update(double seconds_elapsed) {
 
 		//si se hace click, se cambia la cámara
 		if (Input::isMousePressed(SDL_BUTTON_LEFT)) {
-			
+			use_first_person = true;
 			update_fpcamera(seconds_elapsed);
+			//mira (en negativo al color que apuntas para que siempre se vea)
+			
 		}
 		else {
+			use_first_person = false;
 			update_thirdpcamera(seconds_elapsed);
 		}
 	}
@@ -106,46 +112,50 @@ void World::destroyEntity(Entity* entity) {
 
 //realmente no es primera persona como tal
 void World::update_fpcamera(float seconds_elapsed) {
-	
 	camera_yaw -= Input::mouse_delta.x * seconds_elapsed * mouse_speed;
 	camera_pitch -= Input::mouse_delta.y * seconds_elapsed * mouse_speed;
 
 	camera_pitch = clamp(camera_pitch, -M_PI * 0.4f, M_PI * 0.4f);
 
 	Matrix44 mYaw;
-	mYaw.setRotation(camera_yaw, Vector3(0, 1, 0)); 
+	mYaw.setRotation(camera_yaw, Vector3(0, 1, 0));
 
 	Matrix44 mPitch;
-	mPitch.setRotation(camera_pitch, Vector3(-1, 0, 0)); 
+	mPitch.setRotation(camera_pitch, Vector3(-1, 0, 0));
 
 	Vector3 front = (mPitch * mYaw).frontVector().normalize();
+	Vector3 right = (mYaw.rightVector()).normalize(); // Para desplazar la cámara al lado
 
-	
-	Vector3 center = Player::instance->model.getTranslation() + Vector3(0.5f, 1.5f, 0);  
+	// Obtener la escala del jugador
+	float player_scale = Player::instance->model.m[5]; // Escala en Y
 
-	
-	float orbit_distance = 1.3f; 
-	Vector3 eye = center - front * orbit_distance; 
+	// Ajustar la altura de la cámara en función de la escala del jugador
+	float base_height = 2.5f;
+	float adjusted_height = base_height * player_scale;
 
-	
-	camera->lookAt(eye, center + front * 2.0f, Vector3(0, 1, 0));  
+	// Posición del jugador
+	Vector3 center = Player::instance->model.getTranslation() + Vector3(0, adjusted_height, 0);
 
-	//detectar colisiones
+	// Posición de la cámara (un poco detrás y a un lado)
+	float side_offset = 1.5f * player_scale;  // Mueve la cámara ligeramente a un lado
+	float back_offset = 1.0f * player_scale;  // Mantiene la cámara un poco atrás
+
+	Vector3 eye = center - front * back_offset + right * side_offset;
+
+	// Detectar colisiones con el entorno para que la cámara no atraviese objetos
 	sCollisionData data = raycast(center, (eye - center).normalize());
-
 	if (data.collided) {
-		//suavizar la transición para que la camara no de saltos bruscos
 		float smoothing_factor = 0.3f;
 		eye = eye * (1 - smoothing_factor) + data.col_point * smoothing_factor;
 	}
 
-	
-	camera->lookAt(eye, center + front * 2.0f, Vector3(0, 1, 0));  
+	// Aplicar la posición de la cámara
+	camera->lookAt(eye, center + front * 2.0f, Vector3(0, 1, 0));
 }
 
 
+
 void World::update_thirdpcamera(float seconds_elapsed) {
-	
 	camera_yaw -= Input::mouse_delta.x * seconds_elapsed * mouse_speed;
 	camera_pitch -= Input::mouse_delta.y * seconds_elapsed * mouse_speed;
 
@@ -159,24 +169,30 @@ void World::update_thirdpcamera(float seconds_elapsed) {
 
 	Vector3 front = (mPitch * mYaw).frontVector().normalize();
 
-	
-	Vector3 center = Player::instance->model.getTranslation() + Vector3(0,1.5, 0);
-	float orbit_distance = 2.0f; 
+	// Obtener el tamaño del jugador
+	float player_scale = Player::instance->model.m[5]; // La escala en Y
+
+	// Ajustar la altura de la cámara en función de la escala del jugador
+	float base_height = 1.5f; // Altura base de la cámara respecto al jugador
+	float adjusted_height = base_height * player_scale; // Ajuste proporcional
+
+	// Calcular la nueva posición de la cámara
+	Vector3 center = Player::instance->model.getTranslation() + Vector3(0, adjusted_height, 0);
+	float orbit_distance = 3.0f * player_scale; // Ajustar la distancia en función del tamaño
+
 	Vector3 eye = center - front * orbit_distance;
-	
-	//colisiones
+
+	// Detectar colisiones con el entorno
 	sCollisionData data = raycast(center, (eye - center).normalize());
 	if (data.collided) {
-		
-		float smoothing_factor = 0.3f; 
+		float smoothing_factor = 0.3f;
 		eye = eye * (1 - smoothing_factor) + data.col_point * smoothing_factor;
-		camera->lookAt(eye, center, Vector3(0, 1, 0));
-		
 	}
-	else {
-		camera->lookAt(eye, center, Vector3(0, 1, 0));
-	}
+
+	// Aplicar la posición de la cámara
+	camera->lookAt(eye, center, Vector3(0, 1, 0));
 }
+
 
 void World::test_scene_collisions(const Vector3& position, std::vector<sCollisionData>& collisions, std::vector<sCollisionData>& ground_collisions) {
 	for (auto e : root->children) {

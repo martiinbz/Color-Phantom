@@ -12,6 +12,7 @@ Player* Player::instance = NULL;
 Player::Player(Mesh* mesh, const Material& material, const std::string& name)
     : EntityMesh(mesh, material) {
     walk_speed = 2.0f;
+    
     //cargamos el player_texture shader
     player_shader = Shader::Get(isInstanced ? "data/shaders/instanced.vs" : "data/shaders/basic.vs" , "data/shaders/player_texture.fs");
 	instance = this;
@@ -21,6 +22,11 @@ Player::Player(Mesh* mesh, const Material& material, const std::string& name)
 
 void Player::render(Camera* camera) {
 
+
+    
+
+    // Ajustar la escala según la tecla presionada
+     // Tomamos la escala en X como referencia
 	//como el jugador usa otro fs diferente, se debe cambiar el shader.
     if (!mesh || !player_shader) return;
     
@@ -83,6 +89,33 @@ void Player::update(float seconds_elapsed) {
 
         current_color = Vector3(1, 1, 1);
     }
+
+    // Definir los límites de escala
+    const float max_scale = 2.0f;  // Tamaño máximo del jugador
+    const float min_scale = 0.2f;  // Tamaño mínimo del jugador
+    const float scale_speed = 0.5f; // Velocidad de escalado
+
+   
+
+    if (Input::isKeyPressed(SDL_SCANCODE_Q)) {
+        new_scale += scale_speed * seconds_elapsed;
+    }
+    if (Input::isKeyPressed(SDL_SCANCODE_E)) {
+        new_scale -= scale_speed * seconds_elapsed;
+    }
+
+    // Limitar la escala dentro de los valores permitidos
+    if (new_scale > max_scale) {
+        new_scale = max_scale;
+    }
+	else if (new_scale < min_scale) {
+		new_scale = min_scale;
+    }
+	std::cout << new_scale << std::endl;
+    // Aplicar la nueva escala a la matriz del modelo
+    
+    
+
     
     //correr con shift
     float speed_mult = walk_speed;
@@ -103,16 +136,17 @@ void Player::update(float seconds_elapsed) {
 
     
     model.setTranslation(position);
-
+    model.scale(new_scale, new_scale, new_scale);
     //rotar al jugador con la cámara
     model.rotate(camera_yaw, Vector3(0, 1, 0));
 
-    
+   
+
     
 
     // escalar al jugador (en el portatil me sale super grande, pero en la torre sale pequeñisimo entonces esto hay que arreglarlo)
-    model.scale(0.6f);
-
+    //model.scale(0.6f);
+    
    
     EntityMesh::update(seconds_elapsed);
     
@@ -163,3 +197,4 @@ void Player::test_collisions(Vector3& position, float seconds_elapsed) {
     }
       
 }
+
