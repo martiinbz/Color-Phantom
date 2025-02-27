@@ -22,29 +22,18 @@ void MenuStage::init() {
 }
 
 void MenuStage::render(Camera* camera) {
-    
-
-    
-
-   
-    
+    // fondo de pantalla
     UI::addbackground(Vector2(Game::instance->window_width*0.5, Game::instance->window_height*0.5), Vector2(1000,1000), "data/button/blue.png");
        
-    
-
     // boton exit
-    if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.6), Vector2(112,112), "data/button/Exit@2X.png")) {
-        exit(0);
-    }
-
-    // boton play
-    if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.8), Vector2(112,112), "data/button/Play@2X.png")) {
+    if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.6), Vector2(112,112), "data/button/Play@2X.png")) {
         Game::instance->goToStage(STAGE_PLAY);
     }
 
-    
-    // Intercambiar buffers
-   // SDL_GL_SwapWindow(Game::instance->window);
+    // boton play
+    if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.8), Vector2(112,112), "data/button/Exit@2X.png")) {
+        exit(0);
+    }
 }
 
 void MenuStage::update(double dt) {
