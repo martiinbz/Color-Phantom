@@ -32,7 +32,7 @@ void IntroStage::render(Camera* camera) {
     UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(800,600), "data/button/PORTADA.png");
 
     // boton play
-    if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.6), Vector2(192, 64), "data/button/PLAY.png")) {
+    if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.625), Vector2(192, 64), "data/button/PLAY.png")) {
         opened_menu = true;
         Game::instance->goToStage(STAGE_MENU);
     }
@@ -43,7 +43,7 @@ void IntroStage::render(Camera* camera) {
     }
 
     // boton exit
-    if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.9), Vector2(192, 64), "data/button/EXIT.png")) {
+    if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.875), Vector2(192, 64), "data/button/EXIT.png")) {
         exit(0);
     }
 }
@@ -101,7 +101,7 @@ void TutorialStage::render(Camera* camera) {
 }
 
 void TutorialStage::update(double dt) {
-    // ...
+    
 }
 
 void TutorialStage::onEnter(Stage* stage) {
@@ -263,7 +263,9 @@ void SettingsStage::init() {
 }
 
 void SettingsStage::render(Camera* camera) {
-
+    if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.875), Vector2(192, 64), "data/button/EXIT.png")) {
+        Game::instance->goToStage(STAGE_INTRO);
+    }
 }
 
 void SettingsStage::update(double dt) {
