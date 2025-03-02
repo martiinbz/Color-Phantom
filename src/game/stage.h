@@ -1,19 +1,30 @@
 #pragma once
-#ifndef STAGE_H
-#define STAGE_H
 #include "framework/includes.h"
 
 #include "framework/camera.h"
 #include "framework/entities/entity_ui.h"
 
 enum {
-    STAGE_PLAY,
-    STAGE_MENU
+    STAGE_INTRO,
+    STAGE_TUTORIAL,
+    STAGE_MENU,
+    STAGE_L1,
+    STAGE_L2,
+    STAGE_L3,
+    STAGE_L4,
+    STAGE_L5,
+    STAGE_SETTINGS
 };
 
 class Stage {
 protected:
     bool mouse_locked; //tells if the mouse is locked (not seen)
+    bool opened_menu = false;
+    bool L1_completed = false;
+    bool L2_completed = false;
+    bool L3_completed = false;
+    bool L4_completed = false;
+    bool L5_completed = false;
 
 public:
     virtual void init() {};
@@ -24,13 +35,7 @@ public:
 	
 };
 
-class MenuStage : public Stage {
-
-	
-    EntityUI* background = nullptr;
-    EntityUI* play_button = nullptr;
-    EntityUI* exit_button = nullptr;
-
+class IntroStage : public Stage {
 
 public:
     void init() override;
@@ -40,15 +45,84 @@ public:
 	void onLeave(Stage* stage) override;
 };
 
-class  PlayStage : public Stage {
-  
+class  MenuStage : public Stage {
+
 public:
     void init() override;
     void update(double dt) override;
     void render(Camera* camera) override;
-	void onEnter(Stage* stage) override;
-	void onLeave(Stage* stage) override;
+    void onEnter(Stage* stage) override;
+    void onLeave(Stage* stage) override;
 };
-#endif
 
+class  TutorialStage : public Stage {
 
+public:
+    void init() override;
+    void update(double dt) override;
+    void render(Camera* camera) override;
+    void onEnter(Stage* stage) override;
+    void onLeave(Stage* stage) override;
+};
+
+class SettingsStage : public Stage {
+
+public:
+    void init() override;
+    void render(Camera* camera) override;
+    void update(double dt) override;
+    void onEnter(Stage* stage) override;
+    void onLeave(Stage* stage) override;
+};
+
+// LEVEL STAGES
+
+class  L1Stage : public Stage {
+
+public:
+    void init() override;
+    void update(double dt) override;
+    void render(Camera* camera) override;
+    void onEnter(Stage* stage) override;
+    void onLeave(Stage* stage) override;
+};
+
+class  L2Stage : public Stage {
+
+public:
+    void init() override;
+    void update(double dt) override;
+    void render(Camera* camera) override;
+    void onEnter(Stage* stage) override;
+    void onLeave(Stage* stage) override;
+};
+
+class  L3Stage : public Stage {
+
+public:
+    void init() override;
+    void update(double dt) override;
+    void render(Camera* camera) override;
+    void onEnter(Stage* stage) override;
+    void onLeave(Stage* stage) override;
+};
+
+class  L4Stage : public Stage {
+
+public:
+    void init() override;
+    void update(double dt) override;
+    void render(Camera* camera) override;
+    void onEnter(Stage* stage) override;
+    void onLeave(Stage* stage) override;
+};
+
+class  L5Stage : public Stage {
+
+public:
+    void init() override;
+    void update(double dt) override;
+    void render(Camera* camera) override;
+    void onEnter(Stage* stage) override;
+    void onLeave(Stage* stage) override;
+};

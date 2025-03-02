@@ -25,7 +25,6 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	must_exit = false;
 
 	setMouseLocked(true);
-	
 
 	fps = 0;
 	frame = 0;
@@ -33,8 +32,15 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	elapsed_time = 0.0f;
 	mouse_locked = false;
 	
+	stages[STAGE_INTRO] = new IntroStage();
 	stages[STAGE_MENU] = new MenuStage();
-	stages[STAGE_PLAY] = new PlayStage();
+	stages[STAGE_TUTORIAL] = new TutorialStage();
+	stages[STAGE_SETTINGS] = new SettingsStage();
+	stages[STAGE_L1] = new L1Stage();
+	stages[STAGE_L2] = new L2Stage();
+	stages[STAGE_L3] = new L3Stage();
+	stages[STAGE_L4] = new L4Stage();
+	stages[STAGE_L5] = new L5Stage();
 
 	for (auto entry : stages) {
 		int id = entry.first;
@@ -42,7 +48,7 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 		stage->init();
 	}
 
-	goToStage(STAGE_MENU);
+	goToStage(STAGE_INTRO);
 
 	// OpenGL flags
 	glEnable( GL_CULL_FACE ); //render both sides of every triangle
@@ -52,8 +58,7 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 }
 
 //what to do when the image has to be draw
-void Game::render(void)
-{
+void Game::render(void) {
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -70,7 +75,7 @@ void Game::update(double seconds_elapsed)
 		current_stage->update(seconds_elapsed);
 }
 
-void Game::goToStage(uint8_t stage_id) {
+void Game::goToStage(int stage_id) {
 	Stage* new_stage = stages[stage_id];
 	assert(new_stage);
 
