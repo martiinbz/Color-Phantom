@@ -12,12 +12,15 @@
 #include "framework/world.h"
 #include "framework/entities/entity_ui.h"
 
+// VARIABLES PARA GESTIONAR LOS NIVELES
+
 bool opened_menu = false;
 bool L1_completed = false;
 bool L2_completed = false;
 bool L3_completed = false;
 bool L4_completed = false;
 bool L5_completed = false;
+
 
 // INTRO STAGE
 
