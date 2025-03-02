@@ -12,6 +12,12 @@
 #include "framework/world.h"
 #include "framework/entities/entity_ui.h"
 
+bool opened_menu = false;
+bool L1_completed = false;
+bool L2_completed = false;
+bool L3_completed = false;
+bool L4_completed = false;
+bool L5_completed = false;
 
 // INTRO STAGE
 
@@ -20,7 +26,7 @@ void IntroStage::init() {
 
 void IntroStage::render(Camera* camera) {
     // fondo de pantalla
-    UI::addbackground(Vector2(Game::instance->window_width*0.5, Game::instance->window_height*0.5), Vector2(800,600), "data/button/PORTADA.png");
+    UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(800,600), "data/button/PORTADA.png");
 
     // boton play
     if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.6), Vector2(192, 64), "data/button/PLAY.png")) {
@@ -60,7 +66,9 @@ void MenuStage::init() {
 
 void MenuStage::render(Camera* camera) {
     if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.75), Vector2(192, 64), "data/button/PLAY.png")) {
-        Game::instance->goToStage(STAGE_L1);
+        if (opened_menu == true) {
+            Game::instance->goToStage(STAGE_L1);
+        }
     }
 }
 

@@ -19,12 +19,6 @@ enum {
 class Stage {
 protected:
     bool mouse_locked; //tells if the mouse is locked (not seen)
-    bool opened_menu = false;
-    bool L1_completed = false;
-    bool L2_completed = false;
-    bool L3_completed = false;
-    bool L4_completed = false;
-    bool L5_completed = false;
 
 public:
     virtual void init() {};
