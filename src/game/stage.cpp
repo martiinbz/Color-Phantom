@@ -111,6 +111,11 @@ void MenuStage::render(Camera* camera) {
         showHowToPlay = true;
     }
 
+    // back button
+    if (UI::addbutton(Vector2(Game::instance->window_width * 0.04, Game::instance->window_height * 0.05), Vector2(50, 50), "data/button/EXITBACK.png")) {
+        Game::instance->goToStage(STAGE_INTRO);
+    }
+
 }
 
 void MenuStage::update(double dt) {
