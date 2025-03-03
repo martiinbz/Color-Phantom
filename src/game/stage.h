@@ -100,23 +100,3 @@ public:
     void onEnter(Stage* stage) override;
     void onLeave(Stage* stage) override;
 };
-
-class  L4Stage : public Stage {
-
-public:
-    void init() override;
-    void update(double dt) override;
-    void render(Camera* camera) override;
-    void onEnter(Stage* stage) override;
-    void onLeave(Stage* stage) override;
-};
-
-class  L5Stage : public Stage {
-
-public:
-    void init() override;
-    void update(double dt) override;
-    void render(Camera* camera) override;
-    void onEnter(Stage* stage) override;
-    void onLeave(Stage* stage) override;
-};

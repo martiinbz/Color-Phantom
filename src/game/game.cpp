@@ -39,8 +39,6 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	stages[STAGE_L1] = new L1Stage();
 	stages[STAGE_L2] = new L2Stage();
 	stages[STAGE_L3] = new L3Stage();
-	stages[STAGE_L4] = new L4Stage();
-	stages[STAGE_L5] = new L5Stage();
 
 	for (auto entry : stages) {
 		int id = entry.first;

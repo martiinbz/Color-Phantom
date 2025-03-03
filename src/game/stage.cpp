@@ -18,18 +18,22 @@ bool opened_menu = false;
 bool L1_completed = false;
 bool L2_completed = false;
 bool L3_completed = false;
-bool L4_completed = false;
-bool L5_completed = false;
+
+bool showL1 = true;
+bool showL2 = false;
+bool showL3 = false;
+bool showCS = false;
+bool showTutorial = false;
 
 
 // INTRO STAGE
 
-void IntroStage::init() {   
+void IntroStage::init() {
 }
 
 void IntroStage::render(Camera* camera) {
     // fondo de pantalla
-    UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(800,600), "data/button/PORTADA.png");
+    UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(800, 600), "data/button/PORTADA.png");
 
     // boton play
     if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.625), Vector2(192, 64), "data/button/PLAY.png")) {
@@ -49,7 +53,7 @@ void IntroStage::render(Camera* camera) {
 }
 
 void IntroStage::update(double dt) {
-   
+
 }
 
 void IntroStage::onEnter(Stage* stage) {
@@ -68,15 +72,64 @@ void MenuStage::init() {
 }
 
 void MenuStage::render(Camera* camera) {
-    if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.75), Vector2(192, 64), "data/button/PLAY.png")) {
-        if (opened_menu == true) {
-            Game::instance->goToStage(STAGE_L1);
+    if (showL1) UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(800, 600), "data/button/LEVEL1.png");
+    if (showL2) UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(800, 600), "data/button/LEVEL2.png");
+    if (showL3) UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(800, 600), "data/button/PORTADA.png");
+    if (showTutorial) UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(800, 600), "data/button/PORTADA.png");
+
+    if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.93), Vector2(192, 64), "data/button/PLAY.png")) {
+        if (showL1) Game::instance->goToStage(STAGE_L1);
+        if (showL2 && L1_completed) Game::instance->goToStage(STAGE_L2);
+        if (showL3 && L2_completed) Game::instance->goToStage(STAGE_L3);
+        if (showTutorial) Game::instance->goToStage(STAGE_TUTORIAL);
+    }
+
+    if (!showTutorial) {
+        if (UI::addbutton(Vector2(Game::instance->window_width * 0.05, Game::instance->window_height * 0.5), Vector2(32, 32), "data/button/FLECHAIZQ.png")) {
+            if (showL1) {
+                showL1 = false;
+                showTutorial = true;
+            }
+            if (showL2) {
+                showL2 = false;
+                showL1 = true;
+            }
+            if (showL3) {
+                showL3 = false;
+                showL2 = true;
+            }
+            if (showCS) {
+                showCS = false;
+                showL3 = true;
+            }
         }
     }
+
+    if (!showCS) {
+        if (UI::addbutton(Vector2(Game::instance->window_width * 0.95, Game::instance->window_height * 0.5), Vector2(32, 32), "data/button/FLECHADER.png")) {
+            if (showL1) {
+                showL1 = false;
+                showL2 = true;
+            }
+            if (showL2) {
+                showL2 = false;
+                showL3 = true;
+            }
+            if (showL3) {
+                showL3 = false;
+                showCS = true;
+            }
+            if (showTutorial) {
+                showTutorial = false;
+                showL1 = true;
+            }
+        }
+    }
+
 }
 
 void MenuStage::update(double dt) {
-    if (L1_completed && L2_completed && L3_completed && L4_completed && L5_completed) {
+    if (L1_completed && L2_completed && L3_completed) {
         // todo el juego completado, podemos implementar un titulo de victoria del juegador
     }
 }
@@ -206,56 +259,6 @@ void L3Stage::onLeave(Stage* stage) {
 }
 
 
-// LEVEL 4 STAGE
-
-void L4Stage::init() {
-}
-
-void L4Stage::render(Camera* camera) {
-
-}
-
-void L4Stage::update(double seconds_elapsed) {
-    World::get_instance()->update(seconds_elapsed);
-
-    if (L4_completed)
-        Game::instance->goToStage(STAGE_MENU);
-}
-
-void L4Stage::onEnter(Stage* stage) {
-    Game::instance->setMouseLocked(true);
-}
-
-void L4Stage::onLeave(Stage* stage) {
-
-}
-
-
-// LEVEL 5 STAGE
-
-void L5Stage::init() {
-}
-
-void L5Stage::render(Camera* camera) {
-
-}
-
-void L5Stage::update(double seconds_elapsed) {
-    World::get_instance()->update(seconds_elapsed);
-
-    if (L5_completed)
-        Game::instance->goToStage(STAGE_MENU);
-}
-
-void L5Stage::onEnter(Stage* stage) {
-    Game::instance->setMouseLocked(true);
-}
-
-void L5Stage::onLeave(Stage* stage) {
-
-}
-
-
 // SETTINGS STAGE
 
 void SettingsStage::init() {
@@ -263,8 +266,9 @@ void SettingsStage::init() {
 }
 
 void SettingsStage::render(Camera* camera) {
-    if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.875), Vector2(192, 64), "data/button/EXIT.png")) {
-        Game::instance->goToStage(STAGE_INTRO);
+    if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.875), Vector2(192, 64), "data/button/BACK.png")) {
+        if (opened_menu) Game::instance->goToStage(STAGE_MENU);
+        else Game::instance->goToStage(STAGE_INTRO);
     }
 }
 
