@@ -35,7 +35,7 @@ World::World() {
 	}
 
 	SceneParser parser;
-	bool ok = parser.parse("data/myscene.scene", root);
+	bool ok = parser.parse("data/supermarket.scene", root);
 }
 
 void World::render() {
@@ -130,17 +130,14 @@ void World::update_fpcamera(float seconds_elapsed) {
 	float player_scale = Player::instance->model.m[5]; // Escala en Y
 
 	// Ajustar la altura de la cámara en función de la escala del jugador
-	float base_height = 2.5f;
+	float base_height = 1.0f;
 	float adjusted_height = base_height * player_scale;
 
 	// Posición del jugador
 	Vector3 center = Player::instance->model.getTranslation() + Vector3(0, adjusted_height, 0);
 
-	// Posición de la cámara (un poco detrás y a un lado)
-	float side_offset = 1.5f * player_scale;  // Mueve la cámara ligeramente a un lado
-	float back_offset = 1.0f * player_scale;  // Mantiene la cámara un poco atrás
-
-	Vector3 eye = center - front * back_offset + right * side_offset;
+	
+	Vector3 eye = center - front * player_scale + right * player_scale;
 
 	// Detectar colisiones con el entorno para que la cámara no atraviese objetos
 	sCollisionData data = raycast(center, (eye - center).normalize());
