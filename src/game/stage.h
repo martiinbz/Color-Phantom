@@ -10,10 +10,7 @@ enum {
     STAGE_MENU,
     STAGE_L1,
     STAGE_L2,
-    STAGE_L3,
-    STAGE_L4,
-    STAGE_L5,
-    STAGE_SETTINGS
+    STAGE_L3
 };
 
 class Stage {
@@ -59,15 +56,6 @@ public:
     void onLeave(Stage* stage) override;
 };
 
-class SettingsStage : public Stage {
-
-public:
-    void init() override;
-    void render(Camera* camera) override;
-    void update(double dt) override;
-    void onEnter(Stage* stage) override;
-    void onLeave(Stage* stage) override;
-};
 
 // LEVEL STAGES
 

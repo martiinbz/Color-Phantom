@@ -18,7 +18,9 @@ bool opened_menu = false;
 bool L1_completed = false;
 bool L2_completed = false;
 bool L3_completed = false;
+
 bool showHowToPlay = false;
+bool settingsOpen = false;
 
 int level = 1;
 
@@ -33,19 +35,32 @@ void IntroStage::render(Camera* camera) {
     UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(800, 600), "data/button/PORTADA.png");
 
     // boton play
-    if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.625), Vector2(192, 64), "data/button/PLAY.png")) {
-        opened_menu = true;
-        Game::instance->goToStage(STAGE_MENU);
+    if (!settingsOpen) {
+        if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.625), Vector2(192, 64), "data/button/PLAY.png")) {
+            opened_menu = true;
+            level = 1;
+            Game::instance->goToStage(STAGE_MENU);
+        }
     }
 
     // settings play
-    if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.75), Vector2(192, 64), "data/button/SETTINGS.png")) {
-        Game::instance->goToStage(STAGE_SETTINGS);
+    if (!settingsOpen) {
+        if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.75), Vector2(192, 64), "data/button/SETTINGS.png")) {
+            settingsOpen = true;
+        }
+    }
+    
+    if (settingsOpen) {
+        UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(400, 300), "data/button/FONDONEGRO.png");
+        if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.67), Vector2(64, 64), "data/button/X.png"))
+            settingsOpen = false;
     }
 
     // boton exit
-    if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.875), Vector2(192, 64), "data/button/EXIT.png")) {
-        exit(0);
+    if (!settingsOpen) {
+        if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.875), Vector2(192, 64), "data/button/EXIT.png")) {
+            exit(0);
+        }
     }
 }
 
@@ -65,7 +80,6 @@ void IntroStage::onLeave(Stage* stage) {
 // MENU STAGE
 
 void MenuStage::init() {
-
 }
 
 void MenuStage::render(Camera* camera) {
@@ -74,14 +88,20 @@ void MenuStage::render(Camera* camera) {
     if (level == 2) UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(800, 600), "data/button/PORTADA.png");
     if (level == 3) UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(800, 600), "data/button/PORTADA.png");
     if (level == 4) UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(800, 600), "data/button/PORTADA.png");
+    
     if (showHowToPlay) {
         UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(600, 400), "data/button/MENUHTP.png");
         if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.75), Vector2(64, 64), "data/button/X.png"))
             showHowToPlay = false;
     }
 
+    if (level == 2 && !L1_completed)
+        UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(100, 100), "data/button/LOCKED.png");
+    if (level == 3 && !L2_completed)
+        UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(100, 100), "data/button/LOCKED.png");
+
     if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.93), Vector2(192, 64), "data/button/PLAY.png")) {
-        if (!showHowToPlay) {
+        if (!showHowToPlay && !settingsOpen) {
             if (level == 1) Game::instance->goToStage(STAGE_L1);
             if (level == 2 && L1_completed) Game::instance->goToStage(STAGE_L2);
             if (level == 3 && L2_completed) Game::instance->goToStage(STAGE_L3);
@@ -91,19 +111,26 @@ void MenuStage::render(Camera* camera) {
 
     if (level != 0) {
         if (UI::addbutton(Vector2(Game::instance->window_width * 0.05, Game::instance->window_height * 0.5), Vector2(32, 32), "data/button/FLECHAIZQ.png")) {
-            if (!showHowToPlay) level --;
+            if (!showHowToPlay && !settingsOpen) level--;
         }
     }
 
     if (level != 4) {
         if (UI::addbutton(Vector2(Game::instance->window_width * 0.95, Game::instance->window_height * 0.5), Vector2(32, 32), "data/button/FLECHADER.png")) {
-            if (!showHowToPlay) level++;
+            if (!showHowToPlay && !settingsOpen) level++;
         }
     }
 
     // settings button
     if (UI::addbutton(Vector2(Game::instance->window_width * 0.955, Game::instance->window_height * 0.05), Vector2(50, 50), "data/button/LLAVESETTINGS.png")) {
-        Game::instance->goToStage(STAGE_SETTINGS);
+        if (!showHowToPlay)
+            settingsOpen = true;
+    }
+
+    if (settingsOpen) {
+        UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(400, 300), "data/button/FONDONEGRO.png");
+        if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.67), Vector2(64, 64), "data/button/X.png"))
+            settingsOpen = false;
     }
 
     // how to play button
@@ -113,9 +140,8 @@ void MenuStage::render(Camera* camera) {
 
     // back button
     if (UI::addbutton(Vector2(Game::instance->window_width * 0.04, Game::instance->window_height * 0.05), Vector2(50, 50), "data/button/EXITBACK.png")) {
-        Game::instance->goToStage(STAGE_INTRO);
+        if (!showHowToPlay && !settingsOpen) Game::instance->goToStage(STAGE_INTRO);
     }
-
 }
 
 void MenuStage::update(double dt) {
@@ -246,30 +272,4 @@ void L3Stage::onEnter(Stage* stage) {
 
 void L3Stage::onLeave(Stage* stage) {
 
-}
-
-
-// SETTINGS STAGE
-
-void SettingsStage::init() {
-
-}
-
-void SettingsStage::render(Camera* camera) {
-    if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.875), Vector2(192, 64), "data/button/BACK.png")) {
-        if (opened_menu) Game::instance->goToStage(STAGE_MENU);
-        else Game::instance->goToStage(STAGE_INTRO);
-    }
-}
-
-void SettingsStage::update(double dt) {
-
-}
-
-void SettingsStage::onEnter(Stage* stage) {
-    Game::instance->setMouseLocked(false);
-}
-
-void SettingsStage::onLeave(Stage* stage) {
-    Game::instance->setMouseLocked(true);
 }

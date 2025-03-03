@@ -35,7 +35,6 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	stages[STAGE_INTRO] = new IntroStage();
 	stages[STAGE_MENU] = new MenuStage();
 	stages[STAGE_TUTORIAL] = new TutorialStage();
-	stages[STAGE_SETTINGS] = new SettingsStage();
 	stages[STAGE_L1] = new L1Stage();
 	stages[STAGE_L2] = new L2Stage();
 	stages[STAGE_L3] = new L3Stage();
