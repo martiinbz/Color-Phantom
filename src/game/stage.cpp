@@ -21,6 +21,8 @@ bool L3_completed = false;
 
 bool showHowToPlay = false;
 bool settingsOpen = false;
+bool musicOn = true;
+bool soundsOn = true;
 
 int level = 1;
 
@@ -49,10 +51,28 @@ void IntroStage::render(Camera* camera) {
             settingsOpen = true;
         }
     }
-    
+
     if (settingsOpen) {
-        UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(400, 300), "data/button/FONDONEGRO.png");
-        if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.67), Vector2(64, 64), "data/button/X.png"))
+        UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(250, 70), "data/button/FONDONEGRO.png");
+        if (musicOn) {
+            if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(50, 50), "data/button/MUSICON.png"))
+                musicOn = false;
+        }
+        else {
+            if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(50, 50), "data/button/MUSICOFF.png"))
+                musicOn = true;
+        }
+
+        if (soundsOn) {
+            if (UI::addbutton(Vector2(Game::instance->window_width * 0.4, Game::instance->window_height * 0.5), Vector2(50, 50), "data/button/AUDIOON.png"))
+                soundsOn = false;
+        }
+        else {
+            if (UI::addbutton(Vector2(Game::instance->window_width * 0.4, Game::instance->window_height * 0.5), Vector2(50, 50), "data/button/AUDIOOFF.png"))
+                soundsOn = true;
+        }
+
+        if (UI::addbutton(Vector2(Game::instance->window_width * 0.6, Game::instance->window_height * 0.5), Vector2(64, 64), "data/button/X.png"))
             settingsOpen = false;
     }
 
@@ -90,9 +110,11 @@ void MenuStage::render(Camera* camera) {
     if (level == 4) UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(800, 600), "data/button/PORTADA.png");
     
     if (showHowToPlay) {
-        UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(600, 400), "data/button/MENUHTP.png");
-        if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.75), Vector2(64, 64), "data/button/X.png"))
-            showHowToPlay = false;
+        if (!settingsOpen) {
+            UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(600, 400), "data/button/MENUHTP.png");
+            if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.75), Vector2(64, 64), "data/button/X.png"))
+                showHowToPlay = false;
+        }
     }
 
     if (level == 2 && !L1_completed)
@@ -128,8 +150,26 @@ void MenuStage::render(Camera* camera) {
     }
 
     if (settingsOpen) {
-        UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(400, 300), "data/button/FONDONEGRO.png");
-        if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.67), Vector2(64, 64), "data/button/X.png"))
+        UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(250, 70), "data/button/FONDONEGRO.png");
+        if (musicOn) {
+            if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(50, 50), "data/button/MUSICON.png"))
+                musicOn = false;
+        }
+        else {
+            if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(50, 50), "data/button/MUSICOFF.png"))
+                musicOn = true;
+        }
+
+        if (soundsOn) {
+            if (UI::addbutton(Vector2(Game::instance->window_width * 0.4, Game::instance->window_height * 0.5), Vector2(50, 50), "data/button/AUDIOON.png"))
+                soundsOn = false;
+        }
+        else {
+            if (UI::addbutton(Vector2(Game::instance->window_width * 0.4, Game::instance->window_height * 0.5), Vector2(50, 50), "data/button/AUDIOOFF.png"))
+                soundsOn = true;
+        }
+
+        if (UI::addbutton(Vector2(Game::instance->window_width * 0.6, Game::instance->window_height * 0.5), Vector2(64, 64), "data/button/X.png"))
             settingsOpen = false;
     }
 
