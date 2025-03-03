@@ -18,6 +18,7 @@ bool opened_menu = false;
 bool L1_completed = false;
 bool L2_completed = false;
 bool L3_completed = false;
+bool showHowToPlay = false;
 
 int level = 1;
 
@@ -70,27 +71,44 @@ void MenuStage::init() {
 void MenuStage::render(Camera* camera) {
     if (level == 0) UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(800, 600), "data/button/PORTADA.png");
     if (level == 1) UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(800, 600), "data/button/LEVEL1.png");
-    if (level == 2) UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(800, 600), "data/button/LEVEL2.png");
+    if (level == 2) UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(800, 600), "data/button/PORTADA.png");
     if (level == 3) UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(800, 600), "data/button/PORTADA.png");
     if (level == 4) UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(800, 600), "data/button/PORTADA.png");
+    if (showHowToPlay) {
+        UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(600, 400), "data/button/MENUHTP.png");
+        if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.75), Vector2(64, 64), "data/button/X.png"))
+            showHowToPlay = false;
+    }
 
     if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.93), Vector2(192, 64), "data/button/PLAY.png")) {
-        if (level == 1) Game::instance->goToStage(STAGE_L1);
-        if (level == 2 && L1_completed) Game::instance->goToStage(STAGE_L2);
-        if (level == 3 && L2_completed) Game::instance->goToStage(STAGE_L3);
-        if (level == 0) Game::instance->goToStage(STAGE_TUTORIAL);
+        if (!showHowToPlay) {
+            if (level == 1) Game::instance->goToStage(STAGE_L1);
+            if (level == 2 && L1_completed) Game::instance->goToStage(STAGE_L2);
+            if (level == 3 && L2_completed) Game::instance->goToStage(STAGE_L3);
+            if (level == 0) Game::instance->goToStage(STAGE_TUTORIAL);
+        }
     }
 
     if (level != 0) {
         if (UI::addbutton(Vector2(Game::instance->window_width * 0.05, Game::instance->window_height * 0.5), Vector2(32, 32), "data/button/FLECHAIZQ.png")) {
-            level--;
+            if (!showHowToPlay) level --;
         }
     }
 
     if (level != 4) {
         if (UI::addbutton(Vector2(Game::instance->window_width * 0.95, Game::instance->window_height * 0.5), Vector2(32, 32), "data/button/FLECHADER.png")) {
-            level++;
+            if (!showHowToPlay) level++;
         }
+    }
+
+    // settings button
+    if (UI::addbutton(Vector2(Game::instance->window_width * 0.955, Game::instance->window_height * 0.05), Vector2(50, 50), "data/button/LLAVESETTINGS.png")) {
+        Game::instance->goToStage(STAGE_SETTINGS);
+    }
+
+    // how to play button
+    if (UI::addbutton(Vector2(Game::instance->window_width * 0.955, Game::instance->window_height * 0.94), Vector2(50, 50), "data/button/HOWTOPLAY.png")) {
+        showHowToPlay = true;
     }
 
 }
