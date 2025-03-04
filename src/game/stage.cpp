@@ -144,6 +144,7 @@ void MenuStage::render(Camera* camera) {
         else {
             if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(50, 50), "data/button/MUSICOFF.png")) {
                 if (soundsOn) Audio::Play("data/audio/SWITCH.ogg", 1.0f, BASS_SAMPLE_MONO);
+                musica_menu = Audio::Play("data/audio/MUSICA_MENU.mp3", 0.15f, BASS_SAMPLE_LOOP);
                 musicOn = true;
             }
         }
@@ -254,7 +255,7 @@ void L1Stage::update(double seconds_elapsed) {
 
 void L1Stage::onEnter(Stage* stage) {
     Game::instance->setMouseLocked(true);
-    musica_L1 = Audio::Play("data/audio/MUSICA_L1.mp3", 0.15f, BASS_SAMPLE_LOOP);
+    musica_L1 = Audio::Play("data/audio/MUSICA_L1_SUPERMERCADO.mp3", 0.15f, BASS_SAMPLE_LOOP);
 }
 
 void L1Stage::onLeave(Stage* stage) {
@@ -281,7 +282,7 @@ void L2Stage::update(double seconds_elapsed) {
 
 void L2Stage::onEnter(Stage* stage) {
     Game::instance->setMouseLocked(true);
-    musica_L2 = Audio::Play("data/audio/MUSICA_L2.mp3", 0.15f, BASS_SAMPLE_LOOP);
+    musica_L2 = Audio::Play("data/audio/MUSICA_L2_FABRICA.mp3", 0.15f, BASS_SAMPLE_LOOP);
 }
 
 void L2Stage::onLeave(Stage* stage) {
@@ -308,7 +309,7 @@ void L3Stage::update(double seconds_elapsed) {
 
 void L3Stage::onEnter(Stage* stage) {
     Game::instance->setMouseLocked(true);
-    musica_L3 = Audio::Play("data/audio/MUSICA_L3.mp3", 0.15f, BASS_SAMPLE_LOOP);
+    musica_L3 = Audio::Play("data/audio/MUSICA_L3_CASA.mp3", 0.15f, BASS_SAMPLE_LOOP);
 }
 
 void L3Stage::onLeave(Stage* stage) {
