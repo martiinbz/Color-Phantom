@@ -122,12 +122,14 @@ void MenuStage::render(Camera* camera) {
     if (level == 3 && !L2_completed)
         UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(100, 100), "data/button/LOCKED.png");
 
-    if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.93), Vector2(192, 64), "data/button/PLAY.png")) {
-        if (!showHowToPlay && !settingsOpen) {
-            if (level == 1) Game::instance->goToStage(STAGE_L1);
-            if (level == 2 && L1_completed) Game::instance->goToStage(STAGE_L2);
-            if (level == 3 && L2_completed) Game::instance->goToStage(STAGE_L3);
-            if (level == 0) Game::instance->goToStage(STAGE_TUTORIAL);
+    if (level != 4) {
+        if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.93), Vector2(192, 64), "data/button/PLAY.png")) {
+            if (!showHowToPlay && !settingsOpen) {
+                if (level == 1) Game::instance->goToStage(STAGE_L1);
+                if (level == 2 && L1_completed) Game::instance->goToStage(STAGE_L2);
+                if (level == 3 && L2_completed) Game::instance->goToStage(STAGE_L3);
+                if (level == 0) Game::instance->goToStage(STAGE_TUTORIAL);
+            }
         }
     }
 
