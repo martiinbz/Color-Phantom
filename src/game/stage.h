@@ -63,6 +63,7 @@ public:
 // LEVEL STAGES
 
 class  L1Stage : public Stage {
+    HCHANNEL musica_L1;
 
 public:
     void init() override;
@@ -73,6 +74,7 @@ public:
 };
 
 class  L2Stage : public Stage {
+    HCHANNEL musica_L2;
 
 public:
     void init() override;
@@ -83,6 +85,7 @@ public:
 };
 
 class  L3Stage : public Stage {
+    HCHANNEL musica_L3;
 
 public:
     void init() override;

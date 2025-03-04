@@ -136,8 +136,10 @@ void MenuStage::render(Camera* camera) {
     if (settingsOpen) {
         UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(250, 70), "data/button/FONDONEGRO.png");
         if (musicOn) {
-            if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(50, 50), "data/button/MUSICON.png"))
+            if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(50, 50), "data/button/MUSICON.png")) {
+                Audio::Stop(musica_menu);
                 musicOn = false;
+            }
         }
         else {
             if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(50, 50), "data/button/MUSICOFF.png")) {
@@ -184,7 +186,7 @@ void MenuStage::update(double dt) {
 
 void MenuStage::onEnter(Stage* stage) {
     Game::instance->setMouseLocked(false);
-    musica_menu = Audio::Play("data/audio/MUSICA_MENU.mp3", 0.2f, BASS_SAMPLE_LOOP);
+    musica_menu = Audio::Play("data/audio/MUSICA_MENU.mp3", 0.15f, BASS_SAMPLE_LOOP);
 }
 
 void MenuStage::onLeave(Stage* stage) {
@@ -252,10 +254,12 @@ void L1Stage::update(double seconds_elapsed) {
 
 void L1Stage::onEnter(Stage* stage) {
     Game::instance->setMouseLocked(true);
+    musica_L1 = Audio::Play("data/audio/MUSICA_L1.mp3", 0.15f, BASS_SAMPLE_LOOP);
 }
 
 void L1Stage::onLeave(Stage* stage) {
-    
+    Game::instance->setMouseLocked(false);
+    Audio::Stop(musica_L1);
 }
 
 
@@ -277,10 +281,12 @@ void L2Stage::update(double seconds_elapsed) {
 
 void L2Stage::onEnter(Stage* stage) {
     Game::instance->setMouseLocked(true);
+    musica_L2 = Audio::Play("data/audio/MUSICA_L2.mp3", 0.15f, BASS_SAMPLE_LOOP);
 }
 
 void L2Stage::onLeave(Stage* stage) {
-
+    Game::instance->setMouseLocked(false);
+    Audio::Stop(musica_L2);
 }
 
 
@@ -302,8 +308,10 @@ void L3Stage::update(double seconds_elapsed) {
 
 void L3Stage::onEnter(Stage* stage) {
     Game::instance->setMouseLocked(true);
+    musica_L3 = Audio::Play("data/audio/MUSICA_L3.mp3", 0.15f, BASS_SAMPLE_LOOP);
 }
 
 void L3Stage::onLeave(Stage* stage) {
-
+    Game::instance->setMouseLocked(false);
+    Audio::Stop(musica_L3);
 }
