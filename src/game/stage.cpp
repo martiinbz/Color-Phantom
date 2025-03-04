@@ -240,9 +240,9 @@ void L1Stage::render(Camera* camera) {
     drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
     Vector3 color = Player::instance->current_color;
 	std::cout << "color: " << color.x << " " << color.y << " " << color.z << std::endl; 
-    if (color.x==0 && color.y==0 && color.z==0) {
+    if (color.x < 0.01 && color.y < 0.01 && color.z < 0.01) {
 		std::cout << "has ganado!" << std::endl;
-
+        L1_completed = true;
     }
 }
 
