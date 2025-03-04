@@ -11,6 +11,7 @@
 #include "framework/player.h"
 #include "framework/world.h"
 #include "framework/entities/entity_ui.h"
+#include "framework/audio.h"
 
 // VARIABLES PARA GESTIONAR LOS NIVELES
 
@@ -41,6 +42,7 @@ void IntroStage::render(Camera* camera) {
         if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.625), Vector2(192, 64), "data/button/PLAY.png")) {
             opened_menu = true;
             level = 1;
+            Audio::Play("data/audio/1_PLAY_INTRO.ogg", 1.0f, BASS_SAMPLE_MONO);
             Game::instance->goToStage(STAGE_MENU);
         }
     }
@@ -90,10 +92,14 @@ void IntroStage::update(double dt) {
 
 void IntroStage::onEnter(Stage* stage) {
     Game::instance->setMouseLocked(false); // por si en otra escena estaba bloqueado
+
+    intro_audio = Audio::Play("data/audio/1_PLAY_INTRO.ogg", 1.0f, BASS_SAMPLE_MONO);
 }
 
 void IntroStage::onLeave(Stage* stage) {
     Game::instance->setMouseLocked(true);
+
+    Audio::Stop(intro_audio);
 }
 
 

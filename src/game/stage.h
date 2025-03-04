@@ -3,6 +3,7 @@
 
 #include "framework/camera.h"
 #include "framework/entities/entity_ui.h"
+#include "framework/audio.h"
 
 enum {
     STAGE_INTRO,
@@ -27,6 +28,8 @@ public:
 };
 
 class IntroStage : public Stage {
+
+    HCHANNEL intro_audio;
 
 public:
     void init() override;
