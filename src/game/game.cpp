@@ -72,7 +72,7 @@ void Game::update(double seconds_elapsed)
 		current_stage->update(seconds_elapsed);
 }
 
-void Game::goToStage(int stage_id) {
+void Game::goToStage(uint8_t stage_id) {
 	Stage* new_stage = stages[stage_id];
 	assert(new_stage);
 

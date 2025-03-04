@@ -17,7 +17,7 @@ public:
 	static Game* instance;
 
 	std::map<int, Stage*> stages;
-	void goToStage(int stage_id);
+	void goToStage(uint8_t stage_id);
 
 	//window
 	SDL_Window* window;

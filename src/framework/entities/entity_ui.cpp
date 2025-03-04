@@ -29,7 +29,6 @@ EntityUI::EntityUI(Vector2 new_pos, Vector2 new_size, const Material& material, 
 }
 
  bool UI::addbutton(Vector2 pos, Vector2 size, const char* texture_path) {
-
 	 World::get_instance()->camera2D->enable();    
      Vector2 mouse_pos = Input::mouse_position;
      bool is_hovered = false;
@@ -52,7 +51,6 @@ EntityUI::EntityUI(Vector2 new_pos, Vector2 new_size, const Material& material, 
      shader->enable();
 
      if (is_hovered) {
-		 std::cout << "hovered" << std::endl;
 		 shader->setUniform("u_color", Vector4(0.5, 0.5, 0.5, 1));
 	 }
      else {
@@ -66,10 +64,7 @@ EntityUI::EntityUI(Vector2 new_pos, Vector2 new_size, const Material& material, 
      quad.createQuad(pos.x, pos.y, size.x, size.y, true);
      quad.render(GL_TRIANGLES);
 	 
-     shader->disable();
-    
-	 //drawText(5, 15, "LOS BOTONES NO SE PINTAN,PERO ESTAN CREADOS. HAZ CLICK EN EL CENTRO", Vector3(1, 1, 1), 2);
-    
+     shader->disable(); 
  
 	 return was_presed;
 }
@@ -94,9 +89,6 @@ EntityUI::EntityUI(Vector2 new_pos, Vector2 new_size, const Material& material, 
      quad.render(GL_TRIANGLES);
 
      shader->disable();
-    
-
- 
  }
 
 void EntityUI::render(Camera* camera2D) {
@@ -127,4 +119,3 @@ void EntityUI::render(Camera* camera2D) {
 
     Entity::render(camera2D);
 }
-

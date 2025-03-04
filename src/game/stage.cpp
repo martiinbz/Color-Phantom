@@ -31,6 +31,7 @@ int level = 1;
 // INTRO STAGE
 
 void IntroStage::init() {
+    Audio::Init();
 }
 
 void IntroStage::render(Camera* camera) {
@@ -38,51 +39,16 @@ void IntroStage::render(Camera* camera) {
     UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(800, 600), "data/button/PORTADA.png");
 
     // boton play
-    if (!settingsOpen) {
-        if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.625), Vector2(192, 64), "data/button/PLAY.png")) {
-            opened_menu = true;
-            level = 1;
-            Audio::Play("data/audio/1_PLAY_INTRO.ogg", 1.0f, BASS_SAMPLE_MONO);
-            Game::instance->goToStage(STAGE_MENU);
-        }
-    }
-
-    // settings play
-    if (!settingsOpen) {
-        if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.75), Vector2(192, 64), "data/button/SETTINGS.png")) {
-            settingsOpen = true;
-        }
-    }
-
-    if (settingsOpen) {
-        UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(250, 70), "data/button/FONDONEGRO.png");
-        if (musicOn) {
-            if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(50, 50), "data/button/MUSICON.png"))
-                musicOn = false;
-        }
-        else {
-            if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(50, 50), "data/button/MUSICOFF.png"))
-                musicOn = true;
-        }
-
-        if (soundsOn) {
-            if (UI::addbutton(Vector2(Game::instance->window_width * 0.4, Game::instance->window_height * 0.5), Vector2(50, 50), "data/button/AUDIOON.png"))
-                soundsOn = false;
-        }
-        else {
-            if (UI::addbutton(Vector2(Game::instance->window_width * 0.4, Game::instance->window_height * 0.5), Vector2(50, 50), "data/button/AUDIOOFF.png"))
-                soundsOn = true;
-        }
-
-        if (UI::addbutton(Vector2(Game::instance->window_width * 0.6, Game::instance->window_height * 0.5), Vector2(64, 64), "data/button/X.png"))
-            settingsOpen = false;
+    if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.725), Vector2(192, 64), "data/button/PLAY.png")) {
+        opened_menu = true;
+        level = 1;
+        if (soundsOn) Audio::Play("data/audio/CLICK_PLAY_INTRO.ogg", 1.0f, BASS_SAMPLE_MONO);
+        Game::instance->goToStage(STAGE_MENU);
     }
 
     // boton exit
-    if (!settingsOpen) {
-        if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.875), Vector2(192, 64), "data/button/EXIT.png")) {
-            exit(0);
-        }
+    if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.85), Vector2(192, 64), "data/button/EXIT.png")) {
+        exit(0);
     }
 }
 
@@ -91,15 +57,15 @@ void IntroStage::update(double dt) {
 }
 
 void IntroStage::onEnter(Stage* stage) {
-    Game::instance->setMouseLocked(false); // por si en otra escena estaba bloqueado
+    Game::instance->setMouseLocked(false);
 
-    intro_audio = Audio::Play("data/audio/1_PLAY_INTRO.ogg", 1.0f, BASS_SAMPLE_MONO);
+    musica = Audio::Play("data/audio/MUSICA.mp3", 1.0f, BASS_SAMPLE_LOOP);
 }
 
 void IntroStage::onLeave(Stage* stage) {
     Game::instance->setMouseLocked(true);
 
-    Audio::Stop(intro_audio);
+    Audio::Stop(musica);
 }
 
 
@@ -124,9 +90,11 @@ void MenuStage::render(Camera* camera) {
     }
 
     if (level == 2 && !L1_completed)
-        UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(100, 100), "data/button/LOCKED.png");
+        if (!settingsOpen && !showHowToPlay)
+            UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(100, 100), "data/button/LOCKED.png");
     if (level == 3 && !L2_completed)
-        UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(100, 100), "data/button/LOCKED.png");
+        if (!settingsOpen && !showHowToPlay)
+            UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(100, 100), "data/button/LOCKED.png");
 
     if (level != 4) {
         if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.93), Vector2(192, 64), "data/button/PLAY.png")) {
@@ -204,6 +172,7 @@ void MenuStage::onEnter(Stage* stage) {
 
 void MenuStage::onLeave(Stage* stage) {
     Game::instance->setMouseLocked(true);
+    Audio::Stop(musica);
 }
 
 

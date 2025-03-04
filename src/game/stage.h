@@ -16,7 +16,8 @@ enum {
 
 class Stage {
 protected:
-    bool mouse_locked; //tells if the mouse is locked (not seen)
+    bool mouse_locked = false; //tells if the mouse is locked (not seen)
+    HCHANNEL musica;
 
 public:
     virtual void init() {};
@@ -28,8 +29,6 @@ public:
 };
 
 class IntroStage : public Stage {
-
-    HCHANNEL intro_audio;
 
 public:
     void init() override;
