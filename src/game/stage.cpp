@@ -13,19 +13,7 @@
 #include "framework/entities/entity_ui.h"
 #include "framework/audio.h"
 
-// VARIABLES PARA GESTIONAR LOS NIVELES
 
-bool opened_menu = false;
-bool L1_completed = false;
-bool L2_completed = false;
-bool L3_completed = false;
-
-bool showHowToPlay = false;
-bool settingsOpen = false;
-bool musicOn = true;
-bool soundsOn = true;
-
-int level = 1;
 
 
 // INTRO STAGE
@@ -226,15 +214,50 @@ void L1Stage::init() {
 }
 
 void L1Stage::render(Camera* camera) {
- 
     camera->enable();
 
     glDisable(GL_BLEND);
     glEnable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
-
    
     World::get_instance()->render();
+
+    if (showMenuLevel) {
+        Game::instance->setMouseLocked(false);
+        UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(270, 70), "data/button/FONDONEGRO.png");
+        if (musicOn) {
+            if (UI::addbutton(Vector2(Game::instance->window_width * 0.45, Game::instance->window_height * 0.5), Vector2(50, 50), "data/button/MUSICON.png")) {
+                Audio::Stop(musica_L1);
+                musicOn = false;
+            }
+        }
+        else {
+            if (UI::addbutton(Vector2(Game::instance->window_width * 0.45, Game::instance->window_height * 0.5), Vector2(50, 50), "data/button/MUSICOFF.png")) {
+                if (soundsOn) Audio::Play("data/audio/SWITCH.ogg", 1.0f, BASS_SAMPLE_MONO);
+                musica_L1 = Audio::Play("data/audio/MUSICA_L1_SUPERMERCADO.mp3", 0.15f, BASS_SAMPLE_LOOP);
+                musicOn = true;
+            }
+        }
+        if (soundsOn) {
+            if (UI::addbutton(Vector2(Game::instance->window_width * 0.35, Game::instance->window_height * 0.5), Vector2(50, 50), "data/button/AUDIOON.png"))
+                soundsOn = false;
+        }
+        else {
+            if (UI::addbutton(Vector2(Game::instance->window_width * 0.35, Game::instance->window_height * 0.5), Vector2(50, 50), "data/button/AUDIOOFF.png")) {
+                Audio::Play("data/audio/SWITCH.ogg", 1.0f, BASS_SAMPLE_MONO);
+                soundsOn = true;
+            }
+        }
+        if (UI::addbutton(Vector2(Game::instance->window_width * 0.65, Game::instance->window_height * 0.5), Vector2(64, 64), "data/button/X.png")) {
+            if (soundsOn) Audio::Play("data/audio/CERRAR_X.ogg", 0.7f, BASS_SAMPLE_MONO);
+            Game::instance->setMouseLocked(true);
+            showMenuLevel = false;
+        }
+        if (UI::addbutton(Vector2(Game::instance->window_width * 0.55, Game::instance->window_height * 0.5), Vector2(50, 50), "data/button/EXITBACK.png")) {
+            if (soundsOn) Audio::Play("data/audio/SALIR.ogg", 0.7f, BASS_SAMPLE_MONO);
+            Game::instance->goToStage(STAGE_MENU);
+        }
+    }
 
     drawGrid();
     drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
@@ -247,7 +270,9 @@ void L1Stage::render(Camera* camera) {
 }
 
 void L1Stage::update(double seconds_elapsed) {
-    World::get_instance()->update(seconds_elapsed);
+    if (!showMenuLevel) World::get_instance()->update(seconds_elapsed);
+
+    if (Input::wasKeyPressed(SDL_SCANCODE_T)) showMenuLevel = true;
 
     if (L1_completed)
         Game::instance->goToStage(STAGE_MENU);
@@ -260,6 +285,7 @@ void L1Stage::onEnter(Stage* stage) {
 
 void L1Stage::onLeave(Stage* stage) {
     Game::instance->setMouseLocked(false);
+    showMenuLevel = false;
     Audio::Stop(musica_L1);
 }
 
