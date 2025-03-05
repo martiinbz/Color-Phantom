@@ -16,6 +16,7 @@ Player::Player(Mesh* mesh, const Material& material, const std::string& name)
     //cargamos el player_texture shader
     player_shader = Shader::Get(isInstanced ? "data/shaders/instanced.vs" : "data/shaders/basic.vs" , "data/shaders/player_texture.fs");
 	instance = this;
+    model.setTranslation(Vector3(0, 50, 0));
     
 }
 
@@ -91,8 +92,8 @@ void Player::update(float seconds_elapsed) {
     }
 
     // Definir los límites de escala
-    const float max_scale = 2.0f;  // Tamaño máximo del jugador
-    const float min_scale = 0.2f;  // Tamaño mínimo del jugador
+    const float max_scale = 2.5f;  // Tamaño máximo del jugador
+    const float min_scale = 0.1f;  // Tamaño mínimo del jugador
     const float scale_speed = 0.5f; // Velocidad de escalado
 
    

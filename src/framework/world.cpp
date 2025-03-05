@@ -10,7 +10,12 @@
 
 World* World::instance = nullptr;
 
+extern int level;
+
+
 World::World() {
+
+	
 	int window_width = Game::instance->window_width;
 	int window_height = Game::instance->window_height;
 
@@ -33,12 +38,33 @@ World::World() {
 	if (!Player::instance) {
 		Player::instance = new Player();
 	}
+	
 
 	SceneParser parser;
-	bool ok = parser.parse("data/supermarket.scene", root);
+	int current_level = Game::instance->level; // Obtener el nivel desde `Game`
+	const char* scene_path = nullptr;
+
+	switch (current_level) {
+	case 1:
+		scene_path = "data/supermarket.scene";
+		break;
+	case 2:
+		scene_path = "data/tutorial.scene";
+		break;
+	case 3:
+		scene_path = "data/scene_level3.scene";
+		break;
+	default:
+		scene_path = "data/myscene.scene"; // Escena por defecto
+		break;
+	}
+	bool ok = parser.parse(scene_path, root);
+	
 }
 
 void World::render() {
+
+	
 	camera->enable();
 	camera2D->enable();
 	glDisable(GL_BLEND);
@@ -67,6 +93,10 @@ void World::render() {
 
 void World::update(double seconds_elapsed) {
 	
+
+	
+
+
 	
 	//update the scene
 	if (root) {
@@ -100,6 +130,11 @@ void World::update(double seconds_elapsed) {
 		delete e;
 	}
 	entities_to_destroy.clear();
+
+	if (Input::isKeyPressed(SDL_SCANCODE_M)) {
+		
+		Game::instance->goToStage(STAGE_MENU);
+	}
 }
 
 void World::addEntity(Entity* entity) {

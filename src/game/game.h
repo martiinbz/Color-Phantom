@@ -15,7 +15,7 @@ class Game
 {
 public:
 	static Game* instance;
-
+	int level = 1;
 	std::map<int, Stage*> stages;
 	void goToStage(uint8_t stage_id);
 

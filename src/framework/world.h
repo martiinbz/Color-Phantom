@@ -4,11 +4,14 @@
 #include "framework/player.h"
 #include "framework/entities/entity_collider.h"
 
+class Stage;
+
+
 class World {
-	static World* instance;
+	
 
 public:
-
+	static World* instance;
 	static World* get_instance() {
 		if (instance != nullptr)
 			return instance;

@@ -75,7 +75,19 @@ void Game::update(double seconds_elapsed)
 void Game::goToStage(uint8_t stage_id) {
 	Stage* new_stage = stages[stage_id];
 	assert(new_stage);
-
+	switch (stage_id) {
+		case STAGE_L1:
+			level = 1;
+			break;
+		case STAGE_L2:
+			level = 2;
+			break;
+		case STAGE_L3:
+			level = 3;
+			break;
+		default:
+			break; // No cambiar level para otras escenas
+		}
 	if (current_stage)
 		current_stage->onLeave(new_stage);
 	new_stage->onEnter(current_stage);
