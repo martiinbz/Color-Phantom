@@ -41,7 +41,7 @@ void IntroStage::render(Camera* camera) {
     // boton play
     if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.725), Vector2(192, 64), "data/button/PLAY.png")) {
         opened_menu = true;
-        level = 1;
+        //level = 1;
         Audio::Play("data/audio/CLICK_PLAY_INTRO.ogg", 1.0f, BASS_SAMPLE_MONO);
         Game::instance->goToStage(STAGE_MENU);
     }
@@ -75,6 +75,8 @@ void MenuStage::init() {
 }
 
 void MenuStage::render(Camera* camera) {
+	
+	
     if (level == 0) UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(800, 600), "data/button/TUTORIAL.png");
     if (level == 1) UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(800, 600), "data/button/LEVEL1.png");
     if (level == 2) UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(800, 600), "data/button/LEVEL2.png");
@@ -101,12 +103,25 @@ void MenuStage::render(Camera* camera) {
     if (level != 4) {
         if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.93), Vector2(192, 64), "data/button/PLAY.png")) {
             if (!showHowToPlay && !settingsOpen) {
-                if (level == 1) Game::instance->goToStage(STAGE_L1);
-                if (level == 2 && L1_completed) Game::instance->goToStage(STAGE_L2);
-                if (level == 3 && L2_completed) Game::instance->goToStage(STAGE_L3);
-                if (level == 0) Game::instance->goToStage(STAGE_TUTORIAL);
+                if (level == 1) {
+                 
+                    Game::instance->goToStage(STAGE_L1);
+                }
+                if (level == 2 && L1_completed) {
+                    
+                    Game::instance->goToStage(STAGE_L2);
+                }
+                if (level == 3 && L2_completed) {
+                    
+                    Game::instance->goToStage(STAGE_L3);
+                }
+                if (level == 0) {
+                    
+                    Game::instance->goToStage(STAGE_TUTORIAL);
+                }
             }
         }
+
     }
 
     // flechas izquierda y derecha
@@ -177,6 +192,13 @@ void MenuStage::render(Camera* camera) {
             Game::instance->goToStage(STAGE_INTRO);
         }
     }
+
+    //UNLOCK ALL LEVELS:
+	if (Input::isKeyPressed(SDL_SCANCODE_P)) {
+		L1_completed = true;
+		L2_completed = true;
+		L3_completed = true;
+	}
 }
 
 void MenuStage::update(double dt) {
@@ -236,7 +258,7 @@ void L1Stage::render(Camera* camera) {
    
     World::get_instance()->render();
 
-    drawGrid();
+    
     drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
     Vector3 color = Player::instance->current_color;
 	std::cout << "color: " << color.x << " " << color.y << " " << color.z << std::endl; 
@@ -255,11 +277,17 @@ void L1Stage::update(double seconds_elapsed) {
 
 void L1Stage::onEnter(Stage* stage) {
     Game::instance->setMouseLocked(true);
+    if (World::instance) {
+        delete World::instance;
+    }
+    World::instance = new World();
+
     musica_L1 = Audio::Play("data/audio/MUSICA_L1_SUPERMERCADO.mp3", 0.15f, BASS_SAMPLE_LOOP);
 }
 
 void L1Stage::onLeave(Stage* stage) {
     Game::instance->setMouseLocked(false);
+	
     Audio::Stop(musica_L1);
 }
 
@@ -271,6 +299,24 @@ void L2Stage::init() {
 
 void L2Stage::render(Camera* camera) {
 
+   
+    camera->enable();
+
+    glDisable(GL_BLEND);
+    glEnable(GL_DEPTH_TEST);
+    glDisable(GL_CULL_FACE);
+
+   
+    World::get_instance()->render();
+
+
+    drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
+    Vector3 color = Player::instance->current_color;
+    std::cout << "color: " << color.x << " " << color.y << " " << color.z << std::endl;
+    if (color.x < 0.01 && color.y < 0.01 && color.z < 0.01) {
+        std::cout << "has ganado!" << std::endl;
+        L2_completed = true;
+    }
 }
 
 void L2Stage::update(double seconds_elapsed) {
@@ -282,6 +328,13 @@ void L2Stage::update(double seconds_elapsed) {
 
 void L2Stage::onEnter(Stage* stage) {
     Game::instance->setMouseLocked(true);
+    if (World::instance) {
+        delete World::instance;
+    }
+    World::instance = new World();
+
+
+    
     musica_L2 = Audio::Play("data/audio/MUSICA_L2_FABRICA.mp3", 0.15f, BASS_SAMPLE_LOOP);
 }
 
@@ -309,6 +362,12 @@ void L3Stage::update(double seconds_elapsed) {
 
 void L3Stage::onEnter(Stage* stage) {
     Game::instance->setMouseLocked(true);
+   
+    if (World::instance) {
+        delete World::instance;
+    }
+    World::instance = new World();
+
     musica_L3 = Audio::Play("data/audio/MUSICA_L3_CASA.mp3", 0.15f, BASS_SAMPLE_LOOP);
 }
 

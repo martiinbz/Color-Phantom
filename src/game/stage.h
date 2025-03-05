@@ -19,6 +19,8 @@ protected:
     bool mouse_locked = false; //tells if the mouse is locked (not seen)
 
 public:
+    int level = 1;
+    static Stage* instance;
     virtual void init() {};
     virtual void update(double dt) {};
     virtual void render(Camera* camera) {};
