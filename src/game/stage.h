@@ -81,8 +81,10 @@ public:
 
 class  L1Stage : public Stage {
     HCHANNEL musica_L1;
-
+   
 public:
+    Vector3 color;
+
     void init() override;
     void update(double dt) override;
     void render(Camera* camera) override;

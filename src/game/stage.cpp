@@ -261,7 +261,7 @@ void L1Stage::render(Camera* camera) {
 
     drawGrid();
     drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
-    Vector3 color = Player::instance->current_color;
+    color = Player::instance->current_color;
 	std::cout << "color: " << color.x << " " << color.y << " " << color.z << std::endl; 
     if (color.x < 0.01 && color.y < 0.01 && color.z < 0.01) {
 		std::cout << "has ganado!" << std::endl;
@@ -281,6 +281,7 @@ void L1Stage::update(double seconds_elapsed) {
 void L1Stage::onEnter(Stage* stage) {
     Game::instance->setMouseLocked(true);
     musica_L1 = Audio::Play("data/audio/MUSICA_L1_SUPERMERCADO.mp3", 0.15f, BASS_SAMPLE_LOOP);
+    color = Vector3(0.f);
 }
 
 void L1Stage::onLeave(Stage* stage) {
