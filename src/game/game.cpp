@@ -73,9 +73,11 @@ void Game::update(double seconds_elapsed)
 }
 
 void Game::goToStage(uint8_t stage_id) {
-	Stage* new_stage = stages[stage_id];
-	assert(new_stage);
+	
 	switch (stage_id) {
+		case STAGE_TUTORIAL:
+			level = 0;
+			break;
 		case STAGE_L1:
 			level = 1;
 			break;
@@ -87,11 +89,23 @@ void Game::goToStage(uint8_t stage_id) {
 			break;
 		default:
 			break; // No cambiar level para otras escenas
-		}
+	}
+	std::cout << "[goToStage] Game::instance->level = " << level << std::endl;
+	Stage* new_stage = stages[stage_id];
+	assert(new_stage);
+
 	if (current_stage)
 		current_stage->onLeave(new_stage);
+
 	new_stage->onEnter(current_stage);
 	current_stage = new_stage;
+
+	if (World::instance)
+	{
+		delete World::instance;
+		World::instance = nullptr;
+	}
+	World::instance = new World();
 }
 
 //Keyboard event handler (sync input)

@@ -93,7 +93,7 @@ void Player::update(float seconds_elapsed) {
 
     // Definir los límites de escala
     const float max_scale = 2.5f;  // Tamaño máximo del jugador
-    const float min_scale = 0.1f;  // Tamaño mínimo del jugador
+    const float min_scale = 0.4f;  // Tamaño mínimo del jugador
     const float scale_speed = 0.5f; // Velocidad de escalado
 
    

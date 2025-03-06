@@ -39,13 +39,18 @@ World::World() {
 		Player::instance = new Player();
 	}
 	
-
 	SceneParser parser;
 	int current_level = Game::instance->level; // Obtener el nivel desde `Game`
 	const char* scene_path = nullptr;
-
+	std::cout << current_level << std::endl;
 	switch (current_level) {
+
+	case 0:
+		std::cout << "Tutorial" << std::endl;
+		scene_path = "data/tutorial.scene";
+		break;
 	case 1:
+		std::cout << "Supermarket" << std::endl;
 		scene_path = "data/supermarket.scene";
 		break;
 	case 2:
@@ -54,11 +59,9 @@ World::World() {
 	case 3:
 		scene_path = "data/scene_level3.scene";
 		break;
-	default:
-		scene_path = "data/myscene.scene"; // Escena por defecto
-		break;
 	}
 	bool ok = parser.parse(scene_path, root);
+	
 	
 }
 
