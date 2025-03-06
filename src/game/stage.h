@@ -99,6 +99,7 @@ class  L2Stage : public Stage {
     HCHANNEL musica_L2;
 
 public:
+    Vector3 target_color = Vector3(0, 0, 0);
     Vector3 color;
     void init() override;
     void update(double dt) override;
@@ -111,6 +112,7 @@ class  L3Stage : public Stage {
     HCHANNEL musica_L3;
 
 public:
+    Vector3 target_color = Vector3(0, 0, 0);
     Vector3 color;
     void init() override;
     void update(double dt) override;
