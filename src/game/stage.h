@@ -85,6 +85,7 @@ class  L1Stage : public Stage {
     HCHANNEL musica_L1;
    
 public:
+    Vector3 target_color = Vector3(0, 0, 0);
     Vector3 color;
 
     void init() override;
@@ -117,3 +118,4 @@ public:
     void onEnter(Stage* stage) override;
     void onLeave(Stage* stage) override;
 };
+

@@ -322,13 +322,28 @@ void L1Stage::render(Camera* camera) {
         }
     }
 
-    drawGrid();
+    
     drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
     color = Player::instance->current_color;
-	std::cout << "color: " << color.x << " " << color.y << " " << color.z << std::endl; 
+    drawText(5, 5, "TARGET COLOR", target_color, 3);
+    //WIN CONDITION//
+   
+    if (Input::wasKeyPressed(SDL_SCANCODE_G)) {
+        
+        float accuracy = 1 - ((color - target_color).length()/sqrt(3));
+        accuracy *= 100;
+		if (accuracy < 0) accuracy = 0;
+		if (accuracy > 100) accuracy = 100;
+
+		drawText(20, 20, "ACCURACY: " + std::to_string(accuracy) + "%", Vector3(1, 1, 1), 5);
+
+        //if acc>80--> go to win stage
+		// if acc<80--> go to lose stage
+    }
     if (color.x < 0.01 && color.y < 0.01 && color.z < 0.01) {
 		std::cout << "has ganado!" << std::endl;
         L1_completed = true;
+        
     }
 }
 
@@ -338,7 +353,9 @@ void L1Stage::update(double seconds_elapsed) {
     if (Input::wasKeyPressed(SDL_SCANCODE_T)) showMenuLevel = true;
 
     if (L1_completed)
-        Game::instance->goToStage(STAGE_MENU);
+		drawText(5, 5, "LEVEL COMPLETED", Vector3(0, 1, 0), 3);
+        
+       // Game::instance->goToStage(STAGE_MENU);
 }
 
 void L1Stage::onEnter(Stage* stage) {
@@ -406,3 +423,4 @@ void L3Stage::onLeave(Stage* stage) {
     Game::instance->setMouseLocked(false);
     Audio::Stop(musica_L3);
 }
+
