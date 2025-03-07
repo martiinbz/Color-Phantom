@@ -69,8 +69,12 @@ class  L1Stage : public Stage {
     HCHANNEL musica_L1;
    
 public:
-    Vector3 target_color = Vector3(1, 0, 0);
+    Vector3 target_color = Vector3(0.8, 0, 0);
     Vector3 color;
+    float accuracy;
+    float elapsed_time = 0.0f;
+    bool timer_running = false;
+    float final_time = 0.0f;
 
     void init() override;
     void update(double dt) override;
@@ -85,6 +89,9 @@ class  L2Stage : public Stage {
 public:
     Vector3 target_color = Vector3(0, 0, 0);
     Vector3 color;
+    float accuracy;
+    float elapsed_time = 0.0f;
+    bool timer_running = false;
 
     void init() override;
     void update(double dt) override;
@@ -99,6 +106,9 @@ class  L3Stage : public Stage {
 public:
     Vector3 target_color = Vector3(0, 0, 0);
     Vector3 color;
+    float accuracy;
+    float elapsed_time = 0.0f;
+    bool timer_running = false;
 
     void init() override;
     void update(double dt) override;
