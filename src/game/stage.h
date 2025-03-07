@@ -20,22 +20,6 @@ protected:
 
 public:
 
-    // VARIABLES PARA GESTIONAR LOS NIVELES
-
-    bool opened_menu = false;
-    bool L1_completed = false;
-    bool L2_completed = false;
-    bool L3_completed = false;
-
-    bool showHowToPlay = false;
-    bool settingsOpen = false;
-    bool musicOn = true;
-    bool soundsOn = true;
-
-    bool showMenuLevel = false;
-
-    int level = 1;
-
     virtual void init() {};
     virtual void update(double dt) {};
     virtual void render(Camera* camera) {};
@@ -101,6 +85,7 @@ class  L2Stage : public Stage {
 public:
     Vector3 target_color = Vector3(0, 0, 0);
     Vector3 color;
+
     void init() override;
     void update(double dt) override;
     void render(Camera* camera) override;
@@ -114,6 +99,7 @@ class  L3Stage : public Stage {
 public:
     Vector3 target_color = Vector3(0, 0, 0);
     Vector3 color;
+
     void init() override;
     void update(double dt) override;
     void render(Camera* camera) override;

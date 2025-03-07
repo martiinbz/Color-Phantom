@@ -13,7 +13,21 @@
 #include "framework/entities/entity_ui.h"
 #include "framework/audio.h"
 
+// VARIABLES PARA GESTIONAR LOS NIVELES
 
+bool opened_menu = false;
+bool L1_completed = false;
+bool L2_completed = false;
+bool L3_completed = false;
+
+bool showHowToPlay = false;
+bool settingsOpen = false;
+bool musicOn = true;
+bool soundsOn = true;
+
+bool showMenuLevel = false;
+
+int level = 1;
 
 
 // INTRO STAGE
@@ -322,10 +336,15 @@ void L1Stage::render(Camera* camera) {
         }
     }
 
-    
-    drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
     color = Player::instance->current_color;
-    drawText(5, 5, "TARGET COLOR", target_color, 3);
+    
+
+    if (!showMenuLevel) {
+        UI::addbackground(Vector2(Game::instance->window_width * 0.1875, 32), Vector2(800, 64), "data/button/FONDONEGRO.png");
+        UI::addbackground(Vector2(Game::instance->window_width * 0.96, 32), Vector2(64, 64), "data/button/T.png");
+        drawText(5, 5, "TARGET COLOR", target_color, 3);
+    }
+
     //WIN CONDITION//
    
     if (Input::wasKeyPressed(SDL_SCANCODE_G)) {
@@ -343,7 +362,6 @@ void L1Stage::render(Camera* camera) {
     if (color.x < 0.01 && color.y < 0.01 && color.z < 0.01) {
 		std::cout << "has ganado!" << std::endl;
         L1_completed = true;
-        
     }
 }
 
@@ -352,10 +370,8 @@ void L1Stage::update(double seconds_elapsed) {
 
     if (Input::wasKeyPressed(SDL_SCANCODE_T)) showMenuLevel = true;
 
-    if (L1_completed)
-		drawText(5, 5, "LEVEL COMPLETED", Vector3(0, 1, 0), 3);
-        
-       // Game::instance->goToStage(STAGE_MENU);
+    if (L1_completed) Game::instance->goToStage(STAGE_MENU);
+		// drawText(5, 5, "LEVEL COMPLETED", Vector3(0, 1, 0), 3);
 }
 
 void L1Stage::onEnter(Stage* stage) {
