@@ -60,6 +60,7 @@ void IntroStage::update(double dt) {
 }
 
 void IntroStage::onEnter(Stage* stage) {
+    std::cout << "ENTERING INTRO..." << std::endl;
     Game::instance->setMouseLocked(false);
     if (musicOn) musica_intro = Audio::Play("data/audio/MUSICA_INTRO.mp3", 1.0f, BASS_SAMPLE_LOOP);
 }
@@ -190,6 +191,7 @@ void MenuStage::update(double dt) {
 }
 
 void MenuStage::onEnter(Stage* stage) {
+    std::cout << "ENTERING MENU..." << std::endl;
     Game::instance->setMouseLocked(false);
     if (musicOn) musica_menu = Audio::Play("data/audio/MUSICA_MENU.mp3", 0.15f, BASS_SAMPLE_LOOP);
 }
@@ -272,6 +274,7 @@ void TutorialStage::update(double seconds_elapsed) {
 }
 
 void TutorialStage::onEnter(Stage* stage) {
+    std::cout << "ENTERING TUTORIAL..." << std::endl;
     Game::instance->setMouseLocked(true);
     if (musicOn) musica_L1 = Audio::Play("data/audio/MUSICA_L1_SUPERMERCADO.mp3", 0.15f, BASS_SAMPLE_LOOP);
     color = Vector3(0.f);
@@ -375,6 +378,7 @@ void L1Stage::update(double seconds_elapsed) {
 }
 
 void L1Stage::onEnter(Stage* stage) {
+    std::cout << "ENTERING LEVEL 1..." << std::endl;
     Game::instance->setMouseLocked(true);
     if (musicOn) musica_L1 = Audio::Play("data/audio/MUSICA_L1_SUPERMERCADO.mp3", 0.15f, BASS_SAMPLE_LOOP);
     color = Vector3(0.f);
@@ -404,6 +408,7 @@ void L2Stage::update(double seconds_elapsed) {
 }
 
 void L2Stage::onEnter(Stage* stage) {
+    std::cout << "ENTERING LEVEL 2..." << std::endl;
     Game::instance->setMouseLocked(true);
     musica_L2 = Audio::Play("data/audio/MUSICA_L2_FABRICA.mp3", 0.15f, BASS_SAMPLE_LOOP);
 }
@@ -431,6 +436,7 @@ void L3Stage::update(double seconds_elapsed) {
 }
 
 void L3Stage::onEnter(Stage* stage) {
+    std::cout << "ENTERING LEVEL 3..." << std::endl;
     Game::instance->setMouseLocked(true);
     musica_L3 = Audio::Play("data/audio/MUSICA_L3_CASA.mp3", 0.15f, BASS_SAMPLE_LOOP);
 }
