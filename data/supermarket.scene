@@ -293,7 +293,6 @@ supermarket_scene/floor-large/floor-large.obj 1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.
 supermarket_scene/floor-large/floor-large.obj 1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,-1.0,0.0,0.0,-2.68109,2.69551,-12.65523,1.0
 supermarket_scene/floor-large/floor-large.obj 1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,-1.0,0.0,0.0,-0.95521,2.69551,-10.79631,1.0
 supermarket_scene/floor-large/floor-large.obj 1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,-1.0,0.0,0.0,-0.95521,2.69551,-12.65523,1.0
-supermarket_scene/@player/@player.obj 1.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,1.0,0.0,-1.8454,1.19093,-16.8123,1.0
 supermarket_scene/cash-register/cash-register.obj 1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,-1.0,0.0,0.0,0.69229,0.0,-14.68535,1.0
 supermarket_scene/cash-register/cash-register.obj 1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,-1.0,0.0,0.0,-1.08844,0.0,-14.68535,1.0
 supermarket_scene/cash-register/cash-register.obj 1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,-1.0,0.0,0.0,-2.86377,0.0,-14.68535,1.0
@@ -831,3 +830,4 @@ supermarket_scene/wall.044/wall.044.obj -0.0,0.0,1.0,0.0,-1.0,-0.0,-0.0,0.0,0.0,
 supermarket_scene/wall.045/wall.045.obj -0.0,0.0,1.0,0.0,-1.0,-0.0,-0.0,0.0,0.0,-1.0,0.0,0.0,-1.59215,1.81606,-15.78201,1.0
 supermarket_scene/wall.046/wall.046.obj -0.0,0.0,1.0,0.0,-1.0,-0.0,-0.0,0.0,0.0,-1.0,0.0,0.0,-1.59215,1.81606,-15.78201,1.0
 supermarket_scene/column/column.obj 1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,-1.0,0.0,0.0,-6.91545,2.75217,4.06326,1.0
+supermarket_scene/@player/@player.obj 1.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,1.0,0.0,-1.8454,1.19093,-16.8123,1.0

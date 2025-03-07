@@ -44,13 +44,13 @@ void IntroStage::render(Camera* camera) {
     if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.725), Vector2(192, 64), "data/button/PLAY.png")) {
         opened_menu = true;
         level = 1;
-        Audio::Play("data/audio/CLICK_PLAY_INTRO.ogg", 1.0f, BASS_SAMPLE_MONO);
+        if (soundsOn) Audio::Play("data/audio/CLICK_PLAY_INTRO.ogg", 1.0f, BASS_SAMPLE_MONO);
         Game::instance->goToStage(STAGE_MENU);
     }
 
     // boton exit
     if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.85), Vector2(192, 64), "data/button/EXIT.png")) {
-        Audio::Play("data/audio/SALIR.ogg", 1.0f, BASS_SAMPLE_MONO);
+        if (soundsOn) Audio::Play("data/audio/SALIR.ogg", 1.0f, BASS_SAMPLE_MONO);
         exit(0);
     }
 }
@@ -61,7 +61,7 @@ void IntroStage::update(double dt) {
 
 void IntroStage::onEnter(Stage* stage) {
     Game::instance->setMouseLocked(false);
-    musica_intro = Audio::Play("data/audio/MUSICA_INTRO.mp3", 1.0f, BASS_SAMPLE_LOOP);
+    if (musicOn) musica_intro = Audio::Play("data/audio/MUSICA_INTRO.mp3", 1.0f, BASS_SAMPLE_LOOP);
 }
 
 void IntroStage::onLeave(Stage* stage) {
@@ -191,7 +191,7 @@ void MenuStage::update(double dt) {
 
 void MenuStage::onEnter(Stage* stage) {
     Game::instance->setMouseLocked(false);
-    musica_menu = Audio::Play("data/audio/MUSICA_MENU.mp3", 0.15f, BASS_SAMPLE_LOOP);
+    if (musicOn) musica_menu = Audio::Play("data/audio/MUSICA_MENU.mp3", 0.15f, BASS_SAMPLE_LOOP);
 }
 
 void MenuStage::onLeave(Stage* stage) {
@@ -273,7 +273,7 @@ void TutorialStage::update(double seconds_elapsed) {
 
 void TutorialStage::onEnter(Stage* stage) {
     Game::instance->setMouseLocked(true);
-    musica_L1 = Audio::Play("data/audio/MUSICA_L1_SUPERMERCADO.mp3", 0.15f, BASS_SAMPLE_LOOP);
+    if (musicOn) musica_L1 = Audio::Play("data/audio/MUSICA_L1_SUPERMERCADO.mp3", 0.15f, BASS_SAMPLE_LOOP);
     color = Vector3(0.f);
 }
 
@@ -301,7 +301,7 @@ void L1Stage::render(Camera* camera) {
 
     if (showMenuLevel) {
         Game::instance->setMouseLocked(false);
-        UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(270, 70), "data/button/FONDONEGRO.png");
+        UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(305, 70), "data/button/FONDONEGRO.png");
         if (musicOn) {
             if (UI::addbutton(Vector2(Game::instance->window_width * 0.45, Game::instance->window_height * 0.5), Vector2(50, 50), "data/button/MUSICON.png")) {
                 Audio::Stop(musica_L1);
@@ -376,7 +376,7 @@ void L1Stage::update(double seconds_elapsed) {
 
 void L1Stage::onEnter(Stage* stage) {
     Game::instance->setMouseLocked(true);
-    musica_L1 = Audio::Play("data/audio/MUSICA_L1_SUPERMERCADO.mp3", 0.15f, BASS_SAMPLE_LOOP);
+    if (musicOn) musica_L1 = Audio::Play("data/audio/MUSICA_L1_SUPERMERCADO.mp3", 0.15f, BASS_SAMPLE_LOOP);
     color = Vector3(0.f);
 }
 
