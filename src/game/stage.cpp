@@ -74,7 +74,6 @@ void IntroStage::onLeave(Stage* stage) {
 // MENU STAGE
 
 void MenuStage::init() {
-    Audio::Init();
 }
 
 void MenuStage::render(Camera* camera) {
@@ -205,7 +204,6 @@ void MenuStage::onLeave(Stage* stage) {
 // TUTORIAL STAGE
 
 void TutorialStage::init() {
-
 }
 
 void TutorialStage::render(Camera* camera) {
@@ -219,7 +217,7 @@ void TutorialStage::render(Camera* camera) {
 
     if (showMenuLevel) {
         Game::instance->setMouseLocked(false);
-        UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(270, 70), "data/button/FONDONEGRO.png");
+        UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(305, 70), "data/button/FONDONEGRO.png");
         if (musicOn) {
             if (UI::addbutton(Vector2(Game::instance->window_width * 0.45, Game::instance->window_height * 0.5), Vector2(50, 50), "data/button/MUSICON.png")) {
                 Audio::Stop(musica_L1);
@@ -340,12 +338,13 @@ void L1Stage::render(Camera* camera) {
     }
 
     color = Player::instance->current_color;
-    
+    Vector3 l_color = World::get_instance()->looking_color;
 
     if (!showMenuLevel) {
-        UI::addbackground(Vector2(Game::instance->window_width * 0.1875, 32), Vector2(800, 64), "data/button/FONDONEGRO.png");
-        UI::addbackground(Vector2(Game::instance->window_width * 0.96, 32), Vector2(64, 64), "data/button/T.png");
-        drawText(5, 5, "TARGET COLOR", target_color, 3);
+        UI::addbackground(Vector2(Game::instance->window_width * 0.5, 34), Vector2(600, 70), "data/button/FONDONEGRO.png");
+        UI::addbackground(Vector2(400, 34), Vector2(64, 64), "data/button/T.png");
+        drawText(120, 12, "TARGET", target_color, 6);
+        drawText(450, 12, "LOOKING", l_color, 6);
     }
 
     //WIN CONDITION//
@@ -445,4 +444,3 @@ void L3Stage::onLeave(Stage* stage) {
     Game::instance->setMouseLocked(false);
     Audio::Stop(musica_L3);
 }
-

@@ -85,7 +85,7 @@ void World::render() {
 	
 	glReadPixels(Game::instance->window_width/2, Game::instance->window_height/2, 1, 1, GL_RGB, GL_FLOAT, &looking_color.x);
 	
-	drawText(5, 15, "LOOKING_COLOR", looking_color, 4);
+	// drawText(300, 5, "LOOKING COLOR", looking_color, 3);
 
 	//crosshair, solo en primera persona y del color negativo al que se  está mirando
 	if (use_first_person) {
