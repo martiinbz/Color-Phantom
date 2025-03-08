@@ -19,7 +19,9 @@
 
 bool opened_menu = false;
 bool L1_completed = false;
+bool L2_unlocked = false;
 bool L2_completed = false;
+bool L3_unlocked = false;
 bool L3_completed = false;
 
 bool animation_L1 = false;
@@ -110,8 +112,8 @@ void MenuStage::render(Camera* camera) {
         if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.93), Vector2(192, 64), "data/button/PLAY.png")) {
             if (!showHowToPlay && !settingsOpen) {
                 if (level == 1) Game::instance->goToStage(STAGE_L1);
-                if (level == 2 && L1_completed) Game::instance->goToStage(STAGE_L2);
-                if (level == 3 && L2_completed) Game::instance->goToStage(STAGE_L3);
+                if (level == 2 && L2_unlocked) Game::instance->goToStage(STAGE_L2);
+                if (level == 3 && L3_unlocked) Game::instance->goToStage(STAGE_L3);
                 if (level == 0) Game::instance->goToStage(STAGE_TUTORIAL);
             }
         }
@@ -258,14 +260,8 @@ void TutorialStage::render(Camera* camera) {
         }
     }
 
-    drawGrid();
-    drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
-    color = Player::instance->current_color;
-    std::cout << "color: " << color.x << " " << color.y << " " << color.z << std::endl;
-    if (color.x < 0.01 && color.y < 0.01 && color.z < 0.01) {
-        std::cout << "has ganado!" << std::endl;
-        L1_completed = true;
-    }
+   
+   
 }
 
 void TutorialStage::update(double seconds_elapsed) {
@@ -273,8 +269,7 @@ void TutorialStage::update(double seconds_elapsed) {
 
     if (Input::wasKeyPressed(SDL_SCANCODE_T)) showMenuLevel = true;
 
-    if (L1_completed)
-        Game::instance->goToStage(STAGE_MENU);
+    
 }
 
 void TutorialStage::onEnter(Stage* stage) {
@@ -367,6 +362,8 @@ void L1Stage::render(Camera* camera) {
     }
     if (accuracy > 70.0f && !L1_completed) {
         L1_completed = true;
+		L2_unlocked = true;
+
         final_time = elapsed_time;
     }
 
@@ -411,6 +408,7 @@ void L1Stage::update(double seconds_elapsed) {
     if (L1_completed) {
         Game::instance->setMouseLocked(false);
         timer_running = false;
+        L1_completed = false;
         if (animation_L1) Game::instance->goToStage(STAGE_MENU);
     }
 }
@@ -504,7 +502,8 @@ void L2Stage::render(Camera* camera) {
         drawText(20, 20, "ACCURACY: " + std::to_string(accuracy) + "%", Vector3(1, 1, 1), 5);
     }
     if (accuracy > 70.0f && !L1_completed) {
-        L1_completed = true;
+        L2_completed = true;
+        L3_unlocked = true;
         final_time = elapsed_time;
     }
 
@@ -549,6 +548,7 @@ void L2Stage::update(double seconds_elapsed) {
     if (L2_completed) {
         Game::instance->setMouseLocked(false);
         timer_running = false;
+        L2_completed = false;
         if (animation_L2) Game::instance->goToStage(STAGE_MENU);
     }
 }

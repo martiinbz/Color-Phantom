@@ -54,7 +54,7 @@ World::World() {
 		scene_path = "data/supermarket.scene";
 		break;
 	case 2:
-		scene_path = "data/tutorial.scene";
+		scene_path = "data/factory.scene";
 		break;
 	case 3:
 		scene_path = "data/scene_level3.scene";
