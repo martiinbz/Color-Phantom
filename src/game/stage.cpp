@@ -101,10 +101,10 @@ void MenuStage::render(Camera* camera) {
         }
     }
 
-    if (level == 2 && !L1_completed)
+    if (level == 2 && !L2_unlocked)
         if (!settingsOpen && !showHowToPlay)
             UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(100, 100), "data/button/LOCKED.png");
-    if (level == 3 && !L2_completed)
+    if (level == 3 && !L3_unlocked)
         if (!settingsOpen && !showHowToPlay)
             UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(100, 100), "data/button/LOCKED.png");
 
@@ -507,7 +507,7 @@ void L2Stage::render(Camera* camera) {
         final_time = elapsed_time;
     }
 
-    if (L1_completed) {
+    if (L2_completed) {
         UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(600, 400), "data/button/ANIMATIONL2.png");
         std::stringstream timeText;
         timeText << std::fixed << std::setprecision(2) << final_time;
@@ -576,19 +576,127 @@ void L3Stage::init() {
 }
 
 void L3Stage::render(Camera* camera) {
+    camera->enable();
 
+    glDisable(GL_BLEND);
+    glEnable(GL_DEPTH_TEST);
+    glDisable(GL_CULL_FACE);
+
+    World::get_instance()->render();
+
+    if (showMenuLevel) {
+        Game::instance->setMouseLocked(false);
+        UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(305, 70), "data/button/FONDONEGRO.png");
+        if (musicOn) {
+            if (UI::addbutton(Vector2(Game::instance->window_width * 0.45, Game::instance->window_height * 0.5), Vector2(50, 50), "data/button/MUSICON.png")) {
+                Audio::Stop(musica_L3);
+                musicOn = false;
+            }
+        }
+        else {
+            if (UI::addbutton(Vector2(Game::instance->window_width * 0.45, Game::instance->window_height * 0.5), Vector2(50, 50), "data/button/MUSICOFF.png")) {
+                if (soundsOn) Audio::Play("data/audio/SWITCH.ogg", 1.0f, BASS_SAMPLE_MONO);
+                musica_L3 = Audio::Play("data/audio/MUSICA_L2_FABRICA.mp3", 0.15f, BASS_SAMPLE_LOOP);
+                musicOn = true;
+            }
+        }
+        if (soundsOn) {
+            if (UI::addbutton(Vector2(Game::instance->window_width * 0.35, Game::instance->window_height * 0.5), Vector2(50, 50), "data/button/AUDIOON.png"))
+                soundsOn = false;
+        }
+        else {
+            if (UI::addbutton(Vector2(Game::instance->window_width * 0.35, Game::instance->window_height * 0.5), Vector2(50, 50), "data/button/AUDIOOFF.png")) {
+                Audio::Play("data/audio/SWITCH.ogg", 1.0f, BASS_SAMPLE_MONO);
+                soundsOn = true;
+            }
+        }
+        if (UI::addbutton(Vector2(Game::instance->window_width * 0.65, Game::instance->window_height * 0.5), Vector2(64, 64), "data/button/X.png")) {
+            if (soundsOn) Audio::Play("data/audio/CERRAR_X.ogg", 0.7f, BASS_SAMPLE_MONO);
+            Game::instance->setMouseLocked(true);
+            showMenuLevel = false;
+        }
+        if (UI::addbutton(Vector2(Game::instance->window_width * 0.55, Game::instance->window_height * 0.5), Vector2(50, 50), "data/button/EXITBACK.png")) {
+            if (soundsOn) Audio::Play("data/audio/SALIR.ogg", 0.7f, BASS_SAMPLE_MONO);
+            Game::instance->goToStage(STAGE_MENU);
+        }
+    }
+
+    color = Player::instance->current_color;
+    Vector3 l_color = World::get_instance()->looking_color;
+
+    if (!showMenuLevel) {
+        UI::addbackground(Vector2(Game::instance->window_width * 0.5, 34), Vector2(600, 70), "data/button/FONDONEGRO.png");
+        UI::addbackground(Vector2(400, 34), Vector2(64, 64), "data/button/T.png");
+        drawText(120, 12, "TARGET", target_color, 6);
+        drawText(450, 12, "LOOKING", l_color, 6);
+        // drawText(20, 50, "TIME: " + std::to_string(elapsed_time) + "s", Vector3(1, 1, 1), 5);
+    }
+
+    //WIN CONDITION//
+    accuracy = 1 - ((color - target_color).length() / sqrt(3));
+    accuracy *= 100;
+    if (accuracy < 0) accuracy = 0;
+    if (accuracy > 100) accuracy = 100;
+
+    if (Input::wasKeyPressed(SDL_SCANCODE_G)) {
+        drawText(20, 20, "ACCURACY: " + std::to_string(accuracy) + "%", Vector3(1, 1, 1), 5);
+    }
+    if (accuracy > 70.0f && !L1_completed) {
+        L3_completed = true;
+       
+        final_time = elapsed_time;
+    }
+
+    if (L3_completed) {
+        UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(600, 400), "data/button/ANIMATIONL2.png");
+        std::stringstream timeText;
+        timeText << std::fixed << std::setprecision(2) << final_time;
+        drawText(480, 283, timeText.str(), Vector3(1, 1, 1), 4);
+        if (final_time <= 10.0) {
+            UI::addbackground(Vector2(Game::instance->window_width * 0.4, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAR.png");
+            UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAR.png");
+            UI::addbackground(Vector2(Game::instance->window_width * 0.6, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAR.png");
+        }
+        else if (final_time > 10 and final_time <= 15) {
+            UI::addbackground(Vector2(Game::instance->window_width * 0.4, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAR.png");
+            UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAR.png");
+            UI::addbackground(Vector2(Game::instance->window_width * 0.6, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAREMPTY.png");
+        }
+        else if (final_time > 15 and final_time <= 20) {
+            UI::addbackground(Vector2(Game::instance->window_width * 0.4, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAR.png");
+            UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAREMPTY.png");
+            UI::addbackground(Vector2(Game::instance->window_width * 0.6, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAREMPTY.png");
+        }
+        else {
+            UI::addbackground(Vector2(Game::instance->window_width * 0.4, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAREMPTY.png");
+            UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAREMPTY.png");
+            UI::addbackground(Vector2(Game::instance->window_width * 0.6, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAREMPTY.png");
+        }
+        if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.75), Vector2(192, 64), "data/button/CONTINUE.png")) {
+            animation_L1 = true;
+        }
+    }
 }
 
 void L3Stage::update(double seconds_elapsed) {
-    World::get_instance()->update(seconds_elapsed);
+    if (!showMenuLevel || L3_completed || (!showMenuLevel && L3_completed)) World::get_instance()->update(seconds_elapsed);
 
-    if (L3_completed)
-        Game::instance->goToStage(STAGE_MENU);
+    elapsed_time = std::chrono::duration<float>(std::chrono::steady_clock::now() - start_time).count();
+
+    if (Input::wasKeyPressed(SDL_SCANCODE_T)) showMenuLevel = true;
+
+    if (L3_completed) {
+        Game::instance->setMouseLocked(false);
+        timer_running = false;
+        L3_completed = false;
+        if (animation_L3) Game::instance->goToStage(STAGE_MENU);
+    }
 }
 
 void L3Stage::onEnter(Stage* stage) {
     std::cout << "ENTERING LEVEL 3..." << std::endl;
     Game::instance->setMouseLocked(true);
+
     musica_L3 = Audio::Play("data/audio/MUSICA_L3_CASA.mp3", 0.15f, BASS_SAMPLE_LOOP);
 }
 

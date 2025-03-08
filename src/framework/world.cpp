@@ -51,13 +51,13 @@ World::World() {
 		break;
 	case 1:
 		std::cout << "Supermarket" << std::endl;
-		scene_path = "data/supermarket.scene";
+		scene_path = "data/graveyard.scene";
 		break;
 	case 2:
 		scene_path = "data/factory.scene";
 		break;
 	case 3:
-		scene_path = "data/scene_level3.scene";
+		scene_path = "data/graveyard.scene";
 		break;
 	}
 	bool ok = parser.parse(scene_path, root);
