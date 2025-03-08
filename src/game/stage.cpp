@@ -3,6 +3,7 @@
 #include "framework/utils.h"
 #include <iostream>
 #include <chrono>
+#include <iomanip>
 #include "framework/input.h"
 #include "game/scene_parser.h"
 #include "framework/entities/entity.h"
@@ -352,7 +353,7 @@ void L1Stage::render(Camera* camera) {
         UI::addbackground(Vector2(400, 34), Vector2(64, 64), "data/button/T.png");
         drawText(120, 12, "TARGET", target_color, 6);
         drawText(450, 12, "LOOKING", l_color, 6);
-        drawText(20, 50, "TIME: " + std::to_string(elapsed_time) + "s", Vector3(1, 1, 1), 5);
+        // drawText(20, 50, "TIME: " + std::to_string(elapsed_time) + "s", Vector3(1, 1, 1), 5);
     }
 
     //WIN CONDITION//
@@ -371,20 +372,30 @@ void L1Stage::render(Camera* camera) {
 
     if (L1_completed) {
         UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(600, 400), "data/button/ANIMATIONL1.png");
-        drawText(500, 300, std::to_string(final_time), Vector3(1, 1, 1), 3);
+        std::stringstream timeText;
+        timeText << std::fixed << std::setprecision(2) << final_time;
+        drawText(480, 283, timeText.str(), Vector3(1, 1, 1), 4);
         if (final_time <= 10.0) {
-            UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(32, 32), "data/button/STAR.png");
-            UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(32, 32), "data/button/STAR.png");
-            UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(32, 32), "data/button/STAR.png");
+            UI::addbackground(Vector2(Game::instance->window_width * 0.4, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAR.png");
+            UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAR.png");
+            UI::addbackground(Vector2(Game::instance->window_width * 0.6, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAR.png");
         }
         else if (final_time > 10 and final_time <= 15) {
-            UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(32, 32), "data/button/STAR.png");
-            UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(32, 32), "data/button/STAR.png");
+            UI::addbackground(Vector2(Game::instance->window_width * 0.4, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAR.png");
+            UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAR.png");
+            UI::addbackground(Vector2(Game::instance->window_width * 0.6, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAREMPTY.png");
         }
         else if (final_time > 15 and final_time <= 20) {
-            UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(32, 32), "data/button/STAR.png");
+            UI::addbackground(Vector2(Game::instance->window_width * 0.4, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAR.png");
+            UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAREMPTY.png");
+            UI::addbackground(Vector2(Game::instance->window_width * 0.6, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAREMPTY.png");
         }
-        if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.7), Vector2(192, 64), "data/button/CONTINUE.png")) {
+        else {
+            UI::addbackground(Vector2(Game::instance->window_width * 0.4, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAREMPTY.png");
+            UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAREMPTY.png");
+            UI::addbackground(Vector2(Game::instance->window_width * 0.6, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAREMPTY.png");
+        }
+        if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.75), Vector2(192, 64), "data/button/CONTINUE.png")) {
             animation_L1 = true;
         }
     }
@@ -480,27 +491,82 @@ void L2Stage::render(Camera* camera) {
         UI::addbackground(Vector2(400, 34), Vector2(64, 64), "data/button/T.png");
         drawText(120, 12, "TARGET", target_color, 6);
         drawText(450, 12, "LOOKING", l_color, 6);
+        // drawText(20, 50, "TIME: " + std::to_string(elapsed_time) + "s", Vector3(1, 1, 1), 5);
+    }
+
+    //WIN CONDITION//
+    accuracy = 1 - ((color - target_color).length() / sqrt(3));
+    accuracy *= 100;
+    if (accuracy < 0) accuracy = 0;
+    if (accuracy > 100) accuracy = 100;
+
+    if (Input::wasKeyPressed(SDL_SCANCODE_G)) {
+        drawText(20, 20, "ACCURACY: " + std::to_string(accuracy) + "%", Vector3(1, 1, 1), 5);
+    }
+    if (accuracy > 70.0f && !L1_completed) {
+        L1_completed = true;
+        final_time = elapsed_time;
+    }
+
+    if (L1_completed) {
+        UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(600, 400), "data/button/ANIMATIONL2.png");
+        std::stringstream timeText;
+        timeText << std::fixed << std::setprecision(2) << final_time;
+        drawText(480, 283, timeText.str(), Vector3(1, 1, 1), 4);
+        if (final_time <= 10.0) {
+            UI::addbackground(Vector2(Game::instance->window_width * 0.4, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAR.png");
+            UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAR.png");
+            UI::addbackground(Vector2(Game::instance->window_width * 0.6, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAR.png");
+        }
+        else if (final_time > 10 and final_time <= 15) {
+            UI::addbackground(Vector2(Game::instance->window_width * 0.4, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAR.png");
+            UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAR.png");
+            UI::addbackground(Vector2(Game::instance->window_width * 0.6, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAREMPTY.png");
+        }
+        else if (final_time > 15 and final_time <= 20) {
+            UI::addbackground(Vector2(Game::instance->window_width * 0.4, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAR.png");
+            UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAREMPTY.png");
+            UI::addbackground(Vector2(Game::instance->window_width * 0.6, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAREMPTY.png");
+        }
+        else {
+            UI::addbackground(Vector2(Game::instance->window_width * 0.4, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAREMPTY.png");
+            UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAREMPTY.png");
+            UI::addbackground(Vector2(Game::instance->window_width * 0.6, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAREMPTY.png");
+        }
+        if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.75), Vector2(192, 64), "data/button/CONTINUE.png")) {
+            animation_L1 = true;
+        }
     }
 }
 
 void L2Stage::update(double seconds_elapsed) {
-    if (!showMenuLevel) World::get_instance()->update(seconds_elapsed);
+    if (!showMenuLevel || L2_completed || (!showMenuLevel && L2_completed)) World::get_instance()->update(seconds_elapsed);
+
+    elapsed_time = std::chrono::duration<float>(std::chrono::steady_clock::now() - start_time).count();
 
     if (Input::wasKeyPressed(SDL_SCANCODE_T)) showMenuLevel = true;
 
-    if (L2_completed)
-        Game::instance->goToStage(STAGE_MENU);
+    if (L2_completed) {
+        Game::instance->setMouseLocked(false);
+        timer_running = false;
+        if (animation_L2) Game::instance->goToStage(STAGE_MENU);
+    }
 }
 
 void L2Stage::onEnter(Stage* stage) {
     std::cout << "ENTERING LEVEL 2..." << std::endl;
     Game::instance->setMouseLocked(true);
     musica_L2 = Audio::Play("data/audio/MUSICA_L2_FABRICA.mp3", 0.15f, BASS_SAMPLE_LOOP);
+    color = Vector3(0.f);
+    start_time = std::chrono::steady_clock::now();
+    timer_running = true;
 }
 
 void L2Stage::onLeave(Stage* stage) {
     Game::instance->setMouseLocked(false);
+    showMenuLevel = false;
     Audio::Stop(musica_L2);
+    timer_running = false;
 }
 
 

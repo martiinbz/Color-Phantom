@@ -92,6 +92,7 @@ public:
     float accuracy;
     float elapsed_time = 0.0f;
     bool timer_running = false;
+    float final_time = 0.0f;
 
     void init() override;
     void update(double dt) override;
@@ -109,6 +110,7 @@ public:
     float accuracy;
     float elapsed_time = 0.0f;
     bool timer_running = false;
+    float final_time = 0.0f;
 
     void init() override;
     void update(double dt) override;
