@@ -195,6 +195,13 @@ void MenuStage::update(double dt) {
     if (L1_completed && L2_completed && L3_completed) {
         // todo el juego completado, podemos implementar un titulo de victoria del juegador
     }
+
+
+    //DESBLOQUEAR TODOS LOS NIVELES RAPIDAMENTE
+	if (Input::isKeyPressed(SDL_SCANCODE_K)) {
+		L2_unlocked = true;
+		L3_unlocked = true;
+	}
 }
 
 void MenuStage::onEnter(Stage* stage) {
@@ -341,6 +348,7 @@ void L1Stage::render(Camera* camera) {
     }
 
     color = Player::instance->current_color;
+    
     Vector3 l_color = World::get_instance()->looking_color;
 
     if (!showMenuLevel) {
@@ -357,10 +365,8 @@ void L1Stage::render(Camera* camera) {
     if (accuracy < 0) accuracy = 0;
     if (accuracy > 100) accuracy = 100;
 
-    if (Input::wasKeyPressed(SDL_SCANCODE_G)) {
-		drawText(20, 20, "ACCURACY: " + std::to_string(accuracy) + "%", Vector3(1, 1, 1), 5);
-    }
-    if (accuracy > 70.0f && !L1_completed) {
+    
+    if (accuracy > 80.0f && !L1_completed) {
         L1_completed = true;
 		L2_unlocked = true;
 
@@ -482,6 +488,7 @@ void L2Stage::render(Camera* camera) {
     }
 
     color = Player::instance->current_color;
+    
     Vector3 l_color = World::get_instance()->looking_color;
 
     if (!showMenuLevel) {
@@ -498,10 +505,8 @@ void L2Stage::render(Camera* camera) {
     if (accuracy < 0) accuracy = 0;
     if (accuracy > 100) accuracy = 100;
 
-    if (Input::wasKeyPressed(SDL_SCANCODE_G)) {
-        drawText(20, 20, "ACCURACY: " + std::to_string(accuracy) + "%", Vector3(1, 1, 1), 5);
-    }
-    if (accuracy > 70.0f && !L1_completed) {
+   
+    if (accuracy > 80.0f && !L1_completed) {
         L2_completed = true;
         L3_unlocked = true;
         final_time = elapsed_time;
@@ -622,13 +627,14 @@ void L3Stage::render(Camera* camera) {
     }
 
     color = Player::instance->current_color;
+	
     Vector3 l_color = World::get_instance()->looking_color;
 
     if (!showMenuLevel) {
         UI::addbackground(Vector2(Game::instance->window_width * 0.5, 34), Vector2(600, 70), "data/button/FONDONEGRO.png");
         UI::addbackground(Vector2(400, 34), Vector2(64, 64), "data/button/T.png");
         drawText(120, 12, "TARGET", target_color, 6);
-        drawText(450, 12, "LOOKING", l_color, 6);
+        drawText(450, 12, "LOOKING", -l_color, 6); //negativo porque el jugador se transforma en el color negativo
         // drawText(20, 50, "TIME: " + std::to_string(elapsed_time) + "s", Vector3(1, 1, 1), 5);
     }
 
@@ -638,10 +644,8 @@ void L3Stage::render(Camera* camera) {
     if (accuracy < 0) accuracy = 0;
     if (accuracy > 100) accuracy = 100;
 
-    if (Input::wasKeyPressed(SDL_SCANCODE_G)) {
-        drawText(20, 20, "ACCURACY: " + std::to_string(accuracy) + "%", Vector3(1, 1, 1), 5);
-    }
-    if (accuracy > 70.0f && !L1_completed) {
+    
+    if (accuracy > 80.0f && !L1_completed) {
         L3_completed = true;
        
         final_time = elapsed_time;

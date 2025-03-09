@@ -5,6 +5,7 @@
 #include "graphics/mesh.h"
 #include "graphics/material.h"
 #include "framework/entities/entity_collider.h"
+#include "game/game.h"
 
 Player* Player::instance = NULL;
 
@@ -79,7 +80,11 @@ void Player::update(float seconds_elapsed) {
     }
     //mecanica de cambio de color 
     if (Input::isKeyPressed(SDL_SCANCODE_X)) {
-        target_color = World::get_instance()->looking_color;
+        if (Game::instance->level == 3) {
+            target_color = Vector3(1,1,1)-World::get_instance()->looking_color;
+
+        }
+        else target_color = World::get_instance()->looking_color;
 
         //cambiar el color progresivamente 
         current_color = current_color * (1.0f - seconds_elapsed) + target_color * seconds_elapsed;

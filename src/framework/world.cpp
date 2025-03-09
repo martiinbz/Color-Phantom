@@ -51,7 +51,7 @@ World::World() {
 		break;
 	case 1:
 		std::cout << "Supermarket" << std::endl;
-		scene_path = "data/graveyard.scene";
+		scene_path = "data/supermarket.scene";
 		break;
 	case 2:
 		scene_path = "data/factory.scene";
@@ -85,8 +85,8 @@ void World::render() {
 	
 	glReadPixels(Game::instance->window_width/2, Game::instance->window_height/2, 1, 1, GL_RGB, GL_FLOAT, &looking_color.x);
 	
-	// drawText(300, 5, "LOOKING COLOR", looking_color, 3);
-
+	
+	
 	//crosshair, solo en primera persona y del color negativo al que se  está mirando
 	if (use_first_person) {
 		drawText(Game::instance->window_width / 2, Game::instance->window_height / 2 - 5, "o", Vector3(1 - looking_color.x, 1 - looking_color.y, 1 - looking_color.z), 2);

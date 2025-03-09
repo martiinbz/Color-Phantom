@@ -69,7 +69,7 @@ class  L1Stage : public Stage {
     HCHANNEL musica_L1;
    
 public:
-    Vector3 target_color = Vector3(0.8, 0, 0);
+    Vector3 target_color = Vector3(0.7, 0.48, 0.53);
     Vector3 color;
     float accuracy;
     float elapsed_time = 0.0f;
@@ -87,7 +87,7 @@ class  L2Stage : public Stage {
     HCHANNEL musica_L2;
 
 public:
-    Vector3 target_color = Vector3(1, 0, 0);
+    Vector3 target_color = Vector3(0.61, 0.54, 0.38);
     Vector3 color;
     float accuracy;
     float elapsed_time = 0.0f;
@@ -105,7 +105,7 @@ class  L3Stage : public Stage {
     HCHANNEL musica_L3;
 
 public:
-    Vector3 target_color = Vector3(0, 0, 0);
+    Vector3 target_color = Vector3(0.52, 0.31, 0.53);
     Vector3 color;
     float accuracy;
     float elapsed_time = 0.0f;
