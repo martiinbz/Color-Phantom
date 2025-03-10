@@ -13,16 +13,28 @@ Player* Player::instance = NULL;
 Player::Player(Mesh* mesh, const Material& material, const std::string& name)
     : EntityMesh(mesh, material) {
     walk_speed = 2.0f;
-    
+
     //cargamos el player_texture shader
-    player_shader = Shader::Get( "data/shaders/skinning.vs" , "data/shaders/player_texture.fs");
-	instance = this;
-    model.setTranslation(Vector3(0, 50, 0));
+    player_shader = Shader::Get("data/shaders/skinning.vs", "data/shaders/player_texture.fs");
+    instance = this;
+    
 
     isAnimated = true;
 
     animator.playAnimation("data/animations/idle.skanim");
-    
+
+    if (Game::instance->level == 1) {
+        model.setTranslation(Vector3(0, 0.00963535, -17.9041));
+        model.scale(0.8, 0.8, 0.8);
+    }
+    else if (Game::instance->level == 2) {
+        model.setTranslation(Vector3(-0.8243, 0.00978039, 9.12383));
+        model.scale(0.8, 0.8, 0.8);
+    }
+    else if (Game::instance->level == 3) {
+        model.setTranslation(Vector3(2.94316, 1.00970833, 17.7309));
+        model.setScale(0.2, 0.2, 0.2);
+    }
 
 }
 
@@ -98,7 +110,13 @@ void Player::update(float seconds_elapsed) {
         else target_color = World::get_instance()->looking_color;
 
         //cambiar el color progresivamente 
-        current_color = current_color * (1.0f - seconds_elapsed) + target_color * seconds_elapsed;
+        if((current_color-target_color).length()> 0.01f){
+            current_color = current_color * (1.0f - seconds_elapsed * 0.4) + target_color * seconds_elapsed * 0.4;
+        }
+        else {
+			current_color = target_color;
+        }
+        
     }
 
     //REINICIAR COLOR A BLANCO
@@ -128,9 +146,7 @@ void Player::update(float seconds_elapsed) {
 	else if (new_scale < min_scale) {
 		new_scale = min_scale;
     }
-	std::cout << new_scale << std::endl;
-    // Aplicar la nueva escala a la matriz del modelo
-    
+	
     
 
     
@@ -157,6 +173,7 @@ void Player::update(float seconds_elapsed) {
     //rotar al jugador con la cámara
     model.rotate(camera_yaw, Vector3(0, 1, 0));
 
+	
    
 	
 		

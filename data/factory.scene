@@ -279,7 +279,7 @@ factory_scene/conveyor-bars-stripe/conveyor-bars-stripe.obj 1.0,0.0,0.0,0.0,0.0,
 factory_scene/conveyor-bars-stripe/conveyor-bars-stripe.obj 1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,-1.0,0.0,0.0,11.65708,0.14427,1.04392,1.0
 factory_scene/conveyor-bars-stripe/conveyor-bars-stripe.obj 1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,-1.0,0.0,0.0,12.48192,0.14427,1.04392,1.0
 factory_scene/conveyor-bars-stripe/conveyor-bars-stripe.obj 1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,-1.0,0.0,0.0,13.16311,0.14427,1.04392,1.0
-factory_scene/structure-doorway-wide/structure-doorway-wide.obj -0.0,0.0,-0.37385,0.0,1.32125,-0.0,-0.0,0.0,-0.0,-0.3184,0.0,0.0,12.81069,-0.10305,6.23061,1.0
+factory_scene/structure-doorway-wide/structure-doorway-wide.obj -0.0,0.0,-0.37385,0.0,1.32125,-0.0,-0.0,0.0,-0.0,-0.29356,0.0,0.0,12.81069,-0.10305,6.23061,1.0
 factory_scene/floor-large/floor-large.obj 1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,-1.0,0.0,0.0,17.65945,0.0,3.731,1.0
 factory_scene/floor-large/floor-large.obj 1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,-1.0,0.0,0.0,19.01022,0.0,3.73065,1.0
 factory_scene/floor-large/floor-large.obj 1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,-1.0,0.0,0.0,15.88833,0.0,3.73065,1.0
@@ -429,9 +429,9 @@ factory_scene/floor-large/floor-large.obj 1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,-1
 factory_scene/floor-large/floor-large.obj 1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,-1.0,0.0,0.0,1.18815,5.93665,10.63232,1.0
 factory_scene/floor-large/floor-large.obj 1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,-1.0,0.0,0.0,1.18815,5.93665,12.52561,1.0
 factory_scene/structure-yellow-tall/structure-yellow-tall.obj -0.0,0.0,-1.0,0.0,1.0,-0.0,-0.0,0.0,-0.0,-1.0,0.0,0.0,3.09281,5.20158,12.07297,1.0
-factory_scene/apple/apple.obj 1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,-1.0,0.0,0.0,18.72618,-0.02259,5.94005,1.0
+factory_scene/apple/apple.obj 2.04856,0.0,0.0,0.0,0.0,0.0,2.04856,0.0,0.0,-2.04856,0.0,0.0,18.72618,-0.02259,5.0381,1.0
 factory_scene/cake-birthday/cake-birthday.obj 1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,-1.0,0.0,0.0,19.50692,-0.0077,7.11297,1.0
-factory_scene/pear/pear.obj 1.2368,0.0,0.0,0.0,0.0,0.0,1.45661,0.0,0.0,-1.57873,0.0,0.0,-2.25037,5.29252,3.01194,1.0
+factory_scene/pear/pear.obj 2.44413,0.0,0.0,0.0,0.0,0.0,2.87851,0.0,0.0,-3.11983,0.0,0.0,-2.25037,5.29252,3.01194,1.0
 factory_scene/structure-short/structure-short.obj 1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,-1.0,0.0,0.0,5.04404,0.0,6.06777,1.0
 factory_scene/structure-short/structure-short.obj -0.0,0.0,-1.0,0.0,1.0,-0.0,-0.0,0.0,-0.0,-1.0,0.0,0.0,4.62345,0.0,5.59309,1.0
 factory_scene/structure-short/structure-short.obj -0.0,0.0,-1.0,0.0,1.0,-0.0,-0.0,0.0,-0.0,-1.0,0.0,0.0,4.62345,0.0,6.55101,1.0

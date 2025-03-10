@@ -346,6 +346,7 @@ void L1Stage::render(Camera* camera) {
     }
 
     color = Player::instance->current_color;
+	std::cout << "color" << color.x << " " << color.y << " " << color.z << std::endl;
     
     Vector3 l_color = World::get_instance()->looking_color;
 
@@ -364,7 +365,7 @@ void L1Stage::render(Camera* camera) {
     if (accuracy > 100) accuracy = 100;
 
     
-    if (accuracy > 80.0f && !L1_completed) {
+    if (accuracy > 95.0f && !L1_completed) {
         L1_completed = true;
 		L2_unlocked = true;
 
@@ -504,7 +505,7 @@ void L2Stage::render(Camera* camera) {
     if (accuracy > 100) accuracy = 100;
 
    
-    if (accuracy > 80.0f && !L1_completed) {
+    if (accuracy > 99.0f && !L1_completed) {
         L2_completed = true;
         L3_unlocked = true;
         final_time = elapsed_time;
@@ -643,7 +644,7 @@ void L3Stage::render(Camera* camera) {
     if (accuracy > 100) accuracy = 100;
 
     
-    if (accuracy > 80.0f && !L1_completed) {
+    if (accuracy > 90.0f && !L1_completed) {
         L3_completed = true;
        
         final_time = elapsed_time;

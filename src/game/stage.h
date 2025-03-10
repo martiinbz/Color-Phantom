@@ -69,7 +69,7 @@ class  L1Stage : public Stage {
     HCHANNEL musica_L1;
    
 public:
-    Vector3 target_color = Vector3(0.7, 0.48, 0.53);
+    Vector3 target_color = Vector3(0.943608, 0.553454, 0.268275);
     Vector3 color;
     float accuracy;
     float elapsed_time = 0.0f;
