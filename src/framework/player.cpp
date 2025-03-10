@@ -6,7 +6,7 @@
 #include "graphics/material.h"
 #include "framework/entities/entity_collider.h"
 #include "game/game.h"
-
+#include "framework/animation.h"
 Player* Player::instance = NULL;
 
 
@@ -15,16 +15,23 @@ Player::Player(Mesh* mesh, const Material& material, const std::string& name)
     walk_speed = 2.0f;
     
     //cargamos el player_texture shader
-    player_shader = Shader::Get(isInstanced ? "data/shaders/instanced.vs" : "data/shaders/basic.vs" , "data/shaders/player_texture.fs");
+    player_shader = Shader::Get( "data/shaders/skinning.vs" , "data/shaders/player_texture.fs");
 	instance = this;
     model.setTranslation(Vector3(0, 50, 0));
+
+    isAnimated = true;
+
+    animator.playAnimation("data/animations/idle.skanim");
     
+
 }
 
 
 void Player::render(Camera* camera) {
 
+   
 
+   
     
 
     // Ajustar la escala según la tecla presionada
@@ -42,13 +49,16 @@ void Player::render(Camera* camera) {
 
     // enviamos el color actual al shader
     player_shader->setUniform("u_playerColor", Vector4(current_color, 1.0f));
+    
+  
 
     
-    mesh->render(GL_TRIANGLES);
+    mesh->renderAnimated(GL_TRIANGLES,&animator.getCurrentSkeleton());
 
     player_shader->disable();
 	
-    EntityMesh::render(camera);
+
+    //EntityMesh::render(camera);
 }
 
 
@@ -68,6 +78,7 @@ void Player::update(float seconds_elapsed) {
     //WASD keys
     if (Input::isKeyPressed(SDL_SCANCODE_W) || Input::isKeyPressed(SDL_SCANCODE_UP)) {
         move_dir += front;
+        
     }
     if (Input::isKeyPressed(SDL_SCANCODE_S) || Input::isKeyPressed(SDL_SCANCODE_DOWN)) {
         move_dir -= front;
@@ -147,13 +158,28 @@ void Player::update(float seconds_elapsed) {
     model.rotate(camera_yaw, Vector3(0, 1, 0));
 
    
+	
+		
+
+    bool is_moving = move_dir.length() > 0.01f;
+    if (is_moving) {
+        if (animation_state != eAnimationState::WALK) {
+            animation_state = eAnimationState::WALK;
+            animator.playAnimation("data/animations/walking.skanim");
+        }
+    }
+    
+    else {
+        if (animation_state != eAnimationState::IDLE) {
+            animation_state = eAnimationState::IDLE;
+            animator.playAnimation("data/animations/idle.skanim");
+        }
+    }
+
+
+    animator.update(seconds_elapsed);
 
     
-
-    // escalar al jugador (en el portatil me sale super grande, pero en la torre sale pequeñisimo entonces esto hay que arreglarlo)
-    //model.scale(0.6f);
-    
-   
     EntityMesh::update(seconds_elapsed);
     
 

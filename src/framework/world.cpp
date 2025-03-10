@@ -177,12 +177,12 @@ void World::update_fpcamera(float seconds_elapsed) {
 	
 	Vector3 eye = center - front * player_scale + right * player_scale;
 
-	// Detectar colisiones con el entorno para que la cámara no atraviese objetos
-	sCollisionData data = raycast(center, (eye - center).normalize());
-	if (data.collided) {
-		float smoothing_factor = 0.3f;
-		eye = eye * (1 - smoothing_factor) + data.col_point * smoothing_factor;
-	}
+	//// Detectar colisiones con el entorno para que la cámara no atraviese objetos
+	//sCollisionData data = raycast(center, (eye - center).normalize());
+	//if (data.collided) {
+	//	float smoothing_factor = 0.3f;
+	//	eye = eye * (1 - smoothing_factor) + data.col_point * smoothing_factor;
+	//}
 
 	// Aplicar la posición de la cámara
 	camera->lookAt(eye, center + front * 2.0f, Vector3(0, 1, 0));

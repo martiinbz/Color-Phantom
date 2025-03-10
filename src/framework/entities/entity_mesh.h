@@ -3,6 +3,7 @@
 #include "framework/includes.h"
 #include "framework/framework.h"
 #include "framework/entities/entity.h"
+#include "framework/animation.h"
 
 class Camera;
 class Mesh;
@@ -28,6 +29,10 @@ public:
 	Vector4 color;
 	Shader* shader = nullptr;
 
+
+	//Animations
+	Animator animator;
+	bool isAnimated = false;
 
 
 	// Methods that should be overwritten

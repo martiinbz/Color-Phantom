@@ -6,6 +6,13 @@
 class Player : public EntityMesh {
 
 	
+	enum class eAnimationState {
+		IDLE,
+		WALK
+	};
+
+	eAnimationState animation_state = eAnimationState::IDLE;
+	
 	float walk_speed = 0.0f;
 	Vector3 velocity = Vector3(0,0,0);
 	

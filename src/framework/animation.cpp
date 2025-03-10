@@ -208,6 +208,8 @@ void Animation::assignTime(float t, bool loop, bool interpolate, uint8 layers)
 		for (int j = 0; j < 16; ++j)
 			bone.model.m[j] = lerp(k[i].m[j], k2[i].m[j], f);
 	}
+	
+	
 
 	skeleton.updateGlobalMatrices();
 }
@@ -540,6 +542,8 @@ void Animator::update(float delta_time)
 
 	if (!current_animation)
 		return;
+
+
 
 	// Set previous loop in case there's any.. if not, leave action pose
 	if (!playing_loop && time >= (current_animation->duration - transition_time)

@@ -61,13 +61,18 @@ void EntityMesh::render(Camera* camera)
 	material->shader->setUniform("u_viewprojection", camera->viewprojection_matrix);
 	material->shader->setUniform("u_color", material->color);
 
-	if (isInstanced) {
+	if (isAnimated) {
+		mesh->renderAnimated(GL_TRIANGLES, &animator.getCurrentSkeleton());
+	}
+
+	if (isInstanced && !isAnimated) {
 		mesh->renderInstanced(GL_TRIANGLES, must_render_models.data(), must_render_models.size());
 	}
 	else {
 		mesh->render(GL_TRIANGLES);
 	}
 
+	
 	material->shader->disable();
 
 	//propagate render call to children

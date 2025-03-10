@@ -61,14 +61,14 @@ bool SceneParser::parse(const char* filename, Entity* root)
 
 		std::cout << "Procesando entidad: " << data.first << std::endl;
 
-		size_t tag = data.first.find("@player");
+		size_t tag = data.first.find("characterSmall");
 
 		if (tag != std::string::npos) {
 			
 			std::cout << "Encontrado @player en escena" << std::endl;
 
 			
-			Mesh* mesh = Mesh::Get(mesh_name.c_str());
+			Mesh* mesh = Mesh::Get("data/animations/export.MESH");
 
 			
 			new_entity = new Player(mesh, mat, "player");

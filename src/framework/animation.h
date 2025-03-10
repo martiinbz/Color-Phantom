@@ -22,7 +22,7 @@ enum BODY_LAYERS {
 };
 
 //used to compare bone names in the map
-struct cmp_str { bool operator()(char const *a, char const *b) const { return std::strcmp(a, b) < 0; } };
+struct cmp_str { bool operator()(char const* a, char const* b) const { return std::strcmp(a, b) < 0; } };
 
 //This class contains the bone structure hierarchy
 class Skeleton {
@@ -117,12 +117,13 @@ class Animator {
 	Animation* target_animation = nullptr;
 	Skeleton blended_skeleton;
 
-	float transition_counter	= 0.f;
-	float transition_time		= 0.f;
+	float transition_counter = 0.f;
+	float transition_time = 0.f;
 
 	// Callbacks
 	float last_time = 0.0f;
 	std::vector<AnimationCallback> callbacks;
+	std::function<void(std::string)> on_finish_animation = nullptr;
 
 public:
 
@@ -139,4 +140,6 @@ public:
 
 	Animation* getCurrentAnimation() { return target_animation ? target_animation : current_animation; };
 	Skeleton& getCurrentSkeleton();
+
+	void setOnFinishAnimation(std::function<void(std::string)> fn) { on_finish_animation = fn; }
 };
