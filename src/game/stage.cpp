@@ -275,8 +275,6 @@ void TutorialStage::update(double seconds_elapsed) {
     if (!showMenuLevel) World::get_instance()->update(seconds_elapsed);
 
     if (Input::wasKeyPressed(SDL_SCANCODE_T)) showMenuLevel = true;
-
-    
 }
 
 void TutorialStage::onEnter(Stage* stage) {
@@ -538,7 +536,7 @@ void L2Stage::render(Camera* camera) {
             UI::addbackground(Vector2(Game::instance->window_width * 0.6, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAREMPTY.png");
         }
         if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.75), Vector2(192, 64), "data/button/CONTINUE.png")) {
-            animation_L1 = true;
+            animation_L2 = true;
         }
     }
 }
@@ -677,7 +675,7 @@ void L3Stage::render(Camera* camera) {
             UI::addbackground(Vector2(Game::instance->window_width * 0.6, Game::instance->window_height * 0.6), Vector2(64, 60), "data/button/STAREMPTY.png");
         }
         if (UI::addbutton(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.75), Vector2(192, 64), "data/button/CONTINUE.png")) {
-            animation_L1 = true;
+            animation_L3 = true;
         }
     }
 }
@@ -700,11 +698,15 @@ void L3Stage::update(double seconds_elapsed) {
 void L3Stage::onEnter(Stage* stage) {
     std::cout << "ENTERING LEVEL 3..." << std::endl;
     Game::instance->setMouseLocked(true);
-
-    musica_L3 = Audio::Play("data/audio/MUSICA_L3_CASA.mp3", 0.15f, BASS_SAMPLE_LOOP);
+    musica_L3 = Audio::Play("data/audio/MUSICA_L2_FABRICA.mp3", 0.15f, BASS_SAMPLE_LOOP);
+    color = Vector3(0.f);
+    start_time = std::chrono::steady_clock::now();
+    timer_running = true;
 }
 
 void L3Stage::onLeave(Stage* stage) {
     Game::instance->setMouseLocked(false);
+    showMenuLevel = false;
     Audio::Stop(musica_L3);
+    timer_running = false;
 }
