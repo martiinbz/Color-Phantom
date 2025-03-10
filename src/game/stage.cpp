@@ -652,7 +652,7 @@ void L3Stage::render(Camera* camera) {
     }
 
     if (L3_completed) {
-        UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(600, 400), "data/button/ANIMATIONL2.png");
+        UI::addbackground(Vector2(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5), Vector2(600, 400), "data/button/ANIMATIONL3.png");
         std::stringstream timeText;
         timeText << std::fixed << std::setprecision(2) << final_time;
         drawText(480, 283, timeText.str(), Vector3(1, 1, 1), 4);
