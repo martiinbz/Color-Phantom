@@ -34,7 +34,7 @@ void main()
 	v = skin * v;
 	n = skin * n;
 
-	v_position = v;
+	v_position = v.xyz;
 	v_normal = normalize(n.xyz);
 
 	//calcule the normal in world space
