@@ -34,7 +34,7 @@ public:
 	float camera_speed = 2.f;
 	float mouse_speed = 0.5f;
 
-
+	Vector3 starting_position;
 	bool use_first_person = false;
 	bool use_third_person = true;
 

@@ -184,6 +184,8 @@ void Player::update(float seconds_elapsed) {
             animation_state = eAnimationState::WALK;
             animator.playAnimation("data/animations/walking.skanim");
         }
+		
+		
     }
     
     else {
@@ -192,6 +194,7 @@ void Player::update(float seconds_elapsed) {
             animator.playAnimation("data/animations/idle.skanim");
         }
     }
+    
 
 
     animator.update(seconds_elapsed);

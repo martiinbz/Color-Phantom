@@ -61,6 +61,8 @@ World::World() {
 		break;
 	}
 	bool ok = parser.parse(scene_path, root);
+
+	starting_position = Player::instance->model.getTranslation(); //para resetear al jugador si se bugea
 	
 	
 }
@@ -95,19 +97,19 @@ void World::render() {
 }
 
 void World::update(double seconds_elapsed) {
-	
-
-	
 
 
-	
+
+
+
+
 	//update the scene
 	if (root) {
 		root->update(seconds_elapsed);
 	}
 
 	if (Player::instance) {
-			
+
 		Player::instance->update(seconds_elapsed);
 
 		//si se hace click, se cambia la cámara
@@ -115,7 +117,7 @@ void World::update(double seconds_elapsed) {
 			use_first_person = true;
 			update_fpcamera(seconds_elapsed);
 			//mira (en negativo al color que apuntas para que siempre se vea)
-			
+
 		}
 		else {
 			use_first_person = false;
@@ -125,18 +127,19 @@ void World::update(double seconds_elapsed) {
 	else {
 		std::cout << "ERROR: Player es nullptr. No se puede actualizar ni seguir con la cámara." << std::endl;
 	}
-	
 
-	
+
+
 	for (auto e : entities_to_destroy) {
 		root->removeChild(e);
 		delete e;
 	}
 	entities_to_destroy.clear();
 
-	if (Input::isKeyPressed(SDL_SCANCODE_M)) {
-		
-		Game::instance->goToStage(STAGE_MENU);
+
+	if (Input::isKeyPressed(SDL_SCANCODE_O) ){
+		Player::instance->model.setTranslation(starting_position);
+
 	}
 }
 
