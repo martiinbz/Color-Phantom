@@ -137,7 +137,7 @@ void World::update(double seconds_elapsed) {
 	entities_to_destroy.clear();
 
 
-	if (Input::isKeyPressed(SDL_SCANCODE_O) ){
+	if (Input::isKeyPressed(SDL_SCANCODE_R) ){
 		Player::instance->model.setTranslation(starting_position);
 
 	}
