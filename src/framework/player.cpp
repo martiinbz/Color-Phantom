@@ -103,6 +103,7 @@ void Player::update(float seconds_elapsed) {
     }
     //mecanica de cambio de color 
     if (Input::isKeyPressed(SDL_SCANCODE_X)) {
+        Audio::Play("data/audio/SONIDO_ABSORBER.mp3", 1.0f, BASS_SAMPLE_MONO);
         if (Game::instance->level == 3) {
             target_color = Vector3(1,1,1)-World::get_instance()->looking_color;
 

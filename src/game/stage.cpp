@@ -404,7 +404,7 @@ void L1Stage::render(Camera* camera) {
 }
 
 void L1Stage::update(double seconds_elapsed) {
-    if (!showMenuLevel or !L1_completed) World::get_instance()->update(seconds_elapsed);
+    if (!showMenuLevel) World::get_instance()->update(seconds_elapsed);
 
     elapsed_time = std::chrono::duration<float>(std::chrono::steady_clock::now() - start_time).count();
 
@@ -635,7 +635,7 @@ void L3Stage::render(Camera* camera) {
         UI::addbackground(Vector2(Game::instance->window_width * 0.5, 34), Vector2(600, 70), "data/button/FONDONEGRO.png");
         UI::addbackground(Vector2(400, 34), Vector2(64, 64), "data/button/T.png");
         drawText(120, 12, "TARGET", target_color, 6);
-        drawText(450, 12, "LOOKING", -l_color, 6); //negativo porque el jugador se transforma en el color negativo
+        drawText(450, 12, "LOOKING", Vector3(1,1,1) - l_color, 6); //negativo porque el jugador se transforma en el color negativo
         // drawText(20, 50, "TIME: " + std::to_string(elapsed_time) + "s", Vector3(1, 1, 1), 5);
     }
 
@@ -701,7 +701,7 @@ void L3Stage::update(double seconds_elapsed) {
 void L3Stage::onEnter(Stage* stage) {
     std::cout << "ENTERING LEVEL 3..." << std::endl;
     Game::instance->setMouseLocked(true);
-    musica_L3 = Audio::Play("data/audio/MUSICA_L2_FABRICA.mp3", 0.15f, BASS_SAMPLE_LOOP);
+    musica_L3 = Audio::Play("data/audio/MUSICA_L3_CEMENTERIO.mp3", 0.15f, BASS_SAMPLE_LOOP);
     color = Vector3(0.f);
     start_time = std::chrono::steady_clock::now();
     timer_running = true;
