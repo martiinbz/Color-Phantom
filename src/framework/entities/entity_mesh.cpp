@@ -6,6 +6,7 @@
 #include "framework/world.h"
 #include "graphics/shader.h"
 #include "framework/player.h"
+#include "game/game.h"
 
 #include <algorithm>
 
@@ -17,12 +18,11 @@ EntityMesh::EntityMesh(Mesh* new_mesh, const Material& new_material)
 }
 
 void EntityMesh::render(Camera* camera)
-{
+{	
+	camera->enable();
+
 	if (!material || !mesh ) {
 		return;
-	}
-	if (!material->shader) {
-		material->shader = Shader::Get(isInstanced ? "data/shaders/instanced.vs" : "data/shaders/basic.vs", "data/shaders/texture.fs");
 	}
 
 	std::vector<Matrix44> must_render_models;
@@ -54,12 +54,38 @@ void EntityMesh::render(Camera* camera)
 	if (!must_render) {
 		return;
 	}
-	camera->enable();
 
-	material->shader->enable();
-	material->shader->setUniform("u_model", getGlobalMatrix());
-	material->shader->setUniform("u_viewprojection", camera->viewprojection_matrix);
-	material->shader->setUniform("u_color", material->color);
+	Shader* shader = Shader::Get(isInstanced ? "data/shaders/instanced.vs" : "data/shaders/basic.vs", "data/shaders/texture.fs");;
+
+	glEnable(GL_DEPTH_TEST);
+
+	shader->enable();
+
+	shader->setUniform("u_model", getGlobalMatrix());
+	shader->setUniform("u_color", material->color);
+	shader->setUniform("u_viewprojection", camera->viewprojection_matrix);
+	shader->setUniform("u_background_color", Vector4(0.1f, 0.1f, 0.1f, 1.0f));
+	shader->setUniform("u_camera_position", camera->eye);
+
+	shader->setUniform("u_Ka", Vector3(1.0f));
+	shader->setUniform("u_Kd", Vector3(1.0f));
+	shader->setUniform("u_Ks", Vector3(1.0f));
+	shader->setUniform("u_light_color", Vector3(0.9f, 0.9f, 1.0f));
+	shader->setUniform("u_light_position", Vector3(0.0f, 30.0f, 20.0f));
+	shader->setUniform("u_fog_factor", 1.0f);
+	shader->setUniform("u_time", Game::instance->time);
+
+	Vector2 maps = { 0.0f, 0.0f };
+
+	if (material->diffuse) {
+		maps.x = 1.0f;
+		shader->setUniform("u_texture", material->diffuse, 1);
+	}
+	if (material->normal) {
+		maps.y = 1.0f;
+		shader->setUniform("u_normal_texture", material->normal, 1);
+	}
+	shader->setUniform("u_maps", maps);
 
 	if (isAnimated) {
 		mesh->renderAnimated(GL_TRIANGLES, &animator.getCurrentSkeleton());
@@ -72,8 +98,7 @@ void EntityMesh::render(Camera* camera)
 		mesh->render(GL_TRIANGLES);
 	}
 
-	
-	material->shader->disable();
+	shader->disable();
 
 	//propagate render call to children
 	Entity::render(camera);

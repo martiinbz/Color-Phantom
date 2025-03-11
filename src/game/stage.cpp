@@ -404,7 +404,7 @@ void L1Stage::render(Camera* camera) {
 }
 
 void L1Stage::update(double seconds_elapsed) {
-    if (!showMenuLevel || L1_completed || (!showMenuLevel && L1_completed)) World::get_instance()->update(seconds_elapsed);
+    if (!showMenuLevel or !L1_completed) World::get_instance()->update(seconds_elapsed);
 
     elapsed_time = std::chrono::duration<float>(std::chrono::steady_clock::now() - start_time).count();
 
@@ -432,6 +432,7 @@ void L1Stage::onLeave(Stage* stage) {
     showMenuLevel = false;
     Audio::Stop(musica_L1);
     timer_running = false;
+    animation_L1 = false;
 }
 
 
@@ -571,6 +572,7 @@ void L2Stage::onLeave(Stage* stage) {
     showMenuLevel = false;
     Audio::Stop(musica_L2);
     timer_running = false;
+    animation_L2 = false;
 }
 
 
@@ -710,4 +712,5 @@ void L3Stage::onLeave(Stage* stage) {
     showMenuLevel = false;
     Audio::Stop(musica_L3);
     timer_running = false;
+    animation_L3 = false;
 }

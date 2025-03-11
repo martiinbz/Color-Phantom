@@ -239,11 +239,11 @@ void Player::test_collisions(Vector3& position, float seconds_elapsed) {
     }
 	
 
-    if (!is_grounded)
+    /*if (!is_grounded)
         velocity.y -= 9.8f * seconds_elapsed;
     else if (Input::wasKeyPressed(SDL_SCANCODE_SPACE)) {
         velocity.y += 50.0f;
-    }
+    }*/
       
 }
 
