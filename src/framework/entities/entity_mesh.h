@@ -4,10 +4,10 @@
 #include "framework/framework.h"
 #include "framework/entities/entity.h"
 #include "framework/animation.h"
+#include "graphics/material.h"
 
 class Camera;
 class Mesh;
-class Material;
 class Shader;
 class Texture;
 
@@ -24,7 +24,7 @@ public:
 
 	
 	Mesh* mesh = nullptr;
-	Material* material = nullptr;
+	Material* material;
 	Texture* texture = nullptr;
 	Vector4 color;
 	Shader* shader = nullptr;
