@@ -312,4 +312,4 @@ graveyard_scene/gravestone-round/gravestone-round.obj -0.10453,-0.0,-0.99452,0.0
 graveyard_scene/coffin-old/coffin-old.obj -0.0,0.0,-1.0,0.0,1.0,-0.0,-0.0,0.0,-0.0,-1.0,0.0,0.0,4.53771,0.0,9.51473,1.0
 graveyard_scene/trunk/trunk.obj 1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,-1.0,0.0,0.0,1.39287,-0.05563,6.30051,1.0
 graveyard_scene/gravestone-round/gravestone-round.obj -0.10453,-0.0,-0.99452,0.0,0.99452,-0.0,-0.10453,0.0,-0.0,-1.0,0.0,0.0,0.83103,-0.06411,19.51015,1.0
-graveyard_scene/characterSmall.001/characterSmall.001.obj 1.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,1.0,0.0,2.94316,0.32033,17.73085,1.0
+graveyard_scene/characterSmall.001/characterSmall.001.obj 1.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,1.0,0.0,2.94316,-0.00711,17.73085,1.0
